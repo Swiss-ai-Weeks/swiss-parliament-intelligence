@@ -29,6 +29,11 @@ The prototype is intentionally API-ready but does not require the live parliamen
 11. `GET/PATCH /me/alerts` — monitoring rules, frequency, active state, and notification delivery status.
 12. `POST /ai/parse-filters` — natural-language prompt to proposed filter groups; suggestions must remain reviewable before applying.
 
+## Client boundary
+
+`src/services/api.js` exposes the production seam as `createApiClient({ baseUrl, fetchImpl })`.
+Screens should consume this client through a provider/loader rather than calling `fetch` directly. Until a backend base URL and authentication contract are available, local fixtures and localStorage-backed demo state remain the source of truth.
+
 ## Backend guarantees the UI depends on
 
 - Stable IDs across Ask, Debate, Investigate, and Proposal Tracker.

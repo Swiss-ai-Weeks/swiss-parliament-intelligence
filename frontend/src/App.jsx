@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   ArrowLeft, ArrowRight, BookmarkSimple, Buildings, CalendarBlank, CaretDown,
   CaretRight, ChartLineUp, ChatCircleDots, Check, CheckCircle, ClipboardText,
@@ -51,6 +51,23 @@ const evidenceResults = [1, 4, 3, 5, 6, 2].map((id, index) => ({ ...citations[id
 
 const routeLabels = { dashboard: "Dashboard", calendar: "Calendar", alerts: "Alerts", ask: "Ask Parliament", debate: "Debates & Videos", investigate: "Investigate", proposal: "Proposals & Bills", people: "People", topics: "Topics", committees: "Committees", documents: "Documents", saved: "Saved Research", history: "History", settings: "Settings" };
 
+function usePersistentState(key, initialValue) {
+  const [value, setValue] = useState(() => {
+    try {
+      if (typeof window === "undefined") return initialValue;
+      const stored = window.localStorage.getItem(key);
+      return stored ? JSON.parse(stored) : initialValue;
+    } catch { return initialValue; }
+  });
+  useEffect(() => {
+    try {
+      if (typeof window === "undefined") return;
+      window.localStorage.setItem(key, JSON.stringify(value));
+    } catch { /* storage is optional in the prototype */ }
+  }, [key, value]);
+  return [value, setValue];
+}
+
 function NavItem({ icon: Icon, children, active, onClick, quiet }) {
   return <button className={`nav-item ${active ? "active" : ""} ${quiet ? "quiet" : ""}`} onClick={onClick}><Icon size={20} weight={active ? "fill" : "regular"} /><span>{children}</span></button>;
 }
@@ -85,7 +102,7 @@ function PageHeader({ eyebrow, title, description, actions }) {
 function StatusPill({ children, tone = "teal" }) { return <span className={`status-pill ${tone}`}>{children}</span>; }
 
 function DashboardScreen({ onRoute, userName }) {
-  const [following, setFollowing] = useState(["Electronic identity", "Data protection", "Beat Flach"]);
+  const [following, setFollowing] = usePersistentState("spi.following", ["Electronic identity", "Data protection", "Beat Flach"]);
   const [question, setQuestion] = useState("");
   return <main className="page-stage dashboard-page">
     <PageHeader eyebrow="Sunday, 14 September" title={`Good afternoon, ${userName || "Citizen"}`} description="Your overview of Parliament, tracked proposals, and new evidence." actions={<button className="primary-action" onClick={() => onRoute("ask")}><ChatCircleDots /> Ask Parliament</button>} />
@@ -192,7 +209,7 @@ function SettingsScreen({ userName, setUserName, language, setLanguage }) {
 function PlaceholderScreen({ route, onRoute }) { return <main className="page-stage placeholder-page"><div><Globe /><h1>{routeLabels[route]}</h1><p>This destination is represented in the navigation, but the connected hackathon demo currently focuses on Dashboard, Ask, Debate, Investigate, and Proposal tracking.</p><button className="primary-action" onClick={() => onRoute("dashboard")}><House /> Return to dashboard</button></div></main>; }
 
 export function App() {
-  const [route,setRoute] = useState("dashboard"); const [language,setLanguage] = useState("EN"); const [userName,setUserName] = useState("Citizen");
+  const [route,setRoute] = useState("dashboard"); const [language,setLanguage] = usePersistentState("spi.language", "EN"); const [userName,setUserName] = usePersistentState("spi.displayName", "Citizen");
   const withSource = route === "ask";
   const render = () => { if(route === "dashboard") return <DashboardScreen onRoute={setRoute} userName={userName} />; if(route === "calendar") return <CalendarScreen onRoute={setRoute} />; if(route === "alerts") return <AlertsScreen onRoute={setRoute} />; if(route === "ask") return <AskScreen onRoute={setRoute} />; if(route === "debate") return <DebateScreen onRoute={setRoute} />; if(route === "investigate") return <InvestigateScreen onRoute={setRoute} />; if(route === "proposal") return <ProposalScreen onRoute={setRoute} />; if(route === "saved") return <SavedResearchScreen onRoute={setRoute} />; if(route === "history") return <HistoryScreen onRoute={setRoute} />; if(route === "settings") return <SettingsScreen userName={userName} setUserName={setUserName} language={language} setLanguage={setLanguage} />; return <PlaceholderScreen route={route} onRoute={setRoute} />; };
   return <div className={`app-shell ${withSource ? "with-source" : "wide"}`}><Topbar language={language} setLanguage={setLanguage} onRoute={setRoute} /><AppNav route={route} onRoute={setRoute} />{render()}</div>;

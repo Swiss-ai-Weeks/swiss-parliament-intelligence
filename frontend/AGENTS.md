@@ -23,3 +23,5 @@ Build app UI in `src/`. Keep `.openai/hosting.json`, `worker/index.js`, `scripts
 - Alerts are monitoring rules created from explicit filters or a natural-language prompt. AI suggestions are always rendered as editable chips before a rule is saved.
 - Investigate's AI filter builder is assistive only: it proposes period, level, type, topic, and chamber filters for review before search.
 - Prototype screens consume one normalized fixture model so that debate IDs, people, timestamps, proposal stages, and citations remain consistent and can later be replaced by API responses.
+- Keep persistence temporary and explicit: `usePersistentState`/localStorage is only for demo continuity; production preferences, follows, alerts, history, and saved research must come from the authenticated backend.
+- Keep network access behind `src/services/api.js` (`createApiClient`). Screens should consume a provider rather than calling `fetch` directly so fixtures can be replaced by the real API without a UI rewrite.
