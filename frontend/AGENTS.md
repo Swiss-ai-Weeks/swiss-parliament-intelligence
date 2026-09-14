@@ -13,8 +13,15 @@ Build app UI in `src/`. Keep `.openai/hosting.json`, `worker/index.js`, `scripts
 - Desktop-first, dark, evidence-centered interface based on `design/approved-conversational-briefing.png`.
 - Dashboard is the default home and the first navigation item. It summarizes tracked proposals, upcoming parliamentary activity, recent evidence, and voting context.
 - Keep the default Ask experience simple; advanced research controls belong behind the Investigate mode.
+- Ask Parliament opens directly on the question composer. Do not repeat an Ask/Investigate mode switch inside that screen because both destinations already exist in persistent navigation.
 - Original parliamentary video, transcript, and source metadata must remain visually primary over AI interpretation.
 - The source sidebar includes a compact "Speakers in this debate" portrait list directly below "About this source".
 - The core demo journey is Dashboard → Ask → cited source → full Debate → Investigate → Proposal Tracker.
 - Personalization is explicit: people, parties, proposals, and topics are items the user chooses to follow. Never infer or label a user's political affiliation.
+- The dashboard greeting uses the account display name, falling back to "Citizen". Settings owns this preference along with language, notifications, and privacy controls.
+- Calendar is a first-class workspace. Each event is selectable and opens an adjacent detail inspector with an action to open the related debate/proposal or create an alert.
+- Alerts are monitoring rules created from explicit filters or a natural-language prompt. AI suggestions are always rendered as editable chips before a rule is saved.
+- Investigate's AI filter builder is assistive only: it proposes period, level, type, topic, and chamber filters for review before search.
 - Prototype screens consume one normalized fixture model so that debate IDs, people, timestamps, proposal stages, and citations remain consistent and can later be replaced by API responses.
+- Keep persistence temporary and explicit: `usePersistentState`/localStorage is only for demo continuity; production preferences, follows, alerts, history, and saved research must come from the authenticated backend.
+- Keep network access behind `src/services/api.js` (`createApiClient`). Screens should consume a provider rather than calling `fetch` directly so fixtures can be replaced by the real API without a UI rewrite.
