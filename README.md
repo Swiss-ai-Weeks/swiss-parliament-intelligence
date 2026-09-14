@@ -4,6 +4,16 @@ Turn hours of multilingual parliamentary video into evidence people can **find, 
 
 This project is being developed for the HPE–NVIDIA Agentic AI Hackathon during Swiss {ai} Weeks.
 
+## Frontend prototype
+
+The interactive desktop-first prototype lives in [`frontend/`](frontend/). It demonstrates the citizen-friendly Ask experience, source-linked citations, video controls, language and mode states, and the speaker list attached to each debate source.
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
 ## Product promise
 
 Swiss Parliament already publishes recordings. The remaining problem is finding the relevant moment and understanding it without losing the original context.
