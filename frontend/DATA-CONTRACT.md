@@ -34,6 +34,8 @@ The prototype is intentionally API-ready but does not require the live parliamen
 `src/services/api.js` exposes the production seam as `createApiClient({ baseUrl, fetchImpl })`.
 Screens should consume this client through a provider/loader rather than calling `fetch` directly. Until a backend base URL and authentication contract are available, local fixtures and localStorage-backed demo state remain the source of truth.
 
+Set `VITE_API_BASE_URL` to enable live calls. Dashboard requests `GET /dashboard`; Ask submits `POST /ask`. Both retain loading and retryable error states, while the fixture view remains the default when the variable is unset.
+
 ## Backend guarantees the UI depends on
 
 - Stable IDs across Ask, Debate, Investigate, and Proposal Tracker.

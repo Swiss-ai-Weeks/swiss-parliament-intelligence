@@ -1,7 +1,7 @@
 import { ArrowRight, CaretRight, CheckCircle, House, MagnifyingGlass, WarningCircle } from "@phosphor-icons/react";
 
 export function NavItem({ icon: Icon, children, active, onClick, quiet }) {
-  return <button className={`nav-item ${active ? "active" : ""} ${quiet ? "quiet" : ""}`} onClick={onClick}>
+  return <button type="button" aria-current={active ? "page" : undefined} className={`nav-item ${active ? "active" : ""} ${quiet ? "quiet" : ""}`} onClick={onClick}>
     <Icon size={20} weight={active ? "fill" : "regular"} /><span>{children}</span>
   </button>;
 }

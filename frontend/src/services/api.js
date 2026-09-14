@@ -1,8 +1,8 @@
 /**
- * Thin API boundary for the prototype. Screens can use the fixture provider
- * today and switch to this client when the backend endpoints are available.
+ * Thin API boundary for the prototype. Set VITE_API_BASE_URL to connect the
+ * screens to the live parliamentary service; leave it unset to use fixtures.
  */
-export function createApiClient({ baseUrl = "", fetchImpl = fetch } = {}) {
+export function createApiClient({ baseUrl = import.meta.env.VITE_API_BASE_URL || "", fetchImpl = fetch } = {}) {
   async function request(path, options = {}) {
     const response = await fetchImpl(`${baseUrl}${path}`, {
       headers: { "Content-Type": "application/json", ...options.headers },
@@ -27,4 +27,9 @@ export function createApiClient({ baseUrl = "", fetchImpl = fetch } = {}) {
     getPreferences: () => request("/me/preferences"),
     updatePreferences: preferences => request("/me/preferences", { method: "PATCH", body: JSON.stringify(preferences) }),
   };
+}
+
+export function getConfiguredApiClient() {
+  const baseUrl = import.meta.env.VITE_API_BASE_URL || "";
+  return baseUrl ? createApiClient({ baseUrl }) : null;
 }
