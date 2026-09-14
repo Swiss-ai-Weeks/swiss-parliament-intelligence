@@ -2,7 +2,7 @@
  * Thin API boundary for the prototype. Set VITE_API_BASE_URL to connect the
  * screens to the live parliamentary service; leave it unset to use fixtures.
  */
-export function createApiClient({ baseUrl = import.meta.env.VITE_API_BASE_URL || "", fetchImpl = fetch } = {}) {
+export function createApiClient({ baseUrl = import.meta.env?.VITE_API_BASE_URL || "", fetchImpl = fetch } = {}) {
   async function request(path, options = {}) {
     const response = await fetchImpl(`${baseUrl}${path}`, {
       headers: { "Content-Type": "application/json", ...options.headers },
@@ -30,6 +30,6 @@ export function createApiClient({ baseUrl = import.meta.env.VITE_API_BASE_URL ||
 }
 
 export function getConfiguredApiClient() {
-  const baseUrl = import.meta.env.VITE_API_BASE_URL || "";
+  const baseUrl = import.meta.env?.VITE_API_BASE_URL || "";
   return baseUrl ? createApiClient({ baseUrl }) : null;
 }
