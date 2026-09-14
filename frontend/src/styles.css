@@ -291,3 +291,12 @@ blockquote small { display: block; color: var(--muted); margin-top: 5px; font-si
 .alerts-list { margin-top: 20px; border: 1px solid var(--line); background: #0b1721; }.alerts-list > header { display: flex; align-items: center; justify-content: space-between; padding: 16px; border-bottom: 1px solid var(--line); }.alerts-list h2 { margin: 0 0 4px; font-size: 15px; }.alerts-list header p { margin: 0; color: var(--muted); font-size: 9px; }.alerts-list header button { display: flex; align-items: center; gap: 5px; border: 0; background: transparent; color: var(--accent); cursor: pointer; font-size: 9px; }.alerts-list article { display: grid; grid-template-columns: 28px 1fr 100px 42px; align-items: center; gap: 11px; min-height: 76px; padding: 12px 16px; border-bottom: 1px solid var(--line); }.alerts-list article:last-child { border-bottom: 0; }.alerts-list article > svg { color: var(--accent); }.alerts-list article > div { display: flex; flex-direction: column; gap: 5px; }.alerts-list article strong { font-size: 11px; }.alerts-list article p { margin: 0; color: var(--muted); font-size: 9px; }.alerts-list article > span { color: #b7c7d0; font-size: 9px; }.alert-switch input { accent-color: var(--accent); width: 18px; height: 18px; }
 
 @media (max-width: 1350px) { .calendar-layout { grid-template-columns: minmax(650px,1fr) 280px; } }
+
+.async-state { display: flex; align-items: flex-start; gap: 12px; margin: 14px 0; padding: 18px; border: 1px solid var(--line); background: #0b1721; color: var(--text); }
+.async-state > svg { flex: 0 0 auto; color: var(--accent); }
+.async-state strong { display: block; font-size: 11px; }
+.async-state p { margin: 5px 0 10px; color: var(--muted); font-size: 9px; line-height: 1.5; }
+.loading-spinner { width: 22px; height: 22px; flex: 0 0 auto; border: 2px solid #29414e; border-top-color: var(--accent); border-radius: 50%; animation: spi-spin .8s linear infinite; }
+.error-state { border-color: #744854; background: #24151c; }.error-state > svg { color: #ef8798; }.error-state .secondary-action { min-height: 30px; }
+.empty-state { border-style: dashed; }.empty-state > svg { color: #7fa1b2; }
+@keyframes spi-spin { to { transform: rotate(360deg); } }
