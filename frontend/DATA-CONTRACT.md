@@ -12,6 +12,7 @@ The prototype is intentionally API-ready but does not require the live parliamen
 - `Vote`: id, proposal ID, chamber, date, yes/no/abstained totals, result, member votes when available
 - `AskResponse`: question, generated answer sections, citation evidence IDs, generation time, scope
 - `DashboardSummary`: upcoming events, tracked proposals, followed entities, recent evidence, recent votes
+- `UserPreferences`: display name, interface language, explicit follows, notification choices, privacy choices
 
 ## First integration endpoints
 
@@ -22,6 +23,8 @@ The prototype is intentionally API-ready but does not require the live parliamen
 5. `GET /debates/{id}/transcript` — timestamped segments with optional translations.
 6. `GET /proposals/{id}` — status, timeline, debates, votes, and next event.
 7. `GET /search/evidence` — filters and ranked evidence moments for Investigate.
+8. `GET/PATCH /me/preferences` — dashboard name, language, notification, privacy, and follow preferences.
+9. `GET /me/saved-research` and `GET /me/history` — private account workspace lists.
 
 ## Backend guarantees the UI depends on
 
