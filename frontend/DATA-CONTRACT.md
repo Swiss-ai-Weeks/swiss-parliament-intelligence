@@ -25,6 +25,9 @@ The prototype is intentionally API-ready but does not require the live parliamen
 7. `GET /search/evidence` — filters and ranked evidence moments for Investigate.
 8. `GET/PATCH /me/preferences` — dashboard name, language, notification, privacy, and follow preferences.
 9. `GET /me/saved-research` and `GET /me/history` — private account workspace lists.
+10. `GET /calendar?from={date}&to={date}&level={level}` — calendar events with related debate/proposal IDs.
+11. `GET/PATCH /me/alerts` — monitoring rules, frequency, active state, and notification delivery status.
+12. `POST /ai/parse-filters` — natural-language prompt to proposed filter groups; suggestions must remain reviewable before applying.
 
 ## Backend guarantees the UI depends on
 
@@ -34,6 +37,7 @@ The prototype is intentionally API-ready but does not require the live parliamen
 - Original language is always available; translations are labelled and optional.
 - Machine-generated transcript confidence is exposed rather than hidden.
 - Follows are explicit user choices. No political affiliation is inferred.
+- AI-generated filters are suggestions, not silent changes to the user's query or alert rule.
 
 ## Suggested integration order
 

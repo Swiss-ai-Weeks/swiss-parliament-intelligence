@@ -19,4 +19,7 @@ Build app UI in `src/`. Keep `.openai/hosting.json`, `worker/index.js`, `scripts
 - The core demo journey is Dashboard → Ask → cited source → full Debate → Investigate → Proposal Tracker.
 - Personalization is explicit: people, parties, proposals, and topics are items the user chooses to follow. Never infer or label a user's political affiliation.
 - The dashboard greeting uses the account display name, falling back to "Citizen". Settings owns this preference along with language, notifications, and privacy controls.
+- Calendar is a first-class workspace. Each event is selectable and opens an adjacent detail inspector with an action to open the related debate/proposal or create an alert.
+- Alerts are monitoring rules created from explicit filters or a natural-language prompt. AI suggestions are always rendered as editable chips before a rule is saved.
+- Investigate's AI filter builder is assistive only: it proposes period, level, type, topic, and chamber filters for review before search.
 - Prototype screens consume one normalized fixture model so that debate IDs, people, timestamps, proposal stages, and citations remain consistent and can later be replaced by API responses.
