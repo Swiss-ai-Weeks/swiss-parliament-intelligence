@@ -77,9 +77,12 @@ The source's lower source-panel crop and the implementation's matching 395 × 45
 - [x] Remove the duplicated Ask/Investigate switch from Ask Parliament.
 - [x] Verify personalized greeting, account settings, Saved Research filters, and History navigation.
 - [ ] Capture and compare Calendar, Alerts, and AI filter-builder states after browser access is restored.
+- [ ] Re-capture the responsive 1100px and 760px layouts after a fresh production build.
 
 ## Follow-up polish
 
 - Replace fictional portraits with licensed official Parliament headshots when the team confirms the production data source.
 
 final result: blocked
+
+The current session could not start Vite or open a preview: the environment denied the filesystem access required by esbuild, and the browser surface returned no running tabs. Code-level tests passed, but visual QA for the latest commit remains pending a session with browser/build access.
