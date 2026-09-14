@@ -1,21 +1,22 @@
 import { useMemo, useState } from "react";
 import {
   ArrowLeft, ArrowRight, BookmarkSimple, Buildings, CalendarBlank, CaretDown,
-  ChatCircleDots, Check, ClipboardText, ClockCounterClockwise, Copy, FileText,
-  FadersHorizontal, GearSix, Globe, MagnifyingGlass, Paperclip, Pause, Play,
-  ShieldCheck, Sparkle, ThumbsDown, ThumbsUp, UsersThree,
+  CaretRight, ChartLineUp, ChatCircleDots, Check, CheckCircle, ClipboardText,
+  ClockCounterClockwise, Copy, FileText, FadersHorizontal, GearSix, Globe,
+  House, MagnifyingGlass, MapPin, Paperclip, Pause, Play, Plus, ShieldCheck,
+  Sparkle, Star, ThumbsDown, ThumbsUp, UsersThree, X,
 } from "@phosphor-icons/react";
 
 const citations = {
-  1: { time: "00:12:34", speaker: "Beat Flach", topic: "State vs. private provision", quote: "Die e-ID muss vom Staat herausgegeben werden. Nur so können wir das Vertrauen der Bevölkerung sicherstellen und einen gleichberechtigten Zugang für alle gewährleisten.", range: "00:12:34 – 00:12:52" },
-  2: { time: "01:03:17", speaker: "Min Li Marti", topic: "Private providers", quote: "Ein staatlich betriebenes E-ID-System kann das Vertrauen in die digitale Identität stärken, weil der Staat für Sicherheit und Grundrechte bürgt.", range: "01:03:17 – 01:03:43" },
-  3: { time: "00:48:09", speaker: "Marcel Dettling", topic: "Market solutions", quote: "Gleichzeitig dürfen wir private Anbieter nicht grundsätzlich ausschliessen. Ein Marktmodell kann Innovationen ermöglichen und die Akzeptanz erhöhen.", range: "00:48:09 – 00:48:27" },
-  4: { time: "00:27:11", speaker: "Min Li Marti", topic: "Data protection concerns", quote: "Die Grundrechte dürfen nicht dem Komfort geopfert werden. Der Datenschutz muss im Zentrum jeder technischen Lösung stehen.", range: "00:27:11 – 00:27:38" },
-  5: { time: "01:15:26", speaker: "Elisabeth Baume-Schneider", topic: "Federal safeguards", quote: "Die Daten müssen in der Schweiz bleiben und die gesetzlichen Schutzmechanismen müssen von Anfang an eingebaut sein.", range: "01:15:26 – 01:15:58" },
-  6: { time: "00:52:03", speaker: "Beat Flach", topic: "Voluntary adoption", quote: "Vertrauen entsteht nur, wenn die Menschen selbst entscheiden können, ob und wann sie die elektronische Identität verwenden.", range: "00:52:03 – 00:52:25" },
-  7: { time: "00:36:48", speaker: "Elisabeth Baume-Schneider", topic: "Voluntary use", quote: "Die Nutzung bleibt freiwillig. Diese Zusage ist ein Grundpfeiler der Vorlage und wird gesetzlich abgesichert.", range: "00:36:48 – 00:37:15" },
-  8: { time: "01:28:12", speaker: "Marcel Dettling", topic: "Digital services", quote: "Eine Lösung wird nur dann erfolgreich sein, wenn sie im Alltag einen klaren Nutzen schafft und einfach zugänglich bleibt.", range: "01:28:12 – 01:28:38" },
-  9: { time: "00:11:05", speaker: "Beat Flach", topic: "Universal access", quote: "Ein digitaler Service des Bundes darf niemanden ausschliessen. Es braucht weiterhin einen analogen Weg.", range: "00:11:05 – 00:11:29" },
+  1: { time: "00:12:34", speaker: "Beat Flach", party: "GLP", topic: "State vs. private provision", quote: "Die e-ID muss vom Staat herausgegeben werden. Nur so können wir das Vertrauen der Bevölkerung sicherstellen und einen gleichberechtigten Zugang für alle gewährleisten.", range: "00:12:34 – 00:12:52" },
+  2: { time: "01:03:17", speaker: "Min Li Marti", party: "SP", topic: "Private providers", quote: "Ein staatlich betriebenes E-ID-System kann das Vertrauen in die digitale Identität stärken, weil der Staat für Sicherheit und Grundrechte bürgt.", range: "01:03:17 – 01:03:43" },
+  3: { time: "00:48:09", speaker: "Marcel Dettling", party: "SVP", topic: "Market solutions", quote: "Gleichzeitig dürfen wir private Anbieter nicht grundsätzlich ausschliessen. Ein Marktmodell kann Innovationen ermöglichen und die Akzeptanz erhöhen.", range: "00:48:09 – 00:48:27" },
+  4: { time: "00:27:11", speaker: "Min Li Marti", party: "SP", topic: "Data protection concerns", quote: "Die Grundrechte dürfen nicht dem Komfort geopfert werden. Der Datenschutz muss im Zentrum jeder technischen Lösung stehen.", range: "00:27:11 – 00:27:38" },
+  5: { time: "01:15:26", speaker: "Elisabeth Baume-Schneider", party: "Federal Council", topic: "Federal safeguards", quote: "Die Daten müssen in der Schweiz bleiben und die gesetzlichen Schutzmechanismen müssen von Anfang an eingebaut sein.", range: "01:15:26 – 01:15:58" },
+  6: { time: "00:52:03", speaker: "Beat Flach", party: "GLP", topic: "Voluntary adoption", quote: "Vertrauen entsteht nur, wenn die Menschen selbst entscheiden können, ob und wann sie die elektronische Identität verwenden.", range: "00:52:03 – 00:52:25" },
+  7: { time: "00:36:48", speaker: "Elisabeth Baume-Schneider", party: "Federal Council", topic: "Voluntary use", quote: "Die Nutzung bleibt freiwillig. Diese Zusage ist ein Grundpfeiler der Vorlage und wird gesetzlich abgesichert.", range: "00:36:48 – 00:37:15" },
+  8: { time: "01:28:12", speaker: "Marcel Dettling", party: "SVP", topic: "Digital services", quote: "Eine Lösung wird nur dann erfolgreich sein, wenn sie im Alltag einen klaren Nutzen schafft und einfach zugänglich bleibt.", range: "01:28:12 – 01:28:38" },
+  9: { time: "00:11:05", speaker: "Beat Flach", party: "GLP", topic: "Universal access", quote: "Ein digitaler Service des Bundes darf niemanden ausschliessen. Es braucht weiterhin einen analogen Weg.", range: "00:11:05 – 00:11:29" },
 };
 
 const speakers = [
@@ -31,94 +32,123 @@ const answerSections = [
   { title: "Mandatory vs. voluntary use", text: "Several speakers rejected any form of obligation and insisted that use remain voluntary. Others noted that broad adoption would be necessary for the service to be useful in practice.", cites: [7, 8, 9] },
 ];
 
-function NavItem({ icon: Icon, children, active, onClick }) {
-  return <button className={`nav-item ${active ? "active" : ""}`} onClick={onClick}><Icon size={20} weight={active ? "fill" : "regular"} /><span>{children}</span></button>;
+const transcript = [
+  { id: 1, speaker: "Beat Flach", party: "GLP", time: "00:12:34", text: "Die e-ID muss vom Staat herausgegeben werden. Nur so können wir das Vertrauen der Bevölkerung sicherstellen.", translation: "The e-ID must be issued by the state. Only then can we secure public trust." },
+  { id: 4, speaker: "Min Li Marti", party: "SP", time: "00:27:11", text: "Die Grundrechte dürfen nicht dem Komfort geopfert werden. Der Datenschutz muss im Zentrum stehen.", translation: "Fundamental rights must not be sacrificed for convenience. Data protection must remain central." },
+  { id: 7, speaker: "Elisabeth Baume-Schneider", party: "Federal Council", time: "00:36:48", text: "Die Nutzung bleibt freiwillig. Diese Zusage wird gesetzlich abgesichert.", translation: "Use remains voluntary. This commitment will be protected in law." },
+  { id: 3, speaker: "Marcel Dettling", party: "SVP", time: "00:48:09", text: "Gleichzeitig dürfen wir private Anbieter nicht grundsätzlich ausschliessen.", translation: "At the same time, we must not categorically exclude private providers." },
+  { id: 6, speaker: "Beat Flach", party: "GLP", time: "00:52:03", text: "Vertrauen entsteht nur, wenn die Menschen selbst entscheiden können.", translation: "Trust exists only when people can decide for themselves." },
+  { id: 2, speaker: "Min Li Marti", party: "SP", time: "01:03:17", text: "Ein staatlich betriebenes System kann das Vertrauen in die digitale Identität stärken.", translation: "A state-operated system can strengthen trust in digital identity." },
+];
+
+const proposals = [
+  { id: "22.026", title: "Federal Act on Electronic Identity", status: "Final vote scheduled", next: "Council of States · 18 Sep", progress: 78, followed: true },
+  { id: "24.067", title: "Transparency in Political Advertising", status: "Committee consultation", next: "Legal Affairs Committee · 23 Sep", progress: 42, followed: true },
+  { id: "23.081", title: "Secure Swiss Health Data Space", status: "National Council debate", next: "Plenary sitting · 29 Sep", progress: 58, followed: false },
+];
+
+const evidenceResults = [1, 4, 3, 5, 6, 2].map((id, index) => ({ ...citations[id], id, relevance: [96, 92, 89, 86, 82, 78][index], session: index < 3 ? "Autumn Session 2026" : "Summer Session 2026" }));
+
+const routeLabels = { dashboard: "Dashboard", ask: "Ask Parliament", debate: "Debates & Videos", investigate: "Investigate", proposal: "Proposals & Bills", people: "People", topics: "Topics", committees: "Committees", documents: "Documents", saved: "Saved Research" };
+
+function NavItem({ icon: Icon, children, active, onClick, quiet }) {
+  return <button className={`nav-item ${active ? "active" : ""} ${quiet ? "quiet" : ""}`} onClick={onClick}><Icon size={20} weight={active ? "fill" : "regular"} /><span>{children}</span></button>;
 }
 
-function CitationChip({ id, selected, onSelect }) {
-  return <button className={`citation ${selected ? "selected" : ""}`} onClick={() => onSelect(id)} aria-label={`Open source ${id} at ${citations[id].time}`}><b>{id}</b><span>{citations[id].time}</span></button>;
+function AppNav({ route, onRoute }) {
+  const primary = [
+    ["dashboard", House], ["ask", ChatCircleDots], ["investigate", MagnifyingGlass],
+    ["debate", Play], ["proposal", ClipboardText], ["people", UsersThree], ["topics", Globe],
+    ["committees", Buildings], ["documents", FileText],
+  ];
+  return <nav className="sidebar">
+    <div className="nav-main">{primary.map(([key, Icon]) => <NavItem key={key} icon={Icon} active={route === key} onClick={() => onRoute(key)} quiet={["people","topics","committees","documents"].includes(key)}>{routeLabels[key]}</NavItem>)}</div>
+    <div className="nav-secondary"><NavItem icon={BookmarkSimple} active={route === "saved"} onClick={() => onRoute("saved")}>Saved Research</NavItem><NavItem icon={ClockCounterClockwise}>History</NavItem><NavItem icon={GearSix}>Settings</NavItem></div>
+    <div className="civic-note"><p>A public service for an open democracy.</p><div><ShieldCheck size={25} weight="fill" /><span>Federal Assembly<small>The Swiss Parliament</small></span></div></div>
+  </nav>;
 }
+
+function Topbar({ language, setLanguage, onRoute }) {
+  return <header className="topbar">
+    <button className="brand" onClick={() => onRoute("dashboard")}><Buildings size={35} weight="fill" /><span><strong>Swiss Parliament Intelligence</strong><small>Search. Watch. Understand.</small></span></button>
+    <label className="global-search"><MagnifyingGlass size={21} /><input aria-label="Global search" placeholder="Search debates, people, topics, documents..." /><kbd>⌘ K</kbd></label>
+    <div className="session"><CalendarBlank size={20} /><span><strong>Autumn Session 2026</strong><small>14 Sep – 2 Oct 2026</small></span></div>
+    <div className="languages" aria-label="Language">{["DE","FR","IT","EN"].map(item => <button key={item} className={language === item ? "active" : ""} onClick={() => setLanguage(item)}>{item}</button>)}</div>
+    <button className="avatar-button" aria-label="Account"><UsersThree size={22} /></button>
+  </header>;
+}
+
+function PageHeader({ eyebrow, title, description, actions }) {
+  return <header className="page-header"><div><p>{eyebrow}</p><h1>{title}</h1><span>{description}</span></div>{actions && <div className="page-actions">{actions}</div>}</header>;
+}
+
+function StatusPill({ children, tone = "teal" }) { return <span className={`status-pill ${tone}`}>{children}</span>; }
+
+function DashboardScreen({ onRoute }) {
+  const [following, setFollowing] = useState(["Electronic identity", "Data protection", "Beat Flach"]);
+  const [question, setQuestion] = useState("");
+  return <main className="page-stage dashboard-page">
+    <PageHeader eyebrow="Sunday, 14 September" title="Good afternoon" description="Your overview of Parliament, tracked proposals, and new evidence." actions={<button className="primary-action" onClick={() => onRoute("ask")}><ChatCircleDots /> Ask Parliament</button>} />
+    <section className="dashboard-grid">
+      <div className="dash-main">
+        <form className="dashboard-ask" onSubmit={e => { e.preventDefault(); onRoute("ask"); }}><div><Sparkle weight="fill" /><span><strong>What would you like to understand?</strong><small>Ask across debates, proposals, votes, and documents.</small></span></div><div><input value={question} onChange={e => setQuestion(e.target.value)} placeholder="What changed in the latest e-ID debate?" /><button aria-label="Ask"><ArrowRight weight="bold" /></button></div></form>
+        <section className="section-block"><div className="block-heading"><div><h2>Tracked proposals</h2><p>Three dossiers you are following</p></div><button onClick={() => onRoute("proposal")}>View all <ArrowRight /></button></div><div className="proposal-list">{proposals.map(item => <button key={item.id} onClick={() => onRoute("proposal")} className="proposal-row"><div className="proposal-id">{item.id}</div><div className="proposal-body"><strong>{item.title}</strong><span><StatusPill>{item.status}</StatusPill> {item.next}</span><div className="progress-track"><i style={{width:`${item.progress}%`}} /></div></div><CaretRight /></button>)}</div></section>
+        <section className="section-block"><div className="block-heading"><div><h2>New for you</h2><p>Recent moments matching your followed topics</p></div><button onClick={() => onRoute("investigate")}>Investigate <ArrowRight /></button></div><div className="news-grid"><button onClick={() => onRoute("debate")}><img src="/assets/parliament-speaker.png" alt="Parliament debate" /><span><small>Electronic identity · 22 Sep</small><strong>Three unresolved questions before the final vote</strong><em><Play weight="fill" /> 14 min debate summary</em></span></button><div className="vote-digest"><span className="digest-kicker"><ChartLineUp /> Latest votes</span><h3>Followed representatives</h3><div><span><strong>Digital infrastructure funding</strong><small>National Council · 13 Sep</small></span><StatusPill tone="green">Adopted</StatusPill></div><div><span><strong>Data protection amendment</strong><small>Council of States · 12 Sep</small></span><StatusPill tone="red">Rejected</StatusPill></div><button onClick={() => onRoute("proposal")}>See voting context <ArrowRight /></button></div></div></section>
+      </div>
+      <aside className="dash-side">
+        <section className="session-card"><div><CalendarBlank /><span><small>Current session</small><strong>Autumn Session 2026</strong></span></div><dl><div><dt>18 Sep</dt><dd>e-ID final vote</dd></div><div><dt>23 Sep</dt><dd>Political ads committee</dd></div><div><dt>29 Sep</dt><dd>Health data debate</dd></div></dl><button>Open calendar <ArrowRight /></button></section>
+        <section className="following-card"><div className="block-heading"><div><h2>Following</h2><p>Your dashboard preferences</p></div></div><div className="follow-tags">{following.map(item => <button key={item} onClick={() => setFollowing(following.filter(x => x !== item))}>{item}<X /></button>)}<button className="add-follow"><Plus /> Add</button></div><p>Selections are explicit and private to your account. We never infer political affiliation.</p></section>
+        <section className="continue-card"><small>CONTINUE RESEARCH</small><h3>Who supports a state-issued e-ID?</h3><p>4 evidence moments saved · yesterday</p><button onClick={() => onRoute("investigate")}><BookmarkSimple weight="fill" /> Open collection</button></section>
+      </aside>
+    </section>
+  </main>;
+}
+
+function CitationChip({ id, selected, onSelect }) { return <button className={`citation ${selected ? "selected" : ""}`} onClick={() => onSelect(id)} aria-label={`Open source ${id} at ${citations[id].time}`}><b>{id}</b><span>{citations[id].time}</span></button>; }
 
 function SpeakerList() {
   const [expanded, setExpanded] = useState(false);
-  const visible = expanded ? speakers : speakers.slice(0, 3);
-  return (
-    <section className="source-section speakers-section">
-      <div className="section-heading-row"><h3>Speakers in this debate</h3><button className="text-button" onClick={() => setExpanded(!expanded)}>{expanded ? "Show less" : "View all"}</button></div>
-      <div className="speaker-list">
-        {visible.map((speaker, index) => (
-          <button className="speaker-row" key={speaker.name}>
-            <img src={speaker.image} alt="" style={{ objectPosition: speaker.position || "50% 36%" }} />
-            <span><strong>{speaker.name}</strong><small>{speaker.meta}</small></span>
-            {index === 0 && <span className="speaking-badge">Now</span>}
-          </button>
-        ))}
-      </div>
-    </section>
-  );
+  return <section className="source-section speakers-section"><div className="section-heading-row"><h3>Speakers in this debate</h3><button className="text-button" onClick={() => setExpanded(!expanded)}>{expanded ? "Show less" : "View all"}</button></div><div className="speaker-list">{(expanded ? speakers : speakers.slice(0,3)).map((speaker,index) => <button className="speaker-row" key={speaker.name}><img src={speaker.image} alt="" style={{objectPosition:speaker.position || "50% 36%"}} /><span><strong>{speaker.name}</strong><small>{speaker.meta}</small></span>{index === 0 && <span className="speaking-badge">Now</span>}</button>)}</div></section>;
 }
 
-function SourcePanel({ selectedId, onSelect }) {
+function SourcePanel({ selectedId, onSelect, onRoute }) {
   const source = citations[selectedId];
   const [playing, setPlaying] = useState(false);
   const progress = useMemo(() => 12 + selectedId * 7, [selectedId]);
-  return (
-    <aside className="source-panel">
-      <div className="source-panel-head"><span><ClipboardText size={19} /> Source {selectedId} of 9</span><div className="source-arrows"><button onClick={() => onSelect(selectedId === 1 ? 9 : selectedId - 1)} aria-label="Previous source"><ArrowLeft size={16} /></button><button onClick={() => onSelect(selectedId === 9 ? 1 : selectedId + 1)} aria-label="Next source"><ArrowRight size={16} /></button></div></div>
-      <div className="video-frame">
-        <img src="/assets/parliament-speaker.png" alt="Parliamentary speaker at the lectern" />
-        <div className="video-shade" />
-        <div className="video-progress"><span style={{ width: `${progress}%` }} /></div>
-        <div className="video-controls"><button onClick={() => setPlaying(!playing)} aria-label={playing ? "Pause video" : "Play video"}>{playing ? <Pause weight="fill" /> : <Play weight="fill" />}</button><span>{source.time} <i>/ 00:14:02</i></span><button aria-label="Video settings"><GearSix /></button></div>
-      </div>
-      <div className="source-scroll">
-        <section className="speaker-summary"><div><h2>{source.speaker}</h2><p>National Council (NR)</p><p>22 September 2026</p></div><span className="party-pill">GLP</span></section>
-        <blockquote>“{source.quote}”<small>{source.range}</small></blockquote>
-        <button className="full-debate"><Play size={16} weight="fill" /> View in full debate <ArrowRight size={16} /></button>
-        <section className="source-section about-source"><h3>About this source</h3><dl><dt>Session</dt><dd>Autumn Session 2026</dd><dt>Item</dt><dd>22.026 · Federal Act on Electronic Identity</dd><dt>Chamber</dt><dd>National Council</dd><dt>Date</dt><dd>22 Sep 2026</dd><dt>Source</dt><dd><a href="https://www.parlament.ch/" target="_blank" rel="noreferrer">Parliamentary video ↗</a></dd></dl></section>
-        <SpeakerList />
-        <section className="source-section related"><h3>Related moments</h3>{[4, 2, 8].map((id) => <button key={id} onClick={() => onSelect(id)} className={selectedId === id ? "active" : ""}><Play size={14} weight="fill" /><time>{citations[id].time}</time><span>{citations[id].topic}</span></button>)}</section>
-      </div>
-    </aside>
-  );
+  return <aside className="source-panel">
+    <div className="source-panel-head"><span><ClipboardText size={19} /> Source {selectedId} of 9</span><div className="source-arrows"><button onClick={() => onSelect(selectedId === 1 ? 9 : selectedId - 1)} aria-label="Previous source"><ArrowLeft /></button><button onClick={() => onSelect(selectedId === 9 ? 1 : selectedId + 1)} aria-label="Next source"><ArrowRight /></button></div></div>
+    <div className="video-frame"><img src="/assets/parliament-speaker.png" alt="Parliamentary speaker at the lectern" /><div className="video-shade" /><div className="video-progress"><span style={{width:`${progress}%`}} /></div><div className="video-controls"><button onClick={() => setPlaying(!playing)} aria-label={playing ? "Pause video" : "Play video"}>{playing ? <Pause weight="fill" /> : <Play weight="fill" />}</button><span>{source.time} <i>/ 00:14:02</i></span><button aria-label="Video settings"><GearSix /></button></div></div>
+    <div className="source-scroll"><section className="speaker-summary"><div><h2>{source.speaker}</h2><p>National Council (NR)</p><p>22 September 2026</p></div><span className="party-pill">{source.party}</span></section><blockquote>“{source.quote}”<small>{source.range}</small></blockquote><button className="full-debate" onClick={() => onRoute("debate")}><Play weight="fill" /> View in full debate <ArrowRight /></button><section className="source-section about-source"><h3>About this source</h3><dl><dt>Session</dt><dd>Autumn Session 2026</dd><dt>Item</dt><dd>22.026 · Federal Act on Electronic Identity</dd><dt>Chamber</dt><dd>National Council</dd><dt>Date</dt><dd>22 Sep 2026</dd><dt>Source</dt><dd>Parliamentary video ↗</dd></dl></section><SpeakerList /><section className="source-section related"><h3>Related moments</h3>{[4,2,8].map(id => <button key={id} onClick={() => onSelect(id)}><Play weight="fill" /><time>{citations[id].time}</time><span>{citations[id].topic}</span></button>)}</section></div>
+  </aside>;
 }
 
-export function App() {
-  const [mode, setMode] = useState("ask");
-  const [selectedId, setSelectedId] = useState(1);
-  const [language, setLanguage] = useState("EN");
-  const [query, setQuery] = useState("What were the main disagreements about the electronic identity proposal?");
-  const [copied, setCopied] = useState(false);
-  const [feedback, setFeedback] = useState(null);
-  const [nav, setNav] = useState("Conversational Briefing");
-  const submit = (event) => { event.preventDefault(); if (query.trim()) setSelectedId(1); };
+function AskScreen({ onRoute }) {
+  const [selectedId, setSelectedId] = useState(1); const [mode,setMode] = useState("ask"); const [query,setQuery] = useState("What were the main disagreements about the electronic identity proposal?"); const [copied,setCopied] = useState(false); const [feedback,setFeedback] = useState(null);
+  return <><main className="workspace"><div className="mode-switch"><button className={mode === "ask" ? "active" : ""} onClick={() => setMode("ask")}><ChatCircleDots /><span><strong>Ask</strong><small>Get a concise answer with sources</small></span></button><button onClick={() => {setMode("investigate"); onRoute("investigate");}}><MagnifyingGlass /><span><strong>Investigate</strong><small>Explore the evidence yourself</small></span></button></div><form className="question-box" onSubmit={e => e.preventDefault()}><textarea value={query} onChange={e => setQuery(e.target.value)} /><div className="question-tools"><span><button type="button"><Paperclip /> Add context</button><button type="button"><FadersHorizontal /> Filters</button></span><button type="button" className="scope"><Buildings /> Swiss Parliament only <CaretDown /></button></div><button className="send"><ArrowRight weight="bold" /></button></form><article className="answer-card"><header><div className="ai-mark"><Sparkle weight="fill" /></div><div><h1>Answer</h1><p>Based on parliamentary debates and documents · AI interpretation (experimental)</p></div><time>Generated 14 Sep 2026, 14:32</time></header><p className="answer-intro">The electronic identity (e-ID) proposal sparked three main areas of disagreement in Parliament:</p><div className="answer-sections">{answerSections.map((section,index) => <section key={section.title}><span className="section-index">{index + 1}</span><div><h2>{section.title}</h2><p>{section.text}</p><div className="citations-row">{section.cites.map(id => <CitationChip key={id} id={id} selected={selectedId === id} onSelect={setSelectedId} />)}</div></div></section>)}</div><p className="answer-conclusion">Overall, there was broad agreement on the need for a secure and user-friendly solution, but clear disagreements remained on who should operate it, how to protect privacy, and whether it should be mandatory.</p><footer><div className="feedback"><span>Was this helpful?</span><button className={feedback === "up" ? "selected" : ""} onClick={() => setFeedback("up")}><ThumbsUp /></button><button className={feedback === "down" ? "selected" : ""} onClick={() => setFeedback("down")}><ThumbsDown /></button></div><button className="copy-button" onClick={() => {navigator.clipboard?.writeText(query);setCopied(true);setTimeout(()=>setCopied(false),1200);}}>{copied ? <Check /> : <Copy />}{copied ? "Copied" : "Copy answer"}</button></footer></article></main><SourcePanel selectedId={selectedId} onSelect={setSelectedId} onRoute={onRoute} /></>;
+}
 
-  return (
-    <div className="app-shell">
-      <header className="topbar">
-        <div className="brand"><Buildings size={35} weight="fill" /><span><strong>Swiss Parliament Intelligence</strong><small>Search. Watch. Understand.</small></span></div>
-        <label className="global-search"><MagnifyingGlass size={21} /><input aria-label="Global search" placeholder="Search debates, people, topics, documents..." /><kbd>⌘ K</kbd></label>
-        <div className="session"><CalendarBlank size={20} /><span><strong>Autumn Session 2026</strong><small>14 Sep – 2 Oct 2026</small></span></div>
-        <div className="languages" aria-label="Language">{["DE", "FR", "IT", "EN"].map((item) => <button key={item} className={language === item ? "active" : ""} onClick={() => setLanguage(item)}>{item}</button>)}</div>
-        <button className="avatar-button" aria-label="Account"><UsersThree size={22} /></button>
-      </header>
-      <nav className="sidebar">
-        <div className="nav-main"><NavItem icon={ChatCircleDots} active={nav === "Conversational Briefing"} onClick={() => setNav("Conversational Briefing")}>Conversational Briefing</NavItem><NavItem icon={Play} active={nav === "Debates & Videos"} onClick={() => setNav("Debates & Videos")}>Debates & Videos</NavItem><NavItem icon={FileText} active={nav === "Documents"} onClick={() => setNav("Documents")}>Documents</NavItem><NavItem icon={UsersThree} active={nav === "People"} onClick={() => setNav("People")}>People</NavItem><NavItem icon={Globe} active={nav === "Topics"} onClick={() => setNav("Topics")}>Topics</NavItem><NavItem icon={Buildings} active={nav === "Committees"} onClick={() => setNav("Committees")}>Committees</NavItem><NavItem icon={ClipboardText} active={nav === "Initiatives & Bills"} onClick={() => setNav("Initiatives & Bills")}>Initiatives & Bills</NavItem></div>
-        <div className="nav-secondary"><NavItem icon={BookmarkSimple}>Saved</NavItem><NavItem icon={ClockCounterClockwise}>History</NavItem><NavItem icon={GearSix}>Settings</NavItem></div>
-        <div className="civic-note"><p>A public service for an open democracy.</p><div><ShieldCheck size={25} weight="fill" /><span>Federal Assembly<small>The Swiss Parliament</small></span></div></div>
-      </nav>
-      <main className="workspace">
-        <div className="mode-switch" role="tablist"><button className={mode === "ask" ? "active" : ""} onClick={() => setMode("ask")}><ChatCircleDots size={28} /><span><strong>Ask</strong><small>Get a concise answer with sources</small></span></button><button className={mode === "investigate" ? "active" : ""} onClick={() => setMode("investigate")}><MagnifyingGlass size={28} /><span><strong>Investigate</strong><small>Explore the evidence yourself</small></span></button></div>
-        <form className="question-box" onSubmit={submit}><textarea value={query} onChange={(event) => setQuery(event.target.value)} aria-label="Ask about parliamentary debates" /><div className="question-tools"><span><button type="button"><Paperclip size={16} /> Add context</button><button type="button"><FadersHorizontal size={16} /> Filters</button></span><button type="button" className="scope"><Buildings size={16} /> Swiss Parliament only <CaretDown size={14} /></button></div><button className="send" aria-label="Submit question"><ArrowRight size={21} weight="bold" /></button></form>
-        <article className="answer-card">
-          <header><div className="ai-mark"><Sparkle size={20} weight="fill" /></div><div><h1>Answer</h1><p>Based on parliamentary debates and documents · AI interpretation (experimental)</p></div><time>Generated 14 Sep 2026, 14:32</time></header>
-          <p className="answer-intro">The electronic identity (e-ID) proposal sparked three main areas of disagreement in Parliament:</p>
-          <div className="answer-sections">{answerSections.map((section, index) => <section key={section.title}><span className="section-index">{index + 1}</span><div><h2>{section.title}</h2><p>{section.text}</p><div className="citations-row">{section.cites.map((id) => <CitationChip key={id} id={id} selected={selectedId === id} onSelect={setSelectedId} />)}</div></div></section>)}</div>
-          <p className="answer-conclusion">Overall, there was broad agreement on the need for a secure and user-friendly solution, but clear disagreements remained on who should operate it, how to protect privacy, and whether it should be mandatory.</p>
-          <footer><div className="feedback"><span>Was this helpful?</span><button className={feedback === "up" ? "selected" : ""} onClick={() => setFeedback("up")}><ThumbsUp /></button><button className={feedback === "down" ? "selected" : ""} onClick={() => setFeedback("down")}><ThumbsDown /></button></div><button className="copy-button" onClick={() => { navigator.clipboard?.writeText(query); setCopied(true); setTimeout(() => setCopied(false), 1500); }}>{copied ? <Check /> : <Copy />}{copied ? "Copied" : "Copy answer"}</button></footer>
-        </article>
-      </main>
-      <SourcePanel selectedId={selectedId} onSelect={setSelectedId} />
-    </div>
-  );
+function DebateScreen({ onRoute }) {
+  const [active,setActive] = useState(1); const [playing,setPlaying] = useState(false); const [translation,setTranslation] = useState(true);
+  const item = transcript.find(x => x.id === active) || transcript[0];
+  return <main className="page-stage debate-page"><PageHeader eyebrow="Debate · Business 22.026" title="Electronic identity (e-ID)" description="National Council · 22 September 2026 · Morning session" actions={<><button className="secondary-action" onClick={() => onRoute("proposal")}><ClipboardText /> View proposal</button><button className="primary-action" onClick={() => onRoute("ask")}><ChatCircleDots /> Ask about this debate</button></>} /><div className="debate-layout"><section className="debate-media"><div className="large-video"><img src="/assets/parliament-speaker.png" alt="Swiss parliamentary debate" /><div className="large-video-controls"><button onClick={() => setPlaying(!playing)}>{playing ? <Pause weight="fill" /> : <Play weight="fill" />}</button><span>{item.time} / 01:42:10</span><div className="video-line"><i style={{width:`${18 + active * 7}%`}} /></div><GearSix /></div></div><div className="chapter-row"><button className={active === 1 ? "active" : ""} onClick={() => setActive(1)}><time>00:12</time><span>State issuance</span></button><button className={active === 4 ? "active" : ""} onClick={() => setActive(4)}><time>00:27</time><span>Data protection</span></button><button className={active === 3 ? "active" : ""} onClick={() => setActive(3)}><time>00:48</time><span>Private providers</span></button><button className={active === 2 ? "active" : ""} onClick={() => setActive(2)}><time>01:03</time><span>State model</span></button></div><section className="debate-speakers"><div className="block-heading"><div><h2>Speakers</h2><p>6 interventions in this debate</p></div></div><div>{speakers.map(s => <button key={s.name}><img src={s.image} alt="" style={{objectPosition:s.position || "50% 36%"}} /><span><strong>{s.name}</strong><small>{s.meta}</small></span></button>)}</div></section></section><section className="transcript-panel"><header><div><h2>Transcript</h2><p>Original German · machine transcript</p></div><button onClick={() => setTranslation(!translation)} className={translation ? "active" : ""}><Globe /> English translation</button></header><label><MagnifyingGlass /><input placeholder="Search within this transcript..." /></label><div className="transcript-list">{transcript.map(row => <button key={row.id} className={active === row.id ? "active" : ""} onClick={() => setActive(row.id)}><time>{row.time}</time><div><span><strong>{row.speaker}</strong><em>{row.party}</em></span><p>{row.text}</p>{translation && <small>{row.translation}</small>}</div></button>)}</div></section><aside className="moment-inspector"><small>SELECTED MOMENT</small><h2>{item.topic || citations[active]?.topic}</h2><div className="inspector-speaker"><img src={speakers.find(s => s.name === item.speaker)?.image || speakers[0].image} alt="" /><span><strong>{item.speaker}</strong><small>{item.party} · National Council</small></span></div><blockquote>“{item.text}”</blockquote><dl><dt>Timestamp</dt><dd>{item.time}</dd><dt>Language</dt><dd>German</dd><dt>Confidence</dt><dd>94% · machine generated</dd><dt>Evidence ID</dt><dd>EVD-22-026-{active}</dd></dl><button className="primary-action"><BookmarkSimple /> Add to evidence</button><button className="secondary-action" onClick={() => onRoute("investigate")}><MagnifyingGlass /> Find related moments</button></aside></div></main>;
+}
+
+function InvestigateScreen({ onRoute }) {
+  const [query,setQuery] = useState("private providers AND data protection"); const [selected,setSelected] = useState([1,4]); const [saved,setSaved] = useState(false);
+  const toggle = id => setSelected(selected.includes(id) ? selected.filter(x => x !== id) : [...selected,id]);
+  return <main className="page-stage investigate-page"><PageHeader eyebrow="Advanced research" title="Investigate parliamentary evidence" description="Search, filter, compare, and collect source-linked moments." actions={<button className="secondary-action" onClick={() => setSaved(!saved)}>{saved ? <CheckCircle weight="fill" /> : <BookmarkSimple />}{saved ? "Search saved" : "Save search"}</button>} /><div className="investigate-query"><MagnifyingGlass /><input value={query} onChange={e => setQuery(e.target.value)} /><button>Search</button></div><div className="investigate-layout"><aside className="filter-panel"><div className="filter-title"><FadersHorizontal /><strong>Search filters</strong><button>Clear</button></div><label>Date range<input value="01.01.2024 – 31.12.2026" readOnly /></label><fieldset><legend>Chamber</legend><label><input type="checkbox" defaultChecked /> National Council <span>72</span></label><label><input type="checkbox" defaultChecked /> Council of States <span>48</span></label></fieldset><fieldset><legend>Speaker</legend>{speakers.slice(0,3).map(s => <label key={s.name}><input type="checkbox" /> {s.name}</label>)}</fieldset><fieldset><legend>Topics</legend><div className="filter-tags"><button className="active">Electronic identity</button><button className="active">Data protection</button><button>Private providers</button><button>Digital society</button></div></fieldset><fieldset><legend>Source type</legend><label><input type="checkbox" defaultChecked /> Parliamentary video <span>96</span></label><label><input type="checkbox" defaultChecked /> Transcripts <span>22</span></label><label><input type="checkbox" /> Written documents <span>10</span></label></fieldset></aside><section className="results-panel"><div className="results-head"><div><strong>128 evidence moments</strong><span>Sorted by relevance <CaretDown /></span></div><button><ClipboardText /> Compare selected ({selected.length})</button></div><div className="evidence-table">{evidenceResults.map(result => <article key={result.id} className={selected.includes(result.id) ? "selected" : ""}><button className="result-check" onClick={() => toggle(result.id)}>{selected.includes(result.id) ? <Check weight="bold" /> : <Plus />}</button><div className="relevance"><strong>{result.relevance}%</strong><small>match</small></div><button className="result-media" onClick={() => onRoute("debate")}><img src="/assets/parliament-speaker.png" alt="" /><span><Play weight="fill" /> {result.time}</span></button><div className="result-copy"><blockquote>“{result.quote}”</blockquote><button onClick={() => onRoute("debate")}>Show in context <ArrowRight /></button></div><div className="result-meta"><strong>{result.speaker}</strong><span>{result.party} · National Council</span><small>{result.session}</small><div><StatusPill>{result.topic}</StatusPill></div></div></article>)}</div></section><aside className="evidence-collection"><header><div><h2>Evidence collection</h2><span>{selected.length}</span></div><button onClick={() => setSelected([])}>Clear all</button></header><div className="collection-list">{selected.length === 0 ? <div className="empty-collection"><BookmarkSimple /><strong>No evidence selected</strong><p>Add moments from the results to compare them here.</p></div> : selected.map(id => { const item = citations[id]; return <article key={id}><img src="/assets/parliament-speaker.png" alt="" /><div><blockquote>“{item.quote.slice(0,70)}…”</blockquote><strong>{item.speaker}</strong><small>{item.time} · {item.party}</small></div><button onClick={() => toggle(id)}><X /></button></article>; })}</div><div className="collection-notes"><label>Research note<textarea defaultValue="Compare positions on private providers and safeguards before the final vote." /></label></div><button className="primary-action"><FileText /> Export evidence brief</button></aside></div></main>;
+}
+
+function ProposalScreen({ onRoute }) {
+  const [tracked,setTracked] = useState(true); const [tab,setTab] = useState("Overview");
+  return <main className="page-stage proposal-page"><PageHeader eyebrow="Business 22.026" title="Federal Act on Electronic Identity" description="Tracked proposal · last updated 13 September 2026" actions={<><button className={`secondary-action ${tracked ? "active" : ""}`} onClick={() => setTracked(!tracked)}>{tracked ? <Star weight="fill" /> : <Star />}{tracked ? "Following" : "Follow"}</button><button className="primary-action" onClick={() => onRoute("ask")}><ChatCircleDots /> Ask about proposal</button></>} /><div className="proposal-tabs">{["Overview","Debates","Votes"].map(x => <button className={tab === x ? "active" : ""} onClick={() => setTab(x)} key={x}>{x}</button>)}</div><div className="proposal-layout"><section className="proposal-main"><article className="proposal-status"><div><small>CURRENT STATUS</small><StatusPill>Final vote scheduled</StatusPill><h2>Both chambers have completed detailed consideration</h2><p>The proposal returns to the Council of States for the final vote on 18 September. Remaining differences concern private providers and implementation safeguards.</p></div><div className="next-step"><CalendarBlank /><span><small>NEXT STEP</small><strong>Final vote</strong><p>Council of States</p><time>18 Sep · 08:15</time></span></div></article>{tab === "Overview" && <><section className="section-block timeline"><div className="block-heading"><div><h2>Parliamentary journey</h2><p>From introduction to final vote</p></div></div>{[{date:"7 Mar 2024",title:"Federal Council message",done:true},{date:"19 Dec 2024",title:"National Council first debate",done:true},{date:"17 Jun 2026",title:"Council of States detailed debate",done:true},{date:"22 Sep 2026",title:"National Council resolves differences",done:true},{date:"18 Sep 2026",title:"Final vote",current:true}].map(step => <div className={`timeline-step ${step.current ? "current" : ""}`} key={step.title}><span>{step.done ? <Check weight="bold" /> : <CalendarBlank />}</span><time>{step.date}</time><div><strong>{step.title}</strong><small>{step.current ? "Scheduled · Council of States" : "Completed · source documents available"}</small></div></div>)}</section><section className="section-block key-questions"><div className="block-heading"><div><h2>Key questions</h2><p>Evidence-backed themes across the proceedings</p></div></div>{answerSections.map((item,index) => <button key={item.title} onClick={() => onRoute("ask")}><span>{index+1}</span><div><strong>{item.title}</strong><p>{item.text.slice(0,125)}…</p></div><CaretRight /></button>)}</section></>}{tab === "Debates" && <section className="section-block proposal-debates"><div className="block-heading"><div><h2>Related debates</h2><p>4 sessions · 9 hours of source video</p></div></div>{["National Council · 22 September 2026","Council of States · 17 June 2026","National Council · 19 December 2024"].map((title,index) => <button key={title} onClick={() => onRoute("debate")}><img src="/assets/parliament-speaker.png" alt="" /><span><strong>{title}</strong><small>{["01:42:10","02:18:40","01:12:08"][index]} · {6-index} speakers</small></span><ArrowRight /></button>)}</section>}{tab === "Votes" && <section className="section-block vote-table"><div className="block-heading"><div><h2>Votes</h2><p>Roll-call results linked to proceedings</p></div></div><div className="vote-summary"><div><strong>132</strong><span>Yes</span></div><div><strong>51</strong><span>No</span></div><div><strong>7</strong><span>Abstained</span></div><StatusPill tone="green">Adopted</StatusPill></div><p>National Council · overall vote · 22 September 2026</p></section>}</section><aside className="proposal-side"><section><small>AT A GLANCE</small><dl><dt>Stage</dt><dd>Final vote</dd><dt>Lead department</dt><dd>Federal Department of Justice</dd><dt>Chambers</dt><dd>National Council · Council of States</dd><dt>Next sitting</dt><dd>18 September 2026</dd></dl></section><section><small>YOUR TRACKING</small><div className="tracking-options"><label><input type="checkbox" defaultChecked /> Status changes</label><label><input type="checkbox" defaultChecked /> New debates</label><label><input type="checkbox" defaultChecked /> Final votes</label></div></section><section><small>RELATED TOPICS</small><div className="follow-tags"><button>Electronic identity</button><button>Data protection</button><button>Digital society</button></div></section><section className="source-quality"><ShieldCheck weight="fill" /><div><strong>Source coverage</strong><p>12 official documents, 4 debates, and 3 votes indexed.</p></div></section></aside></div></main>;
+}
+
+function PlaceholderScreen({ route, onRoute }) { return <main className="page-stage placeholder-page"><div><Globe /><h1>{routeLabels[route]}</h1><p>This destination is represented in the navigation, but the connected hackathon demo currently focuses on Dashboard, Ask, Debate, Investigate, and Proposal tracking.</p><button className="primary-action" onClick={() => onRoute("dashboard")}><House /> Return to dashboard</button></div></main>; }
+
+export function App() {
+  const [route,setRoute] = useState("dashboard"); const [language,setLanguage] = useState("EN");
+  const withSource = route === "ask";
+  const render = () => { if(route === "dashboard") return <DashboardScreen onRoute={setRoute} />; if(route === "ask") return <AskScreen onRoute={setRoute} />; if(route === "debate") return <DebateScreen onRoute={setRoute} />; if(route === "investigate") return <InvestigateScreen onRoute={setRoute} />; if(route === "proposal") return <ProposalScreen onRoute={setRoute} />; return <PlaceholderScreen route={route} onRoute={setRoute} />; };
+  return <div className={`app-shell ${withSource ? "with-source" : "wide"}`}><Topbar language={language} setLanguage={setLanguage} onRoute={setRoute} /><AppNav route={route} onRoute={setRoute} />{render()}</div>;
 }

@@ -11,6 +11,10 @@ Build app UI in `src/`. Keep `.openai/hosting.json`, `worker/index.js`, `scripts
 ## Approved product direction
 
 - Desktop-first, dark, evidence-centered interface based on `design/approved-conversational-briefing.png`.
+- Dashboard is the default home and the first navigation item. It summarizes tracked proposals, upcoming parliamentary activity, recent evidence, and voting context.
 - Keep the default Ask experience simple; advanced research controls belong behind the Investigate mode.
 - Original parliamentary video, transcript, and source metadata must remain visually primary over AI interpretation.
 - The source sidebar includes a compact "Speakers in this debate" portrait list directly below "About this source".
+- The core demo journey is Dashboard → Ask → cited source → full Debate → Investigate → Proposal Tracker.
+- Personalization is explicit: people, parties, proposals, and topics are items the user chooses to follow. Never infer or label a user's political affiliation.
+- Prototype screens consume one normalized fixture model so that debate IDs, people, timestamps, proposal stages, and citations remain consistent and can later be replaced by API responses.
