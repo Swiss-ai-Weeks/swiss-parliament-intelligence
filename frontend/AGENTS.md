@@ -10,6 +10,24 @@ Build app UI in `src/`. Keep `.openai/hosting.json`, `worker/index.js`, `scripts
 
 ## Approved product direction
 
+### Parliamentary intelligence update — 17 September 2026
+
+Tomas requested continued real AI processing, broad parliamentary ingestion, politician vote histories, source-based investigation of position changes, and a clear distinction between current proceedings and historical votes. The new Parliament view uses real official OData imports. Never interpret missing vote records as abstentions, current party membership as historical membership, or procedural text carrying a chair ID as their speech. Comparisons require reviewed role and proposal-version context; no automatic hypocrisy or integrity score. See `../docs/research/PARLIAMENT-INTELLIGENCE-UPDATE.md`.
+
+### User direction update — voice and Swiss branding, 17 September 2026
+
+Tomas selected https://heyaristotle.com/ as the design reference: immersive illustration, warm serif typography, a personable conversational experience and a counter-trend feel. Translate that direction into distinctly Swiss figures, symbols, history and regional details. Keep source panels readable and professional across mobile and desktop. Voice and text should share one evidence-backed conversation, with explicit canton selection for future local ballot discovery. ElevenLabs Creator access is user-reported for three free months; verify the actual Agents/API entitlement. See `../docs/VOICE-AND-SWISS-BRAND-PLAN.md` for the updated implementation order. This is a durable approved direction; the current interface has not yet been reskinned or given speech support.
+
+### User-approved implementation — 17 September 2026
+
+Build Midnight Vote — Swiss Pilot as the responsive default experience, preserving the existing application at `/legacy`. Use restrained Swiss editorial styling, ivory backgrounds, generous spacing and muted red accents. Citizens are primary, with explicit Research view available on mobile and desktop. Five historical voting dossiers, anonymous reading, ordinary Supabase accounts and source-linked AI actions are approved. Optional private identity remains a clearly labelled concept until core acceptance passes. Official explainers must never be labelled parliamentary debate recordings; distinguish publisher captions, editorial summaries and machine processing. These decisions supersede the older dark desktop-first prototype direction below for the pilot.
+
+### User direction update — 14 September 2026
+
+The user has shifted the next product cycle toward a simple citizen journey in a responsive web app, with desktop evidence inspection, federal popular votes first and local ballots later. Public information remains accessible without passport verification; proposed verified participation stays non-binding. See `../docs/README.md` and `../docs/PRODUCT-SPEC.md` for research, acceptance criteria and open decisions. Current work is documentation, not an approved replacement visual layout. The older desktop-first audience/journey preferences below describe the existing prototype and must not override this newer user direction. Keep exact navigation and provider choices open until the relevant implementation specification is settled.
+
+### Existing prototype reference
+
 - Desktop-first, dark, evidence-centered interface based on `design/approved-conversational-briefing.png`.
 - Dashboard is the default home and the first navigation item. It summarizes tracked proposals, upcoming parliamentary activity, recent evidence, and voting context.
 - Keep the default Ask experience simple; advanced research controls belong behind the Investigate mode.
@@ -25,3 +43,17 @@ Build app UI in `src/`. Keep `.openai/hosting.json`, `worker/index.js`, `scripts
 - Prototype screens consume one normalized fixture model so that debate IDs, people, timestamps, proposal stages, and citations remain consistent and can later be replaced by API responses.
 - Keep persistence temporary and explicit: `usePersistentState`/localStorage is only for demo continuity; production preferences, follows, alerts, history, and saved research must come from the authenticated backend.
 - Keep network access behind `src/services/api.js` (`createApiClient`). Screens should consume a provider rather than calling `fetch` directly so fixtures can be replaced by the real API without a UI rewrite.
+
+### Cleisthenes update — 17 September 2026
+
+The assistant is named Cleisthenes, with an original friendly Greek-inspired illustrated avatar. User requests an always-available bottom-right compact chat, expandable into its own page, fewer competing controls, visual support and an Apple-like restrained finish within the Swiss / Hey Aristotle direction. Keep source details progressively disclosed and preserve chat when expanded. Continue current-session ingestion, multilingual retrieval, speed and genuine parliamentary-video alignment. Stance-change work is explicitly paused; hide its controls. Voice is still a later integration. The new avatar is a generated raster asset at `public/images/cleisthenes.png`.
+
+### Profile and retrieval feedback — 17 September 2026
+
+Tomas wants varied questions to select relevant checked sources, particularly party-background follow-ups after a politician’s speech. Keep official profile fields, party self-description and personal parliamentary statements distinct. Provide official portraits, declared background, dated individual votes, and verified professional contacts. AI correspondence is an editable draft with an email-app handoff; never send automatically. Use concise About / Votes / Write sections, paginate long voting histories, and state import coverage. Do not infer personal ideology or restart stance-change analysis.
+
+### UX refinement — 17 September 2026
+Use Parliament / Dossiers / Saved as destinations; Research is a dossier-level mode, not a duplicate main navigation item. All AI entry cards open the same contextual Cleisthenes chat with visible source scope and a focused composer. Avoid permanent flagship shortcuts in general directories. Style disclosure panels, segmented choices, inputs and buttons using the shared cream, muted-red and rounded-surface language. Appllama's Craft New Chat pattern informed the context label, suggestion chips and clear composer; retain original Swiss branding.
+
+### Reader-first update — 17 September 2026
+Use Topics & votes / Thèmes et votations in the navigation. People seek documents, subjects, speakers and statements; use Read the debate as the search entry. Always show matching text even without timed video. Keep experimental image similarity in advanced tools. Official portraits and canton/chamber context belong in profiles. Never replace an empty AI answer with a generic coverage disclaimer. See ../docs/TOPICS-AND-READER-ROADMAP.md.
