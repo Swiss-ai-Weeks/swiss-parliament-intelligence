@@ -1,9 +1,22 @@
-# Add the Swiss citizen intelligence pilot with evidence-linked NVIDIA processing
+# Swiss citizen pilot: source-linked AI, debate reading and official profiles
 
-People need a readable route from a public issue to the original parliamentary evidence. This introduces the Midnight Vote Swiss Pilot while preserving the earlier interface at `/legacy`: historical dossiers, Cleisthenes source-linked chat, parliamentary research, profiles, saved evidence and briefings.
+This PR adds the Midnight Vote Swiss Pilot while retaining the previous interface at `/legacy`. Citizens can understand five historical ballots, inspect original parliamentary passages, ask Cleisthenes source-linked questions, explore public representatives and save/export evidence.
 
-The pilot imports official parliamentary text and distinguishes originals from machine output. Server-side NVIDIA adapters support chat and full-passage translation. The video pipeline processes recordings with Cosmos embeddings and language-constrained Canary ASR. Users search aligned spoken evidence or separately labelled visual scenes and open the corresponding video moments.
+The reader journey uses Parliament / Topics & votes / Saved, with Reading and Research modes inside a topic. Debate search now returns matching text even when no video has been aligned: the reported `president` query returns 20 readable passages instead of an empty video result. Scoped overview prompts retrieve available passages directly, and empty answers explain their limitation instead of showing only a coverage disclaimer. Experimental image search is behind advanced controls.
 
-Validation includes automated backend/frontend checks, a production build, live DE/FR/IT processing and translation evaluations, and browser verification of timestamped playback. Six recordings yielded 269 VSS chunks and 17 machine-aligned paragraph candidates. Human timing/translation review and full-session ingestion remain outstanding. Visual similarity is not evidence for political claims.
+## AI and data
+- Server-side NVIDIA adapters for chat, translation, Canary ASR and Cosmos video embeddings; resumable imports and source/hash provenance.
+- Official profiles, canton/chamber/party fields, verified portrait links and dated vote records. A lightweight directory sync enriched 271 people locally; 77 portrait URLs passed validation. Detailed vote histories are loaded separately.
+- Six recordings yielded 269 visual chunks and 17 machine-aligned paragraph candidates. Text coverage is much larger: 10,494 paragraphs. These are snapshots, not complete archive coverage.
+- Supabase accounts and account-owned saved material; optional private identity remains a labelled concept.
 
-Secrets, account data, databases, downloaded media and raw provider outputs are excluded from Git. See `docs/SESSION-PIPELINE.md` and `docs/PILOT-RECAP.md` for reproduction and limitations. Intended destination: the user's own fork, pending selection. This draft has not been submitted upstream.
+## Validation
+- 32 backend tests, including unaligned text retrieval and scoped-overview regression checks.
+- Six frontend/API/packaging tests and production build.
+- Live local verification: scoped proposal 25.4623 overview returned three cited claims in 5.8 seconds; restored NVIDIA video connection returned four exploratory matches from 269 chunks.
+- Browser checks of navigation, contextual chat and the revised reading flow.
+
+## Remaining work
+Human translation/timing review, robust provider supervision, wider media coverage, missing portraits and richer linked-document topic pages remain open. Visual similarity cannot establish what was said or whether a described event occurred. Voice and stance-change analysis are not delivered here.
+
+Secrets, account data, SQLite databases, downloaded media and raw provider outputs are ignored and excluded. The repository contains import scripts and a reproducible runbook; a fresh clone does not contain the local parliamentary corpus or live GPU access. See `docs/USER-GUIDE.md`, `docs/TOPICS-AND-READER-ROADMAP.md`, `docs/SESSION-PIPELINE.md` and `docs/PILOT-RECAP.md`.

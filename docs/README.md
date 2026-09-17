@@ -30,3 +30,6 @@ Updated 14 September 2026. This package responds to Tomas's revised direction: m
 The repository currently contains an interactive frontend and API seam. Its fixtures, simulated playback controls and saved demo preferences are not proof of a working parliamentary ingestion pipeline or election system. This update adds research and specifications, not those capabilities. Existing journalist-first and desktop-first descriptions document the earlier prototype; the citizen priority above guides the next specification cycle.
 
 Start with one real recording → timestamped evidence → cited answer → playable source. In parallel, test a ballot-companion storyboard with prospective users. Expand the implementation only as each slice's acceptance evidence becomes available. The earlier three-product exploration sprint is an opportunity backlog, not three equal development commitments competing with the challenge.
+
+## Reader-first follow-up
+See [User guide](USER-GUIDE.md) and [Topics, debates and people roadmap](TOPICS-AND-READER-ROADMAP.md) for the latest interface, observed Parlacta dashboard and current limitations.

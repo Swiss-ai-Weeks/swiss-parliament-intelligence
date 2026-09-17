@@ -1,3 +1,4 @@
+import {overviewEvidence} from './overview-evidence.mjs';
 import {research} from './research.mjs';
 import {answerProfile} from './profile-ai.mjs';
 import {unsupportedProposalAttribution} from './attribution-guard.mjs';
@@ -19,7 +20,8 @@ export async function answerParliament(store,input,env,fetchImpl=fetch){
  let passages=store.search(input.question,scope).filter(s=>s.text.length<7000),retrieval={method:'lexical',translatedQueries:[]};
  if(!env.INFERENCE_BASE_URL&&!env.DEMO_REPLAY_FILE)return {status:'provider-unavailable',claims:[],passages};
  if(collection?.length===0)return {status:'insufficient-evidence',claims:[],passages:[],coverage:'No speech evidence imported for this selection.'};
- if(env.INFERENCE_BASE_URL&&!env.DEMO_REPLAY_FILE){try{const q=await multilingualQueries(input.question,env,fetchImpl);retrieval={method:'multilingual-query-expansion',translatedQueries:q.queries,queryCacheHit:q.cached};const score=new Map();for(const list of [passages,...q.queries.map(t=>store.search(t,scope))])for(const [i,s]of list.entries()){if(s.text.length>=7000)continue;const prior=score.get(s.id);score.set(s.id,{passage:s,score:(prior?.score||0)+1/(10+i)});}passages=[...score.values()].sort((a,b)=>b.score-a.score).slice(0,3).map(x=>x.passage);}catch{retrieval.warning='Query translation unavailable; using original-language search.';}}
+ const overview=overviewEvidence(input,collection);if(overview){passages=overview;retrieval={method:'selected-record-overview',translatedQueries:[]};}
+ if(!overview&&env.INFERENCE_BASE_URL&&!env.DEMO_REPLAY_FILE){try{const q=await multilingualQueries(input.question,env,fetchImpl);retrieval={method:'multilingual-query-expansion',translatedQueries:q.queries,queryCacheHit:q.cached};const score=new Map();for(const list of [passages,...q.queries.map(t=>store.search(t,scope))])for(const [i,s]of list.entries()){if(s.text.length>=7000)continue;const prior=score.get(s.id);score.set(s.id,{passage:s,score:(prior?.score||0)+1/(10+i)});}passages=[...score.values()].sort((a,b)=>b.score-a.score).slice(0,3).map(x=>x.passage);}catch{retrieval.warning='Query translation unavailable; using original-language search.';}}
  passages=passages.slice(0,3);const evidence=passages.map(speechEvidence);const d={id:'parliament-'+(input.businessId||'collection'),title:{en:'Imported Swiss parliamentary speeches'},evidence};
  const answer=await research(d,{question:input.question,language:input.language||'en'},env,fetchImpl,evidence);
  if(answer.mode==='live-inference'){const reviewed=await reviewClaims(answer.claims,env,fetchImpl);answer.claims=reviewed.claims;answer.withheldClaims=reviewed.withheld;answer.review='automated-source-entailment-check; human review still required';if(!answer.claims.length)answer.status='insufficient-evidence';}

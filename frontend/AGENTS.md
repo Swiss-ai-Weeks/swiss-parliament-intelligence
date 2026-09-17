@@ -51,3 +51,9 @@ The assistant is named Cleisthenes, with an original friendly Greek-inspired ill
 ### Profile and retrieval feedback — 17 September 2026
 
 Tomas wants varied questions to select relevant checked sources, particularly party-background follow-ups after a politician’s speech. Keep official profile fields, party self-description and personal parliamentary statements distinct. Provide official portraits, declared background, dated individual votes, and verified professional contacts. AI correspondence is an editable draft with an email-app handoff; never send automatically. Use concise About / Votes / Write sections, paginate long voting histories, and state import coverage. Do not infer personal ideology or restart stance-change analysis.
+
+### UX refinement — 17 September 2026
+Use Parliament / Dossiers / Saved as destinations; Research is a dossier-level mode, not a duplicate main navigation item. All AI entry cards open the same contextual Cleisthenes chat with visible source scope and a focused composer. Avoid permanent flagship shortcuts in general directories. Style disclosure panels, segmented choices, inputs and buttons using the shared cream, muted-red and rounded-surface language. Appllama's Craft New Chat pattern informed the context label, suggestion chips and clear composer; retain original Swiss branding.
+
+### Reader-first update — 17 September 2026
+Use Topics & votes / Thèmes et votations in the navigation. People seek documents, subjects, speakers and statements; use Read the debate as the search entry. Always show matching text even without timed video. Keep experimental image similarity in advanced tools. Official portraits and canton/chamber context belong in profiles. Never replace an empty AI answer with a generic coverage disclaimer. See ../docs/TOPICS-AND-READER-ROADMAP.md.

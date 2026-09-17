@@ -29,7 +29,7 @@ export async function searchVideo({root,store,query,mode='spoken',personId,busin
  const started=Date.now();
  if(mode==='spoken'){
   const matches=store.search(query,{personId,businessId,limit:20});
-  return {mode,status:'ok',matches:matches.filter(s=>s.video).slice(0,6).map(s=>({id:s.id,speaker:s.speaker,date:s.date,language:s.language,text:s.text,sourceUrl:s.officialUrl,mediaUrl:s.video.url,start:s.video.start,end:s.video.end,reviewState:s.video.reviewState})),unavailableTiming:matches.filter(s=>!s.video).length,latencyMs:Date.now()-started};
+  return {mode,status:'ok',matches:matches.map(s=>({id:s.id,speaker:s.speaker,date:s.date,language:s.language,text:s.text,sourceUrl:s.officialUrl,...(s.video?{mediaUrl:s.video.url,start:s.video.start,end:s.video.end,reviewState:s.video.reviewState}:{})})),unavailableTiming:matches.filter(s=>!s.video).length,latencyMs:Date.now()-started};
  }
  const chunks=loadVideoIndex(root,store).filter(c=>(!personId||c.personId===personId)&&(!businessId||c.businessId===businessId));
  if(!chunks.length)return {mode,status:'ok',matches:[],indexedChunks:0};
