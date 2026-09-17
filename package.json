@@ -1,0 +1,19 @@
+{
+  "name": "midnight-vote-swiss-pilot",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.13"
+  },
+  "scripts": {
+    "start": "node --env-file-if-exists=.env server/index.mjs",
+    "test": "node --test server/tests/*.test.mjs",
+    "evaluate": "node scripts/evaluate.mjs",
+    "import:evidence": "node scripts/import-evidence.mjs",
+    "export:evidence": "node scripts/export-evidence.mjs",
+    "probe:nvidia": "node --env-file-if-exists=.env scripts/probe-nvidia.mjs",
+    "sync:parliament": "node scripts/sync-parliament.mjs",
+    "sync:session": "node scripts/sync-current-session.mjs",
+    "align:parliament": "node scripts/align-parliament-video.mjs"
+  }
+}
