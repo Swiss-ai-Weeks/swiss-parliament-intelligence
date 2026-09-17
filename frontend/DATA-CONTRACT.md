@@ -12,6 +12,7 @@ The prototype is intentionally API-ready but does not require the live parliamen
 - `Vote`: id, proposal ID, chamber, date, yes/no/abstained totals, result, member votes when available
 - `AskResponse`: question, generated answer sections, citation evidence IDs, generation time, scope
 - `DashboardSummary`: upcoming events, tracked proposals, followed entities, recent evidence, recent votes
+- `UserPreferences`: display name, interface language, explicit follows, notification choices, privacy choices
 
 ## First integration endpoints
 
@@ -22,6 +23,18 @@ The prototype is intentionally API-ready but does not require the live parliamen
 5. `GET /debates/{id}/transcript` — timestamped segments with optional translations.
 6. `GET /proposals/{id}` — status, timeline, debates, votes, and next event.
 7. `GET /search/evidence` — filters and ranked evidence moments for Investigate.
+8. `GET/PATCH /me/preferences` — dashboard name, language, notification, privacy, and follow preferences.
+9. `GET /me/saved-research` and `GET /me/history` — private account workspace lists.
+10. `GET /calendar?from={date}&to={date}&level={level}` — calendar events with related debate/proposal IDs.
+11. `GET/PATCH /me/alerts` — monitoring rules, frequency, active state, and notification delivery status.
+12. `POST /ai/parse-filters` — natural-language prompt to proposed filter groups; suggestions must remain reviewable before applying.
+
+## Client boundary
+
+`src/services/api.js` exposes the production seam as `createApiClient({ baseUrl, fetchImpl })`.
+Screens should consume this client through a provider/loader rather than calling `fetch` directly. Until a backend base URL and authentication contract are available, local fixtures and localStorage-backed demo state remain the source of truth.
+
+Set `VITE_API_BASE_URL` to enable live calls. Dashboard requests `GET /dashboard`; Ask submits `POST /ask`. Both retain loading and retryable error states, while the fixture view remains the default when the variable is unset.
 
 ## Backend guarantees the UI depends on
 
@@ -31,6 +44,7 @@ The prototype is intentionally API-ready but does not require the live parliamen
 - Original language is always available; translations are labelled and optional.
 - Machine-generated transcript confidence is exposed rather than hidden.
 - Follows are explicit user choices. No political affiliation is inferred.
+- AI-generated filters are suggestions, not silent changes to the user's query or alert rule.
 
 ## Suggested integration order
 
