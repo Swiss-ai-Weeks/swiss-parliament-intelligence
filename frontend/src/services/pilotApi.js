@@ -16,7 +16,7 @@ export function createPilotApi({baseUrl=publicBase+'api',fetchImpl=fetch}={}) {
     feedbackChallenge:()=>request('/feedback/challenge'),feedback:p=>request('/feedback','POST',p),
     discoverySearch:p=>request('/discovery/search','POST',p),
     broadcast:()=>request('/broadcast'),
-    providers:()=>request('/auth/providers'),recover:p=>request('/auth/recover','POST',p),password:p=>request('/auth/password','POST',p),google:()=>request('/auth/google','POST',{}),
+    provider:provider=>request('/auth/provider','POST',{provider}),providers:()=>request('/auth/providers'),recover:p=>request('/auth/recover','POST',p),password:p=>request('/auth/password','POST',p),google:()=>request('/auth/google','POST',{}),
     items:(kind)=>request('/me/items/'+kind),putItem:(kind,id,payload,accountId)=>request('/me/items/'+kind,'POST',{id,payload,accountId}),deleteItem:(kind,id,accountId)=>request('/me/items/'+kind,'DELETE',{id,accountId}),
     chamber:(council,version)=>request('/chambers/'+council+(version?'?version='+encodeURIComponent(version):'')),dashboard:()=>request('/dashboard'),agenda:()=>request('/agenda'),feed:()=>request('/feed'),
     readDebate:filters=>request('/parliament/read?'+new URLSearchParams(filters)),

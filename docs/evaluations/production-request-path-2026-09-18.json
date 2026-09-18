@@ -1,0 +1,63 @@
+{
+  "at": "2026-09-18T20:38:29.197Z",
+  "base": "https://midnight.vote/Switzerland",
+  "scope": "HTTP origin, status and citation mechanics; not independent semantic review",
+  "results": [
+    {
+      "input": {
+        "question": "What does Parliament say about data protection?",
+        "language": "en"
+      },
+      "http": 200,
+      "status": "ok",
+      "mode": "live-inference",
+      "cacheHit": false,
+      "claims": 2,
+      "passages": 3,
+      "latencyMs": 5738,
+      "pass": true
+    },
+    {
+      "input": {
+        "question": "What does Parliament say about data protection?",
+        "language": "en"
+      },
+      "http": 200,
+      "status": "ok",
+      "mode": "live-inference",
+      "cacheHit": true,
+      "claims": 2,
+      "passages": 3,
+      "latencyMs": 831,
+      "pass": true
+    },
+    {
+      "input": {
+        "question": "Que dit le Parlement sur la protection des données ?",
+        "language": "fr"
+      },
+      "http": 200,
+      "status": "ok",
+      "mode": "live-inference",
+      "cacheHit": false,
+      "claims": 2,
+      "passages": 3,
+      "latencyMs": 5557,
+      "pass": true
+    },
+    {
+      "input": {
+        "question": "What is the weather tomorrow on Mars?",
+        "language": "en"
+      },
+      "http": 200,
+      "status": "insufficient-evidence",
+      "mode": "live-inference",
+      "cacheHit": false,
+      "claims": 0,
+      "passages": 3,
+      "latencyMs": 3154,
+      "pass": true
+    }
+  ]
+}

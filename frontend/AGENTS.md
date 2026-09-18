@@ -80,3 +80,6 @@ Citations should offer an inline expandable video, with exact aligned quotes dis
 
 ### Real landing and feedback — 18 September 2026
 Replace the fictional research walkthrough with an actual processed official recording, original quotation and labelled translation. Keep copy brief. Privacy/voting simulations stay labelled concepts. Feedback explicitly routes to contact@midnight.vote with spam controls; never attach chat history or private account context. Public corpus backups/indexing must remain separate from user data.
+
+### Account entry and chatbot audit — 18 September 2026
+Get started opens a clean Greek–Swiss account dialog while preserving the landing artwork and demos. Keep anonymous reading available. Social and organization sign-in must reflect real provider configuration; never present adapter support as activated authentication. The requested competitor chatbot review is analysis only: do not apply its chat proposals without a subsequent implementation request.

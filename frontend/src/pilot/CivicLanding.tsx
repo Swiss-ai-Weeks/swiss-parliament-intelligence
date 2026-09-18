@@ -1,6 +1,7 @@
 import React,{useEffect,useRef,useState} from 'react';
 import {ArrowDown,ArrowRight,Check,CaretDown as ChevronDown,ArrowSquareOut as ExternalLink,Pause,Play,ArrowCounterClockwise as RotateCcw,ShieldCheck} from '@phosphor-icons/react';
 import './landing.css';
+import LandingAccount from './LandingAccount.jsx';
 import {ResearchDemo,PrivacyDemo,ParticipateDemo} from './LandingDemos.jsx';
 const asset=name=>import.meta.env.BASE_URL+'brand/'+name;
 const alpineLandscape=asset('alpine-landscape.png'),porticoForeground=asset('portico.png'),cleisthenesBust=asset('cleisthenes-bust.png'),midnightMark=asset('midnight-mark.svg'),genevaFooter={url:asset('geneva-footer.png')};
@@ -53,7 +54,9 @@ function WordStatement({ text, className }: { text: string; className: string })
   );
 }
 
-export default function CivicLanding({onNavigate,language='en',reduceMotion=false}) {
+export default function CivicLanding({onNavigate,user,onUser,language='en',reduceMotion=false}) {
+  const [accountOpen,setAccountOpen]=useState(false);
+  const getStarted=()=>user?onNavigate(null,'dashboard'):setAccountOpen(true);
   const sceneRef = useRef<HTMLElement>(null);
   const [ready, setReady] = useState(false);
   const [activeChapter, setActiveChapter] = useState<ChapterId>("understand");
@@ -173,6 +176,7 @@ export default function CivicLanding({onNavigate,language='en',reduceMotion=fals
         <img src={midnightMark} alt="" className="loading-mark" />
         <span>Preparing the view</span>
       </div>
+      <LandingAccount open={accountOpen} onClose={()=>setAccountOpen(false)} onUser={u=>{onUser(u);setAccountOpen(false);onNavigate(null,"dashboard");}} onGuest={()=>{setAccountOpen(false);onNavigate(null,"dashboard");}}/>
       <header className={`site-header nav-${navState}`}>
         <a href="#top" className="brand" aria-label="midnight.vote, Switzerland">
           <img src={midnightMark} alt="" />
@@ -186,7 +190,7 @@ export default function CivicLanding({onNavigate,language='en',reduceMotion=fals
           <a href="#features" onClick={() => selectChapter("understand")}>
             Sources
           </a>
-          <a href="#site-footer">About</a><button className="landing-enter" onClick={()=>onNavigate(null,"dashboard")}>Enter the pilot <ArrowRight/></button>
+          <a href="#site-footer">About</a><button className="landing-enter" onClick={getStarted}>Get started <ArrowRight/></button>
         </nav>
       </header>
 
@@ -222,11 +226,7 @@ export default function CivicLanding({onNavigate,language='en',reduceMotion=fals
               Your own decision.
             </h1>
             <p className="hero-subtitle">Meet Cleisthenes, your thoughtful civic companion.</p>
-            <Button variant="civic" size="lg" asChild>
-              <a href="#features">
-                Explore the idea <ArrowRight />
-              </a>
-            </Button>
+            <Button variant="civic" size="lg" onClick={getStarted}>Get started <ArrowRight /></Button><a className="landing-preview-link" href="#features">See it in action</a>
           </div>
           <div className="mascot" aria-label="Cleisthenes, the civic companion">
             <img
@@ -308,9 +308,9 @@ export default function CivicLanding({onNavigate,language='en',reduceMotion=fals
           <Button
             variant="civicOutline"
             size="sm"
-            onClick={() => onNavigate(null,"dashboard")}
+            onClick={getStarted}
           >
-            Enter the pilot <ArrowRight />
+            Get started <ArrowRight />
           </Button>
         </div>
         <div className="footer-art" aria-hidden="true">

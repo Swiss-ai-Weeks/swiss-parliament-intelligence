@@ -4,9 +4,10 @@ from pathlib import Path
 import torch
 from transformers import AutoTokenizer,AutoModel
 MODEL='intfloat/multilingual-e5-large'
+REVISION='3d7cfbdacd47fdda877c5cd8a79fbcc4f2a574f3'
 source,destination=sys.argv[1:3]
-tokenizer=AutoTokenizer.from_pretrained(MODEL)
-model=AutoModel.from_pretrained(MODEL,use_safetensors=True).to('cuda').eval()
+tokenizer=AutoTokenizer.from_pretrained(MODEL,revision=REVISION)
+model=AutoModel.from_pretrained(MODEL,revision=REVISION,use_safetensors=True).to('cuda').eval()
 revision=model.config._commit_hash
 db=sqlite3.connect(destination)
 db.executescript('''CREATE TABLE IF NOT EXISTS embeddings (id TEXT,chunk INTEGER,source_hash TEXT,model TEXT,revision TEXT,dimensions INTEGER,start_char INTEGER,end_char INTEGER,vector BLOB,metadata TEXT,PRIMARY KEY(id,chunk));
