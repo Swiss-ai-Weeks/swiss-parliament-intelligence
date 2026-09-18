@@ -1,6 +1,7 @@
 import React,{useEffect,useRef,useState} from 'react';
 import {ArrowDown,ArrowRight,Check,CaretDown as ChevronDown,ArrowSquareOut as ExternalLink,Pause,Play,ArrowCounterClockwise as RotateCcw,ShieldCheck} from '@phosphor-icons/react';
 import './landing.css';
+import {ResearchDemo,PrivacyDemo,ParticipateDemo} from './LandingDemos.jsx';
 const asset=name=>import.meta.env.BASE_URL+'brand/'+name;
 const alpineLandscape=asset('alpine-landscape.png'),porticoForeground=asset('portico.png'),cleisthenesBust=asset('cleisthenes-bust.png'),midnightMark=asset('midnight-mark.svg'),genevaFooter={url:asset('geneva-footer.png')};
 function Button({asChild,variant,size,className='',children,...props}){const cls='civic-button '+(variant||'civic')+' '+className;return asChild?React.cloneElement(children,{...props,className:cls}):<button type="button" {...props} className={cls}>{children}</button>;}
@@ -22,9 +23,9 @@ const chapters = [
     id: "privacy",
     number: "02",
     label: "Stay private",
-    title: "Your reading. Your privacy.",
-    summary: "Understand what stays on this device and what you choose to share.",
-    copy: "Understand what is stored in this browser and what requires an account. Private eligibility proofs remain a future concept.",
+    title: "Prove eligibility. Keep the details private.",
+    summary: "Share the proof that matters. Keep personal details on your device.",
+    copy: "Explore a future privacy flow: confirm citizenship, age and, when needed, canton without sharing your full identity.",
   },
   {
     id: "participate",
@@ -32,7 +33,7 @@ const chapters = [
     label: "Participate",
     title: "Understand first. Then have your say.",
     summary: "Consider the arguments, then respond on your own terms.",
-    copy: "Explore a civic issue, compare the arguments, and revisit the official outcome of historical Swiss votes.",
+    copy: "Ask a question, consider both sides, then try a simulated community vote. Your perspective stays your own.",
   },
 ] as const;
 
@@ -296,9 +297,7 @@ export default function CivicLanding({onNavigate,language='en',reduceMotion=fals
               <h3>{active.title}</h3>
               <p>{active.copy}</p>
             </div>
-            <div key={active.id} className="active-demo live-feature">
- {active.id==='understand'?<><span className="demo-label">The Swiss public record</span><h3>Start with the words themselves.</h3><p>Read original parliamentary passages, translate them, and ask Cleisthenes a question with the source in view.</p><Button onClick={()=>onNavigate(null,'parliament')}>Explore Parliament <ArrowRight/></Button></>:active.id==='privacy'?<><ShieldCheck size={36}/><h3>Know what stays where.</h3><p>Read without an account. Pilot chat history stays in this browser. Saving sources requires an account. Private eligibility proofs are a future concept.</p><Button onClick={()=>onNavigate(null,'settings')}>Your settings <ArrowRight/></Button></>:<><img src={cleisthenesBust} alt="" style={{width:90}}/><h3>Your own view, at your own pace.</h3><p>Explore five historical Swiss votes. Compare the arguments and return to the original sources. This pilot does not cast votes.</p><Button onClick={()=>onNavigate(null,'explore')}>Explore topics &amp; votes <ArrowRight/></Button></>}
- </div>
+            <div key={active.id} className="active-demo">{active.id==='understand'?<ResearchDemo reduceMotion={reduceMotion} onExplore={()=>onNavigate(null,'parliament')}/>:active.id==='privacy'?<PrivacyDemo reduceMotion={reduceMotion}/>:<ParticipateDemo reduceMotion={reduceMotion} onExplore={()=>onNavigate(null,'explore')}/>}</div>
           </article>
         </div>
       </section>
