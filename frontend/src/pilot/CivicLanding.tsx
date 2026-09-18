@@ -186,7 +186,7 @@ export default function CivicLanding({onNavigate,language='en',reduceMotion=fals
           <a href="#features" onClick={() => selectChapter("understand")}>
             Sources
           </a>
-          <a href="#site-footer">About</a><button className="landing-enter" onClick={()=>onNavigate(null,"parliament")}>Enter the pilot <ArrowRight/></button>
+          <a href="#site-footer">About</a><button className="landing-enter" onClick={()=>onNavigate(null,"dashboard")}>Enter the pilot <ArrowRight/></button>
         </nav>
       </header>
 
@@ -308,7 +308,7 @@ export default function CivicLanding({onNavigate,language='en',reduceMotion=fals
           <Button
             variant="civicOutline"
             size="sm"
-            onClick={() => onNavigate(null,"parliament")}
+            onClick={() => onNavigate(null,"dashboard")}
           >
             Enter the pilot <ArrowRight />
           </Button>

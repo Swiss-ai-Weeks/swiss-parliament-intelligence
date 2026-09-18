@@ -1,0 +1,1424 @@
+{
+  "schemaVersion": 1,
+  "chamber": "sr",
+  "capacity": 46,
+  "asOf": "2026-09-18",
+  "retrievedAt": "2026-09-18T12:21:06.909Z",
+  "effectiveFrom": null,
+  "effectiveUntil": null,
+  "dateBasis": "Official live seating service and active roster reconciled on retrieval date; not a historical effective-date assertion.",
+  "verification": "verified",
+  "geometrySource": "Official Parliament interactive seating app; literal SVG desk paths unchanged.",
+  "colorBasis": "Party presentation hues; parliamentary-group colours from the official seating application. Patterns and labels distinguish similar hues.",
+  "viewBox": [
+    0,
+    0,
+    860,
+    565
+  ],
+  "architecture": [
+    "M860,414.44C851.61,184.13,662.31,0,430,0S8.38,184.14,0,414.45A150.54,150.54,0,0,1,149.76,565h560A150.55,150.55,0,0,1,860,414.44Z"
+  ],
+  "seats": [
+    {
+      "seatId": "1",
+      "geometry": {
+        "path": "M453.24,519.69v27H409.55v-27Z",
+        "x": 453.24,
+        "y": 519.69
+      },
+      "status": "occupied",
+      "verifiedAt": "2026-09-18",
+      "sourceUrl": "https://ws.parlament.ch/OData.svc/SeatOrganisationSr(ID=1,Language='DE')",
+      "member": {
+        "id": "4055",
+        "chamber": "sr",
+        "name": "Stefan Engler",
+        "canton": "GR",
+        "partyId": "1586",
+        "groupId": "3",
+        "party": "Die Mitte",
+        "partyAbbreviation": "M-E",
+        "group": "Die Mitte-Fraktion. Die Mitte. EVP.",
+        "groupAbbreviation": "M-E",
+        "joined": "2023-12-04T00:00:00.000Z",
+        "left": null,
+        "sourceUrl": "https://ws.parlament.ch/OData.svc/MemberCouncil(ID=4055,Language='DE')",
+        "portraitUrl": "https://www.parlament.ch/sitecollectionimages/profil/original/2768.jpg"
+      }
+    },
+    {
+      "seatId": "2",
+      "geometry": {
+        "path": "M431.4,472.83v27H409.56v-27Z",
+        "x": 431.4,
+        "y": 472.83
+      },
+      "status": "occupied",
+      "verifiedAt": "2026-09-18",
+      "sourceUrl": "https://ws.parlament.ch/OData.svc/SeatOrganisationSr(ID=2,Language='DE')",
+      "member": {
+        "id": "4189",
+        "chamber": "sr",
+        "name": "Thierry Burkart",
+        "canton": "AG",
+        "partyId": "15",
+        "groupId": "1",
+        "party": "FDP.Die Liberalen",
+        "partyAbbreviation": "FDP-Liberale",
+        "group": "FDP-Liberale Fraktion",
+        "groupAbbreviation": "RL",
+        "joined": "2023-12-04T00:00:00.000Z",
+        "left": null,
+        "sourceUrl": "https://ws.parlament.ch/OData.svc/MemberCouncil(ID=4189,Language='DE')",
+        "portraitUrl": "https://www.parlament.ch/sitecollectionimages/profil/original/3065.jpg"
+      }
+    },
+    {
+      "seatId": "3",
+      "geometry": {
+        "path": "M496.31,545.51q-10.47,1.05-21.13,1.11l-.14-27q9.37,0,18.58-1Z",
+        "x": 496.31,
+        "y": 545.51
+      },
+      "status": "occupied",
+      "verifiedAt": "2026-09-18",
+      "sourceUrl": "https://ws.parlament.ch/OData.svc/SeatOrganisationSr(ID=3,Language='DE')",
+      "member": {
+        "id": "4172",
+        "chamber": "sr",
+        "name": "Werner Salzmann",
+        "canton": "BE",
+        "partyId": "13",
+        "groupId": "4",
+        "party": "Schweizerische Volkspartei",
+        "partyAbbreviation": "SVP",
+        "group": "Fraktion der Schweizerischen Volkspartei",
+        "groupAbbreviation": "V",
+        "joined": "2023-12-04T00:00:00.000Z",
+        "left": null,
+        "sourceUrl": "https://ws.parlament.ch/OData.svc/MemberCouncil(ID=4172,Language='DE')",
+        "portraitUrl": "https://www.parlament.ch/sitecollectionimages/profil/original/3092.jpg"
+      }
+    },
+    {
+      "seatId": "4",
+      "geometry": {
+        "path": "M269.34,364,242.6,355.5a176.5,176.5,0,0,0-7.44,35.4l27.91,3A148.64,148.64,0,0,1,269.34,364Z",
+        "x": 269.34,
+        "y": 364
+      },
+      "status": "occupied",
+      "verifiedAt": "2026-09-18",
+      "sourceUrl": "https://ws.parlament.ch/OData.svc/SeatOrganisationSr(ID=4,Language='DE')",
+      "member": {
+        "id": "15601",
+        "chamber": "sr",
+        "name": "Severin Brüngger",
+        "canton": "SH",
+        "partyId": "15",
+        "groupId": "1",
+        "party": "FDP.Die Liberalen",
+        "partyAbbreviation": "FDP-Liberale",
+        "group": "FDP-Liberale Fraktion",
+        "groupAbbreviation": "RL",
+        "joined": "2025-09-08T00:00:00.000Z",
+        "left": null,
+        "sourceUrl": "https://ws.parlament.ch/OData.svc/MemberCouncil(ID=15601,Language='DE')",
+        "portraitUrl": "https://www.parlament.ch/sitecollectionimages/profil/original/15601.jpg"
+      }
+    },
+    {
+      "seatId": "5",
+      "geometry": {
+        "path": "M453.24,472.83v27H431.4v-27Z",
+        "x": 453.24,
+        "y": 472.83
+      },
+      "status": "occupied",
+      "verifiedAt": "2026-09-18",
+      "sourceUrl": "https://ws.parlament.ch/OData.svc/SeatOrganisationSr(ID=5,Language='DE')",
+      "member": {
+        "id": "4332",
+        "chamber": "sr",
+        "name": "Mathilde Crevoisier Crelier",
+        "canton": "JU",
+        "partyId": "12",
+        "groupId": "2",
+        "party": "Sozialdemokratische Partei der Schweiz",
+        "partyAbbreviation": "SP",
+        "group": "Sozialdemokratische Fraktion",
+        "groupAbbreviation": "S",
+        "joined": "2023-12-04T00:00:00.000Z",
+        "left": null,
+        "sourceUrl": "https://ws.parlament.ch/OData.svc/MemberCouncil(ID=4332,Language='DE')",
+        "portraitUrl": "https://www.parlament.ch/sitecollectionimages/profil/original/3227.jpg"
+      }
+    },
+    {
+      "seatId": "6",
+      "geometry": {
+        "path": "M281.11,336.91l-24.53-13.63a176.86,176.86,0,0,0-14,32.22L269.34,364A148.94,148.94,0,0,1,281.11,336.91Z",
+        "x": 281.11,
+        "y": 336.91
+      },
+      "status": "occupied",
+      "verifiedAt": "2026-09-18",
+      "sourceUrl": "https://ws.parlament.ch/OData.svc/SeatOrganisationSr(ID=6,Language='DE')",
+      "member": {
+        "id": "4283",
+        "chamber": "sr",
+        "name": "Franziska Roth",
+        "canton": "SO",
+        "partyId": "12",
+        "groupId": "2",
+        "party": "Sozialdemokratische Partei der Schweiz",
+        "partyAbbreviation": "SP",
+        "group": "Sozialdemokratische Fraktion",
+        "groupAbbreviation": "S",
+        "joined": "2023-12-04T00:00:00.000Z",
+        "left": null,
+        "sourceUrl": "https://ws.parlament.ch/OData.svc/MemberCouncil(ID=4283,Language='DE')",
+        "portraitUrl": "https://www.parlament.ch/sitecollectionimages/profil/original/3175.jpg"
+      }
+    },
+    {
+      "seatId": "7",
+      "geometry": {
+        "path": "M627.61,390.9l-27.91,3A148.64,148.64,0,0,0,593.43,364l26.74-8.54a176.5,176.5,0,0,1,7.44,35.4",
+        "x": 627.61,
+        "y": 390.9
+      },
+      "status": "occupied",
+      "verifiedAt": "2026-09-18",
+      "sourceUrl": "https://ws.parlament.ch/OData.svc/SeatOrganisationSr(ID=7,Language='DE')",
+      "member": {
+        "id": "4240",
+        "chamber": "sr",
+        "name": "Charles Juillard",
+        "canton": "JU",
+        "partyId": "1586",
+        "groupId": "3",
+        "party": "Die Mitte",
+        "partyAbbreviation": "M-E",
+        "group": "Die Mitte-Fraktion. Die Mitte. EVP.",
+        "groupAbbreviation": "M-E",
+        "joined": "2023-12-04T00:00:00.000Z",
+        "left": null,
+        "sourceUrl": "https://ws.parlament.ch/OData.svc/MemberCouncil(ID=4240,Language='DE')",
+        "portraitUrl": "https://www.parlament.ch/sitecollectionimages/profil/original/3195.jpg"
+      }
+    },
+    {
+      "seatId": "8",
+      "geometry": {
+        "path": "M307.49,295.46l-21.38-18.17a178.67,178.67,0,0,0-20,28.73l24.53,13.63A150.48,150.48,0,0,1,307.49,295.46Z",
+        "x": 307.49,
+        "y": 295.46
+      },
+      "status": "occupied",
+      "verifiedAt": "2026-09-18",
+      "sourceUrl": "https://ws.parlament.ch/OData.svc/SeatOrganisationSr(ID=8,Language='DE')",
+      "member": {
+        "id": "3897",
+        "chamber": "sr",
+        "name": "Tiana Angelina Moser",
+        "canton": "ZH",
+        "partyId": "1336",
+        "groupId": "137",
+        "party": "Grünliberale Partei",
+        "partyAbbreviation": "glp",
+        "group": "Grünliberale Fraktion",
+        "groupAbbreviation": "GL",
+        "joined": "2023-12-11T00:00:00.000Z",
+        "left": null,
+        "sourceUrl": "https://ws.parlament.ch/OData.svc/MemberCouncil(ID=3897,Language='DE')",
+        "portraitUrl": "https://www.parlament.ch/sitecollectionimages/profil/original/2700.jpg"
+      }
+    },
+    {
+      "seatId": "9",
+      "geometry": {
+        "path": "M620.17,355.5,593.43,364a148.94,148.94,0,0,0-11.77-27.13l24.53-13.63A176.86,176.86,0,0,1,620.17,355.5Z",
+        "x": 620.17,
+        "y": 355.5
+      },
+      "status": "occupied",
+      "verifiedAt": "2026-09-18",
+      "sourceUrl": "https://ws.parlament.ch/OData.svc/SeatOrganisationSr(ID=9,Language='DE')",
+      "member": {
+        "id": "4303",
+        "chamber": "sr",
+        "name": "Marianne Maret",
+        "canton": "VS",
+        "partyId": "1586",
+        "groupId": "3",
+        "party": "Die Mitte",
+        "partyAbbreviation": "M-E",
+        "group": "Die Mitte-Fraktion. Die Mitte. EVP.",
+        "groupAbbreviation": "M-E",
+        "joined": "2023-12-04T00:00:00.000Z",
+        "left": null,
+        "sourceUrl": "https://ws.parlament.ch/OData.svc/MemberCouncil(ID=4303,Language='DE')",
+        "portraitUrl": "https://www.parlament.ch/sitecollectionimages/profil/original/3200.jpg"
+      }
+    },
+    {
+      "seatId": "10",
+      "geometry": {
+        "path": "M330.9,273.27l-17-22.33a179.33,179.33,0,0,0-27.8,26.35l21.38,18.17A151,151,0,0,1,330.9,273.27Z",
+        "x": 330.9,
+        "y": 273.27
+      },
+      "status": "occupied",
+      "verifiedAt": "2026-09-18",
+      "sourceUrl": "https://ws.parlament.ch/OData.svc/SeatOrganisationSr(ID=10,Language='DE')",
+      "member": {
+        "id": "10802",
+        "chamber": "sr",
+        "name": "Benjamin Mühlemann",
+        "canton": "GL",
+        "partyId": "15",
+        "groupId": "1",
+        "party": "FDP.Die Liberalen",
+        "partyAbbreviation": "FDP-Liberale",
+        "group": "FDP-Liberale Fraktion",
+        "groupAbbreviation": "RL",
+        "joined": "2023-12-04T00:00:00.000Z",
+        "left": null,
+        "sourceUrl": "https://ws.parlament.ch/OData.svc/MemberCouncil(ID=10802,Language='DE')",
+        "portraitUrl": "https://www.parlament.ch/sitecollectionimages/profil/original/10802.jpg"
+      }
+    },
+    {
+      "seatId": "11",
+      "geometry": {
+        "path": "M596.61,306l-24.53,13.63a150.48,150.48,0,0,0-16.8-24.2l21.38-18.17A178.67,178.67,0,0,1,596.61,306Z",
+        "x": 596.61,
+        "y": 306
+      },
+      "status": "occupied",
+      "verifiedAt": "2026-09-18",
+      "sourceUrl": "https://ws.parlament.ch/OData.svc/SeatOrganisationSr(ID=11,Language='DE')",
+      "member": {
+        "id": "4204",
+        "chamber": "sr",
+        "name": "Beat Rieder",
+        "canton": "VS",
+        "partyId": "1586",
+        "groupId": "3",
+        "party": "Die Mitte",
+        "partyAbbreviation": "M-E",
+        "group": "Die Mitte-Fraktion. Die Mitte. EVP.",
+        "groupAbbreviation": "M-E",
+        "joined": "2023-12-04T00:00:00.000Z",
+        "left": null,
+        "sourceUrl": "https://ws.parlament.ch/OData.svc/MemberCouncil(ID=4204,Language='DE')",
+        "portraitUrl": "https://www.parlament.ch/sitecollectionimages/profil/original/3105.jpg"
+      }
+    },
+    {
+      "seatId": "12",
+      "geometry": {
+        "path": "M359.9,255.92l-11.55-25.58a177.94,177.94,0,0,0-34.43,20.6l17,22.33A149.85,149.85,0,0,1,359.9,255.92Z",
+        "x": 359.9,
+        "y": 255.92
+      },
+      "status": "occupied",
+      "verifiedAt": "2026-09-18",
+      "sourceUrl": "https://ws.parlament.ch/OData.svc/SeatOrganisationSr(ID=12,Language='DE')",
+      "member": {
+        "id": "4072",
+        "chamber": "sr",
+        "name": "Fabio Regazzi",
+        "canton": "TI",
+        "partyId": "1586",
+        "groupId": "3",
+        "party": "Die Mitte",
+        "partyAbbreviation": "M-E",
+        "group": "Die Mitte-Fraktion. Die Mitte. EVP.",
+        "groupAbbreviation": "M-E",
+        "joined": "2023-12-04T00:00:00.000Z",
+        "left": null,
+        "sourceUrl": "https://ws.parlament.ch/OData.svc/MemberCouncil(ID=4072,Language='DE')",
+        "portraitUrl": "https://www.parlament.ch/sitecollectionimages/profil/original/2776.jpg"
+      }
+    },
+    {
+      "seatId": "13",
+      "geometry": {
+        "path": "M576.66,277.29l-21.38,18.17a151,151,0,0,0-23.41-22.19l17-22.33A179.33,179.33,0,0,1,576.66,277.29Z",
+        "x": 576.66,
+        "y": 277.29
+      },
+      "status": "occupied",
+      "verifiedAt": "2026-09-18",
+      "sourceUrl": "https://ws.parlament.ch/OData.svc/SeatOrganisationSr(ID=13,Language='DE')",
+      "member": {
+        "id": "4237",
+        "chamber": "sr",
+        "name": "Benedikt Würth",
+        "canton": "SG",
+        "partyId": "1586",
+        "groupId": "3",
+        "party": "Die Mitte",
+        "partyAbbreviation": "M-E",
+        "group": "Die Mitte-Fraktion. Die Mitte. EVP.",
+        "groupAbbreviation": "M-E",
+        "joined": "2023-12-04T00:00:00.000Z",
+        "left": null,
+        "sourceUrl": "https://ws.parlament.ch/OData.svc/MemberCouncil(ID=4237,Language='DE')",
+        "portraitUrl": "https://www.parlament.ch/sitecollectionimages/profil/original/3136.jpg"
+      }
+    },
+    {
+      "seatId": "14",
+      "geometry": {
+        "path": "M390.38,245.89l-5.84-27.46a176.2,176.2,0,0,0-36.19,11.92l11.55,25.58A148.38,148.38,0,0,1,390.38,245.89Z",
+        "x": 390.38,
+        "y": 245.89
+      },
+      "status": "occupied",
+      "verifiedAt": "2026-09-18",
+      "sourceUrl": "https://ws.parlament.ch/OData.svc/SeatOrganisationSr(ID=14,Language='DE')",
+      "member": {
+        "id": "4159",
+        "chamber": "sr",
+        "name": "Marco Chiesa",
+        "canton": "TI",
+        "partyId": "13",
+        "groupId": "4",
+        "party": "Schweizerische Volkspartei",
+        "partyAbbreviation": "SVP",
+        "group": "Fraktion der Schweizerischen Volkspartei",
+        "groupAbbreviation": "V",
+        "joined": "2023-12-04T00:00:00.000Z",
+        "left": null,
+        "sourceUrl": "https://ws.parlament.ch/OData.svc/MemberCouncil(ID=4159,Language='DE')",
+        "portraitUrl": "https://www.parlament.ch/sitecollectionimages/profil/original/3067.jpg"
+      }
+    },
+    {
+      "seatId": "15",
+      "geometry": {
+        "path": "M548.86,250.95l-17,22.33a149.85,149.85,0,0,0-29-17.35l11.55-25.58A177.94,177.94,0,0,1,548.86,250.95Z",
+        "x": 548.86,
+        "y": 250.95
+      },
+      "status": "occupied",
+      "verifiedAt": "2026-09-18",
+      "sourceUrl": "https://ws.parlament.ch/OData.svc/SeatOrganisationSr(ID=15,Language='DE')",
+      "member": {
+        "id": "4325",
+        "chamber": "sr",
+        "name": "Isabelle Chassot",
+        "canton": "FR",
+        "partyId": "1586",
+        "groupId": "3",
+        "party": "Die Mitte",
+        "partyAbbreviation": "M-E",
+        "group": "Die Mitte-Fraktion. Die Mitte. EVP.",
+        "groupAbbreviation": "M-E",
+        "joined": "2023-12-04T00:00:00.000Z",
+        "left": null,
+        "sourceUrl": "https://ws.parlament.ch/OData.svc/MemberCouncil(ID=4325,Language='DE')",
+        "portraitUrl": "https://www.parlament.ch/sitecollectionimages/profil/original/3220.jpg"
+      }
+    },
+    {
+      "seatId": "16",
+      "geometry": {
+        "path": "M421.52,242.62V214.55a177.73,177.73,0,0,0-37,3.88l5.84,27.46A149.67,149.67,0,0,1,421.52,242.62Z",
+        "x": 421.52,
+        "y": 242.62
+      },
+      "status": "occupied",
+      "verifiedAt": "2026-09-18",
+      "sourceUrl": "https://ws.parlament.ch/OData.svc/SeatOrganisationSr(ID=16,Language='DE')",
+      "member": {
+        "id": "4241",
+        "chamber": "sr",
+        "name": "Jakob Stark",
+        "canton": "TG",
+        "partyId": "13",
+        "groupId": "4",
+        "party": "Schweizerische Volkspartei",
+        "partyAbbreviation": "SVP",
+        "group": "Fraktion der Schweizerischen Volkspartei",
+        "groupAbbreviation": "V",
+        "joined": "2023-12-04T00:00:00.000Z",
+        "left": null,
+        "sourceUrl": "https://ws.parlament.ch/OData.svc/MemberCouncil(ID=4241,Language='DE')",
+        "portraitUrl": "https://www.parlament.ch/sitecollectionimages/profil/original/3196.jpg"
+      }
+    },
+    {
+      "seatId": "17",
+      "geometry": {
+        "path": "M514.42,230.35l-11.55,25.58a148.38,148.38,0,0,0-30.48-10l5.84-27.46A176.2,176.2,0,0,1,514.42,230.35Z",
+        "x": 514.42,
+        "y": 230.35
+      },
+      "status": "occupied",
+      "verifiedAt": "2026-09-18",
+      "sourceUrl": "https://ws.parlament.ch/OData.svc/SeatOrganisationSr(ID=17,Language='DE')",
+      "member": {
+        "id": "4249",
+        "chamber": "sr",
+        "name": "Marianne Binder-Keller",
+        "canton": "AG",
+        "partyId": "1586",
+        "groupId": "3",
+        "party": "Die Mitte",
+        "partyAbbreviation": "M-E",
+        "group": "Die Mitte-Fraktion. Die Mitte. EVP.",
+        "groupAbbreviation": "M-E",
+        "joined": "2023-12-04T00:00:00.000Z",
+        "left": null,
+        "sourceUrl": "https://ws.parlament.ch/OData.svc/MemberCouncil(ID=4249,Language='DE')",
+        "portraitUrl": "https://www.parlament.ch/sitecollectionimages/profil/original/3141.jpg"
+      }
+    },
+    {
+      "seatId": "18",
+      "geometry": {
+        "path": "M221,363.39l-27.28-6.6A223.06,223.06,0,0,0,188.63,386l27.91,3A195.21,195.21,0,0,1,221,363.39Z",
+        "x": 221,
+        "y": 363.39
+      },
+      "status": "occupied",
+      "verifiedAt": "2026-09-18",
+      "sourceUrl": "https://ws.parlament.ch/OData.svc/SeatOrganisationSr(ID=18,Language='DE')",
+      "member": {
+        "id": "491",
+        "chamber": "sr",
+        "name": "Pierre-Yves Maillard",
+        "canton": "VD",
+        "partyId": "12",
+        "groupId": "2",
+        "party": "Sozialdemokratische Partei der Schweiz",
+        "partyAbbreviation": "SP",
+        "group": "Sozialdemokratische Fraktion",
+        "groupAbbreviation": "S",
+        "joined": "2023-12-04T00:00:00.000Z",
+        "left": null,
+        "sourceUrl": "https://ws.parlament.ch/OData.svc/MemberCouncil(ID=491,Language='DE')",
+        "portraitUrl": "https://www.parlament.ch/sitecollectionimages/profil/original/2513.jpg"
+      }
+    },
+    {
+      "seatId": "19",
+      "geometry": {
+        "path": "M478.23,218.42l-5.84,27.46a149.67,149.67,0,0,0-31.14-3.27V214.55A177.73,177.73,0,0,1,478.23,218.42Z",
+        "x": 478.23,
+        "y": 218.42
+      },
+      "status": "occupied",
+      "verifiedAt": "2026-09-18",
+      "sourceUrl": "https://ws.parlament.ch/OData.svc/SeatOrganisationSr(ID=19,Language='DE')",
+      "member": {
+        "id": "1159",
+        "chamber": "sr",
+        "name": "Pirmin Schwander",
+        "canton": "SZ",
+        "partyId": "13",
+        "groupId": "4",
+        "party": "Schweizerische Volkspartei",
+        "partyAbbreviation": "SVP",
+        "group": "Fraktion der Schweizerischen Volkspartei",
+        "groupAbbreviation": "V",
+        "joined": "2023-12-04T00:00:00.000Z",
+        "left": null,
+        "sourceUrl": "https://ws.parlament.ch/OData.svc/MemberCouncil(ID=1159,Language='DE')",
+        "portraitUrl": "https://www.parlament.ch/sitecollectionimages/profil/original/2631.jpg"
+      }
+    },
+    {
+      "seatId": "20",
+      "geometry": {
+        "path": "M229.19,337.5l-26.11-10.3a222.63,222.63,0,0,0-9.39,29.59l27.28,6.6A194.81,194.81,0,0,1,229.19,337.5Z",
+        "x": 229.19,
+        "y": 337.5
+      },
+      "status": "occupied",
+      "verifiedAt": "2026-09-18",
+      "sourceUrl": "https://ws.parlament.ch/OData.svc/SeatOrganisationSr(ID=20,Language='DE')",
+      "member": {
+        "id": "4224",
+        "chamber": "sr",
+        "name": "Flavia Wasserfallen",
+        "canton": "BE",
+        "partyId": "12",
+        "groupId": "2",
+        "party": "Sozialdemokratische Partei der Schweiz",
+        "partyAbbreviation": "SP",
+        "group": "Sozialdemokratische Fraktion",
+        "groupAbbreviation": "S",
+        "joined": "2023-12-04T00:00:00.000Z",
+        "left": null,
+        "sourceUrl": "https://ws.parlament.ch/OData.svc/MemberCouncil(ID=4224,Language='DE')",
+        "portraitUrl": "https://www.parlament.ch/sitecollectionimages/profil/original/3125.jpg"
+      }
+    },
+    {
+      "seatId": "21",
+      "geometry": {
+        "path": "M674.13,386l-27.91,3a195.21,195.21,0,0,0-4.42-25.54l27.28-6.6A223.06,223.06,0,0,1,674.13,386Z",
+        "x": 674.13,
+        "y": 386
+      },
+      "status": "occupied",
+      "verifiedAt": "2026-09-18",
+      "sourceUrl": "https://ws.parlament.ch/OData.svc/SeatOrganisationSr(ID=21,Language='DE')",
+      "member": {
+        "id": "4243",
+        "chamber": "sr",
+        "name": "Heidi Z'graggen",
+        "canton": "UR",
+        "partyId": "1586",
+        "groupId": "3",
+        "party": "Die Mitte",
+        "partyAbbreviation": "M-E",
+        "group": "Die Mitte-Fraktion. Die Mitte. EVP.",
+        "groupAbbreviation": "M-E",
+        "joined": "2023-12-04T00:00:00.000Z",
+        "left": null,
+        "sourceUrl": "https://ws.parlament.ch/OData.svc/MemberCouncil(ID=4243,Language='DE')",
+        "portraitUrl": "https://www.parlament.ch/sitecollectionimages/profil/original/3198.jpg"
+      }
+    },
+    {
+      "seatId": "22",
+      "geometry": {
+        "path": "M240.23,314.19,215.7,300.56a224,224,0,0,0-12.62,26.64l26.11,10.3A196,196,0,0,1,240.23,314.19Z",
+        "x": 240.23,
+        "y": 314.19
+      },
+      "status": "occupied",
+      "verifiedAt": "2026-09-18",
+      "sourceUrl": "https://ws.parlament.ch/OData.svc/SeatOrganisationSr(ID=22,Language='DE')",
+      "member": {
+        "id": "4244",
+        "chamber": "sr",
+        "name": "Mathias Zopfi",
+        "canton": "GL",
+        "partyId": "20",
+        "groupId": "6",
+        "party": "GRÜNE Schweiz",
+        "partyAbbreviation": "GRÜNE",
+        "group": "Grüne Fraktion",
+        "groupAbbreviation": "G",
+        "joined": "2023-12-04T00:00:00.000Z",
+        "left": null,
+        "sourceUrl": "https://ws.parlament.ch/OData.svc/MemberCouncil(ID=4244,Language='DE')",
+        "portraitUrl": "https://www.parlament.ch/sitecollectionimages/profil/original/3199.jpg"
+      }
+    },
+    {
+      "seatId": "23",
+      "geometry": {
+        "path": "M669.08,356.79l-27.28,6.6a194.81,194.81,0,0,0-8.22-25.89l26.11-10.3A222.63,222.63,0,0,1,669.08,356.79Z",
+        "x": 669.08,
+        "y": 356.79
+      },
+      "status": "occupied",
+      "verifiedAt": "2026-09-18",
+      "sourceUrl": "https://ws.parlament.ch/OData.svc/SeatOrganisationSr(ID=23,Language='DE')",
+      "member": {
+        "id": "4056",
+        "chamber": "sr",
+        "name": "Daniel Fässler",
+        "canton": "AI",
+        "partyId": "1586",
+        "groupId": "3",
+        "party": "Die Mitte",
+        "partyAbbreviation": "M-E",
+        "group": "Die Mitte-Fraktion. Die Mitte. EVP.",
+        "groupAbbreviation": "M-E",
+        "joined": "2023-12-04T00:00:00.000Z",
+        "left": null,
+        "sourceUrl": "https://ws.parlament.ch/OData.svc/MemberCouncil(ID=4056,Language='DE')",
+        "portraitUrl": "https://www.parlament.ch/sitecollectionimages/profil/original/2767.jpg"
+      }
+    },
+    {
+      "seatId": "24",
+      "geometry": {
+        "path": "M267.45,270.55l-22-17.4a225.49,225.49,0,0,0-20.17,30.15l24.53,13.63A197.34,197.34,0,0,1,267.45,270.55Z",
+        "x": 267.45,
+        "y": 270.55
+      },
+      "status": "occupied",
+      "verifiedAt": "2026-09-18",
+      "sourceUrl": "https://ws.parlament.ch/OData.svc/SeatOrganisationSr(ID=24,Language='DE')",
+      "member": {
+        "id": "806",
+        "chamber": "sr",
+        "name": "Maya Graf",
+        "canton": "BL",
+        "partyId": "20",
+        "groupId": "6",
+        "party": "GRÜNE Schweiz",
+        "partyAbbreviation": "GRÜNE",
+        "group": "Grüne Fraktion",
+        "groupAbbreviation": "G",
+        "joined": "2023-12-04T00:00:00.000Z",
+        "left": null,
+        "sourceUrl": "https://ws.parlament.ch/OData.svc/MemberCouncil(ID=806,Language='DE')",
+        "portraitUrl": "https://www.parlament.ch/sitecollectionimages/profil/original/2569.jpg"
+      }
+    },
+    {
+      "seatId": "25",
+      "geometry": {
+        "path": "M659.69,327.2l-26.11,10.3a196,196,0,0,0-11-23.31l24.53-13.63A224,224,0,0,1,659.69,327.2Z",
+        "x": 659.69,
+        "y": 327.2
+      },
+      "status": "occupied",
+      "verifiedAt": "2026-09-18",
+      "sourceUrl": "https://ws.parlament.ch/OData.svc/SeatOrganisationSr(ID=25,Language='DE')",
+      "member": {
+        "id": "4181",
+        "chamber": "sr",
+        "name": "Andrea Gmür-Schönenberger",
+        "canton": "LU",
+        "partyId": "1586",
+        "groupId": "3",
+        "party": "Die Mitte",
+        "partyAbbreviation": "M-E",
+        "group": "Die Mitte-Fraktion. Die Mitte. EVP.",
+        "groupAbbreviation": "M-E",
+        "joined": "2023-12-04T00:00:00.000Z",
+        "left": null,
+        "sourceUrl": "https://ws.parlament.ch/OData.svc/MemberCouncil(ID=4181,Language='DE')",
+        "portraitUrl": "https://www.parlament.ch/sitecollectionimages/profil/original/3075.jpg"
+      }
+    },
+    {
+      "seatId": "26",
+      "geometry": {
+        "path": "M289.32,247.11l-18.89-20.75a226.58,226.58,0,0,0-25,26.79l22,17.4A198.26,198.26,0,0,1,289.32,247.11Z",
+        "x": 289.32,
+        "y": 247.11
+      },
+      "status": "occupied",
+      "verifiedAt": "2026-09-18",
+      "sourceUrl": "https://ws.parlament.ch/OData.svc/SeatOrganisationSr(ID=26,Language='DE')",
+      "member": {
+        "id": "4260",
+        "chamber": "sr",
+        "name": "Fabien Fivaz",
+        "canton": "NE",
+        "partyId": "20",
+        "groupId": "6",
+        "party": "GRÜNE Schweiz",
+        "partyAbbreviation": "GRÜNE",
+        "group": "Grüne Fraktion",
+        "groupAbbreviation": "G",
+        "joined": "2025-06-02T00:00:00.000Z",
+        "left": null,
+        "sourceUrl": "https://ws.parlament.ch/OData.svc/MemberCouncil(ID=4260,Language='DE')",
+        "portraitUrl": "https://www.parlament.ch/sitecollectionimages/profil/original/3152.jpg"
+      }
+    },
+    {
+      "seatId": "27",
+      "geometry": {
+        "path": "M637.49,283.31,613,296.94a197.34,197.34,0,0,0-17.65-26.39l22-17.4A225.49,225.49,0,0,1,637.49,283.31Z",
+        "x": 637.49,
+        "y": 283.31
+      },
+      "status": "occupied",
+      "verifiedAt": "2026-09-18",
+      "sourceUrl": "https://ws.parlament.ch/OData.svc/SeatOrganisationSr(ID=27,Language='DE')",
+      "member": {
+        "id": "4151",
+        "chamber": "sr",
+        "name": "Josef Dittli",
+        "canton": "UR",
+        "partyId": "15",
+        "groupId": "1",
+        "party": "FDP.Die Liberalen",
+        "partyAbbreviation": "FDP-Liberale",
+        "group": "FDP-Liberale Fraktion",
+        "groupAbbreviation": "RL",
+        "joined": "2023-12-04T00:00:00.000Z",
+        "left": null,
+        "sourceUrl": "https://ws.parlament.ch/OData.svc/MemberCouncil(ID=4151,Language='DE')",
+        "portraitUrl": "https://www.parlament.ch/sitecollectionimages/profil/original/3052.jpg"
+      }
+    },
+    {
+      "seatId": "28",
+      "geometry": {
+        "path": "M314.63,227.54,299.36,204a226,226,0,0,0-28.92,22.36l18.89,20.75A197.78,197.78,0,0,1,314.63,227.54Z",
+        "x": 314.63,
+        "y": 227.54
+      },
+      "status": "occupied",
+      "verifiedAt": "2026-09-18",
+      "sourceUrl": "https://ws.parlament.ch/OData.svc/SeatOrganisationSr(ID=28,Language='DE')",
+      "member": {
+        "id": "10839",
+        "chamber": "sr",
+        "name": "Mauro Poggia",
+        "canton": "GE",
+        "partyId": "1576",
+        "groupId": "4",
+        "party": "Mouvement Citoyens Genevois",
+        "partyAbbreviation": "MCG",
+        "group": "Fraktion der Schweizerischen Volkspartei",
+        "groupAbbreviation": "V",
+        "joined": "2023-12-05T00:00:00.000Z",
+        "left": null,
+        "sourceUrl": "https://ws.parlament.ch/OData.svc/MemberCouncil(ID=10839,Language='DE')",
+        "portraitUrl": "https://www.parlament.ch/sitecollectionimages/profil/original/10839.jpg"
+      }
+    },
+    {
+      "seatId": "29",
+      "geometry": {
+        "path": "M617.32,253.15l-22,17.4a198.26,198.26,0,0,0-21.87-23.44l18.89-20.75A226.58,226.58,0,0,1,617.32,253.15Z",
+        "x": 617.32,
+        "y": 253.15
+      },
+      "status": "occupied",
+      "verifiedAt": "2026-09-18",
+      "sourceUrl": "https://ws.parlament.ch/OData.svc/SeatOrganisationSr(ID=29,Language='DE')",
+      "member": {
+        "id": "4116",
+        "chamber": "sr",
+        "name": "Petra Gössi",
+        "canton": "SZ",
+        "partyId": "15",
+        "groupId": "1",
+        "party": "FDP.Die Liberalen",
+        "partyAbbreviation": "FDP-Liberale",
+        "group": "FDP-Liberale Fraktion",
+        "groupAbbreviation": "RL",
+        "joined": "2023-12-04T00:00:00.000Z",
+        "left": null,
+        "sourceUrl": "https://ws.parlament.ch/OData.svc/MemberCouncil(ID=4116,Language='DE')",
+        "portraitUrl": "https://www.parlament.ch/sitecollectionimages/profil/original/3023.jpg"
+      }
+    },
+    {
+      "seatId": "30",
+      "geometry": {
+        "path": "M341.24,213,329.77,187.4A224.33,224.33,0,0,0,299.36,204l15.27,23.54A196.26,196.26,0,0,1,341.24,213Z",
+        "x": 341.24,
+        "y": 213
+      },
+      "status": "occupied",
+      "verifiedAt": "2026-09-18",
+      "sourceUrl": "https://ws.parlament.ch/OData.svc/SeatOrganisationSr(ID=30,Language='DE')",
+      "member": {
+        "id": "4261",
+        "chamber": "sr",
+        "name": "Esther Friedli",
+        "canton": "SG",
+        "partyId": "13",
+        "groupId": "4",
+        "party": "Schweizerische Volkspartei",
+        "partyAbbreviation": "SVP",
+        "group": "Fraktion der Schweizerischen Volkspartei",
+        "groupAbbreviation": "V",
+        "joined": "2023-12-04T00:00:00.000Z",
+        "left": null,
+        "sourceUrl": "https://ws.parlament.ch/OData.svc/MemberCouncil(ID=4261,Language='DE')",
+        "portraitUrl": "https://www.parlament.ch/sitecollectionimages/profil/original/3153.jpg"
+      }
+    },
+    {
+      "seatId": "31",
+      "geometry": {
+        "path": "M592.33,226.36l-18.89,20.75a197.78,197.78,0,0,0-25.3-19.57L563.41,204A226,226,0,0,1,592.33,226.36Z",
+        "x": 592.33,
+        "y": 226.36
+      },
+      "status": "occupied",
+      "verifiedAt": "2026-09-18",
+      "sourceUrl": "https://ws.parlament.ch/OData.svc/SeatOrganisationSr(ID=31,Language='DE')",
+      "member": {
+        "id": "4207",
+        "chamber": "sr",
+        "name": "Damian Müller",
+        "canton": "LU",
+        "partyId": "15",
+        "groupId": "1",
+        "party": "FDP.Die Liberalen",
+        "partyAbbreviation": "FDP-Liberale",
+        "group": "FDP-Liberale Fraktion",
+        "groupAbbreviation": "RL",
+        "joined": "2023-12-04T00:00:00.000Z",
+        "left": null,
+        "sourceUrl": "https://ws.parlament.ch/OData.svc/MemberCouncil(ID=4207,Language='DE')",
+        "portraitUrl": "https://www.parlament.ch/sitecollectionimages/profil/original/3108.jpg"
+      }
+    },
+    {
+      "seatId": "32",
+      "geometry": {
+        "path": "M173.76,360.09l-27.48-5.71a269.8,269.8,0,0,0-4.17,26.68L170,384A241.91,241.91,0,0,1,173.76,360.09Z",
+        "x": 173.76,
+        "y": 360.09
+      },
+      "status": "occupied",
+      "verifiedAt": "2026-09-18",
+      "sourceUrl": "https://ws.parlament.ch/OData.svc/SeatOrganisationSr(ID=32,Language='DE')",
+      "member": {
+        "id": "4239",
+        "chamber": "sr",
+        "name": "Eva Herzog",
+        "canton": "BS",
+        "partyId": "12",
+        "groupId": "2",
+        "party": "Sozialdemokratische Partei der Schweiz",
+        "partyAbbreviation": "SP",
+        "group": "Sozialdemokratische Fraktion",
+        "groupAbbreviation": "S",
+        "joined": "2023-12-04T00:00:00.000Z",
+        "left": null,
+        "sourceUrl": "https://ws.parlament.ch/OData.svc/MemberCouncil(ID=4239,Language='DE')",
+        "portraitUrl": "https://www.parlament.ch/sitecollectionimages/profil/original/3194.jpg"
+      }
+    },
+    {
+      "seatId": "33",
+      "geometry": {
+        "path": "M563.41,204l-15.27,23.54A196.26,196.26,0,0,0,521.53,213L533,187.4A224.33,224.33,0,0,1,563.41,204Z",
+        "x": 563.41,
+        "y": 204
+      },
+      "status": "occupied",
+      "verifiedAt": "2026-09-18",
+      "sourceUrl": "https://ws.parlament.ch/OData.svc/SeatOrganisationSr(ID=33,Language='DE')",
+      "member": {
+        "id": "825",
+        "chamber": "sr",
+        "name": "Hannes Germann",
+        "canton": "SH",
+        "partyId": "13",
+        "groupId": "4",
+        "party": "Schweizerische Volkspartei",
+        "partyAbbreviation": "SVP",
+        "group": "Fraktion der Schweizerischen Volkspartei",
+        "groupAbbreviation": "V",
+        "joined": "2023-12-04T00:00:00.000Z",
+        "left": null,
+        "sourceUrl": "https://ws.parlament.ch/OData.svc/MemberCouncil(ID=825,Language='DE')",
+        "portraitUrl": "https://www.parlament.ch/sitecollectionimages/profil/original/2575.jpg"
+      }
+    },
+    {
+      "seatId": "34",
+      "geometry": {
+        "path": "M180,336.14l-26.76-8.48a268.88,268.88,0,0,0-7,26.71l27.48,5.71A241.1,241.1,0,0,1,180,336.14Z",
+        "x": 180,
+        "y": 336.14
+      },
+      "status": "occupied",
+      "verifiedAt": "2026-09-18",
+      "sourceUrl": "https://ws.parlament.ch/OData.svc/SeatOrganisationSr(ID=34,Language='DE')",
+      "member": {
+        "id": "4270",
+        "chamber": "sr",
+        "name": "Baptiste Hurni",
+        "canton": "NE",
+        "partyId": "12",
+        "groupId": "2",
+        "party": "Sozialdemokratische Partei der Schweiz",
+        "partyAbbreviation": "SP",
+        "group": "Sozialdemokratische Fraktion",
+        "groupAbbreviation": "S",
+        "joined": "2023-12-04T00:00:00.000Z",
+        "left": null,
+        "sourceUrl": "https://ws.parlament.ch/OData.svc/MemberCouncil(ID=4270,Language='DE')",
+        "portraitUrl": "https://www.parlament.ch/sitecollectionimages/profil/original/3162.jpg"
+      }
+    },
+    {
+      "seatId": "35",
+      "geometry": {
+        "path": "M720.66,381.05l-27.91,3A241.91,241.91,0,0,0,689,360.09l27.48-5.71A269.8,269.8,0,0,1,720.66,381.05Z",
+        "x": 720.66,
+        "y": 381.05
+      },
+      "status": "occupied",
+      "verifiedAt": "2026-09-18",
+      "sourceUrl": "https://ws.parlament.ch/OData.svc/SeatOrganisationSr(ID=35,Language='DE')",
+      "member": {
+        "id": "4153",
+        "chamber": "sr",
+        "name": "Peter Hegglin",
+        "canton": "ZG",
+        "partyId": "1586",
+        "groupId": "3",
+        "party": "Die Mitte",
+        "partyAbbreviation": "M-E",
+        "group": "Die Mitte-Fraktion. Die Mitte. EVP.",
+        "groupAbbreviation": "M-E",
+        "joined": "2023-12-04T00:00:00.000Z",
+        "left": null,
+        "sourceUrl": "https://ws.parlament.ch/OData.svc/MemberCouncil(ID=4153,Language='DE')",
+        "portraitUrl": "https://www.parlament.ch/sitecollectionimages/profil/original/3053.jpg"
+      }
+    },
+    {
+      "seatId": "36",
+      "geometry": {
+        "path": "M188.7,313l-25.76-11.15a269.39,269.39,0,0,0-9.68,25.83L180,336.14A241.63,241.63,0,0,1,188.7,313Z",
+        "x": 188.7,
+        "y": 313
+      },
+      "status": "occupied",
+      "verifiedAt": "2026-09-18",
+      "sourceUrl": "https://ws.parlament.ch/OData.svc/SeatOrganisationSr(ID=36,Language='DE')",
+      "member": {
+        "id": "1120",
+        "chamber": "sr",
+        "name": "Carlo Sommaruga",
+        "canton": "GE",
+        "partyId": "12",
+        "groupId": "2",
+        "party": "Sozialdemokratische Partei der Schweiz",
+        "partyAbbreviation": "SP",
+        "group": "Sozialdemokratische Fraktion",
+        "groupAbbreviation": "S",
+        "joined": "2023-12-04T00:00:00.000Z",
+        "left": null,
+        "sourceUrl": "https://ws.parlament.ch/OData.svc/MemberCouncil(ID=1120,Language='DE')",
+        "portraitUrl": "https://www.parlament.ch/sitecollectionimages/profil/original/2632.jpg"
+      }
+    },
+    {
+      "seatId": "37",
+      "geometry": {
+        "path": "M716.49,354.38,689,360.09a241.1,241.1,0,0,0-6.27-24l26.76-8.48A268.89,268.89,0,0,1,716.49,354.38Z",
+        "x": 716.49,
+        "y": 354.38
+      },
+      "status": "occupied",
+      "verifiedAt": "2026-09-18",
+      "sourceUrl": "https://ws.parlament.ch/OData.svc/SeatOrganisationSr(ID=37,Language='DE')",
+      "member": {
+        "id": "1106",
+        "chamber": "sr",
+        "name": "Brigitte Häberli-Koller",
+        "canton": "TG",
+        "partyId": "1586",
+        "groupId": "3",
+        "party": "Die Mitte",
+        "partyAbbreviation": "M-E",
+        "group": "Die Mitte-Fraktion. Die Mitte. EVP.",
+        "groupAbbreviation": "M-E",
+        "joined": "2023-12-04T00:00:00.000Z",
+        "left": null,
+        "sourceUrl": "https://ws.parlament.ch/OData.svc/MemberCouncil(ID=1106,Language='DE')",
+        "portraitUrl": "https://www.parlament.ch/sitecollectionimages/profil/original/2600.jpg"
+      }
+    },
+    {
+      "seatId": "38",
+      "geometry": {
+        "path": "M199.34,291.48l-.83-.46-23.7-13.17q-6.5,11.66-11.86,24L188.7,313Q193.5,301.94,199.34,291.48Z",
+        "x": 199.34,
+        "y": 291.48
+      },
+      "status": "occupied",
+      "verifiedAt": "2026-09-18",
+      "sourceUrl": "https://ws.parlament.ch/OData.svc/SeatOrganisationSr(ID=38,Language='DE')",
+      "member": {
+        "id": "3891",
+        "chamber": "sr",
+        "name": "Daniel Jositsch",
+        "canton": "ZH",
+        "partyId": "26",
+        "groupId": "99",
+        "party": "parteilos",
+        "partyAbbreviation": "Independent",
+        "group": "Fraktionslos",
+        "groupAbbreviation": "FRAKTIONSLOS",
+        "joined": "2026-06-05T00:00:00.000Z",
+        "left": null,
+        "sourceUrl": "https://ws.parlament.ch/OData.svc/MemberCouncil(ID=3891,Language='DE')",
+        "portraitUrl": "https://www.parlament.ch/sitecollectionimages/profil/original/2694.jpg"
+      }
+    },
+    {
+      "seatId": "39",
+      "geometry": {
+        "path": "M709.5,327.66l-26.76,8.48A241.63,241.63,0,0,0,674.06,313l25.76-11.15A269.39,269.39,0,0,1,709.5,327.66Z",
+        "x": 709.5,
+        "y": 327.66
+      },
+      "status": "occupied",
+      "verifiedAt": "2026-09-18",
+      "sourceUrl": "https://ws.parlament.ch/OData.svc/SeatOrganisationSr(ID=39,Language='DE')",
+      "member": {
+        "id": "4206",
+        "chamber": "sr",
+        "name": "Erich Ettlin",
+        "canton": "OW",
+        "partyId": "1586",
+        "groupId": "3",
+        "party": "Die Mitte",
+        "partyAbbreviation": "M-E",
+        "group": "Die Mitte-Fraktion. Die Mitte. EVP.",
+        "groupAbbreviation": "M-E",
+        "joined": "2023-12-04T00:00:00.000Z",
+        "left": null,
+        "sourceUrl": "https://ws.parlament.ch/OData.svc/MemberCouncil(ID=4206,Language='DE')",
+        "portraitUrl": "https://www.parlament.ch/sitecollectionimages/profil/original/3107.jpg"
+      }
+    },
+    {
+      "seatId": "40",
+      "geometry": {
+        "path": "M222.32,252.89l-23-16.09a272.11,272.11,0,0,0-15,23.79l23.7,13.17.83.46A244,244,0,0,1,222.32,252.89Z",
+        "x": 222.32,
+        "y": 252.89
+      },
+      "status": "occupied",
+      "verifiedAt": "2026-09-18",
+      "sourceUrl": "https://ws.parlament.ch/OData.svc/SeatOrganisationSr(ID=40,Language='DE')",
+      "member": {
+        "id": "10805",
+        "chamber": "sr",
+        "name": "Pascal Broulis",
+        "canton": "VD",
+        "partyId": "15",
+        "groupId": "1",
+        "party": "FDP.Die Liberalen",
+        "partyAbbreviation": "FDP-Liberale",
+        "group": "FDP-Liberale Fraktion",
+        "groupAbbreviation": "RL",
+        "joined": "2023-12-04T00:00:00.000Z",
+        "left": null,
+        "sourceUrl": "https://ws.parlament.ch/OData.svc/MemberCouncil(ID=10805,Language='DE')",
+        "portraitUrl": "https://www.parlament.ch/sitecollectionimages/profil/original/10805.jpg"
+      }
+    },
+    {
+      "seatId": "41",
+      "geometry": {
+        "path": "M699.82,301.84,674.06,313q-4.8-11-10.64-21.51l.83-.46L688,277.85Q694.46,289.5,699.82,301.84Z",
+        "x": 699.82,
+        "y": 301.84
+      },
+      "status": "occupied",
+      "verifiedAt": "2026-09-18",
+      "sourceUrl": "https://ws.parlament.ch/OData.svc/SeatOrganisationSr(ID=41,Language='DE')",
+      "member": {
+        "id": "3871",
+        "chamber": "sr",
+        "name": "Pirmin Bischof",
+        "canton": "SO",
+        "partyId": "1586",
+        "groupId": "3",
+        "party": "Die Mitte",
+        "partyAbbreviation": "M-E",
+        "group": "Die Mitte-Fraktion. Die Mitte. EVP.",
+        "groupAbbreviation": "M-E",
+        "joined": "2023-12-04T00:00:00.000Z",
+        "left": null,
+        "sourceUrl": "https://ws.parlament.ch/OData.svc/MemberCouncil(ID=3871,Language='DE')",
+        "portraitUrl": "https://www.parlament.ch/sitecollectionimages/profil/original/2674.jpg"
+      }
+    },
+    {
+      "seatId": "42",
+      "geometry": {
+        "path": "M238.65,232.13l-21.1-18.49a273.28,273.28,0,0,0-18.22,23.16l23,16.09A245,245,0,0,1,238.65,232.13Z",
+        "x": 238.65,
+        "y": 232.13
+      },
+      "status": "occupied",
+      "verifiedAt": "2026-09-18",
+      "sourceUrl": "https://ws.parlament.ch/OData.svc/SeatOrganisationSr(ID=42,Language='DE')",
+      "member": {
+        "id": "4306",
+        "chamber": "sr",
+        "name": "Johanna Gapany",
+        "canton": "FR",
+        "partyId": "15",
+        "groupId": "1",
+        "party": "FDP.Die Liberalen",
+        "partyAbbreviation": "FDP-Liberale",
+        "group": "FDP-Liberale Fraktion",
+        "groupAbbreviation": "RL",
+        "joined": "2023-12-04T00:00:00.000Z",
+        "left": null,
+        "sourceUrl": "https://ws.parlament.ch/OData.svc/MemberCouncil(ID=4306,Language='DE')",
+        "portraitUrl": "https://www.parlament.ch/sitecollectionimages/profil/original/3183.jpg"
+      }
+    },
+    {
+      "seatId": "43",
+      "geometry": {
+        "path": "M678.38,260.59l-23.7,13.17-.83.46a244,244,0,0,0-13.4-21.33l23-16.09A272.11,272.11,0,0,1,678.38,260.59Z",
+        "x": 678.38,
+        "y": 260.59
+      },
+      "status": "occupied",
+      "verifiedAt": "2026-09-18",
+      "sourceUrl": "https://ws.parlament.ch/OData.svc/SeatOrganisationSr(ID=43,Language='DE')",
+      "member": {
+        "id": "4075",
+        "chamber": "sr",
+        "name": "Andrea Caroni",
+        "canton": "AR",
+        "partyId": "15",
+        "groupId": "1",
+        "party": "FDP.Die Liberalen",
+        "partyAbbreviation": "FDP-Liberale",
+        "group": "FDP-Liberale Fraktion",
+        "groupAbbreviation": "RL",
+        "joined": "2023-12-04T00:00:00.000Z",
+        "left": null,
+        "sourceUrl": "https://ws.parlament.ch/OData.svc/MemberCouncil(ID=4075,Language='DE')",
+        "portraitUrl": "https://www.parlament.ch/sitecollectionimages/profil/original/2775.jpg"
+      }
+    },
+    {
+      "seatId": "44",
+      "geometry": {
+        "path": "M257.59,212.77,238.67,192a273.82,273.82,0,0,0-21.12,21.59l21.1,18.49A245.49,245.49,0,0,1,257.59,212.77Z",
+        "x": 257.59,
+        "y": 212.77
+      },
+      "status": "occupied",
+      "verifiedAt": "2026-09-18",
+      "sourceUrl": "https://ws.parlament.ch/OData.svc/SeatOrganisationSr(ID=44,Language='DE')",
+      "member": {
+        "id": "4309",
+        "chamber": "sr",
+        "name": "Matthias Michel",
+        "canton": "ZG",
+        "partyId": "15",
+        "groupId": "1",
+        "party": "FDP.Die Liberalen",
+        "partyAbbreviation": "FDP-Liberale",
+        "group": "FDP-Liberale Fraktion",
+        "groupAbbreviation": "RL",
+        "joined": "2023-12-04T00:00:00.000Z",
+        "left": null,
+        "sourceUrl": "https://ws.parlament.ch/OData.svc/MemberCouncil(ID=4309,Language='DE')",
+        "portraitUrl": "https://www.parlament.ch/sitecollectionimages/profil/original/3205.jpg"
+      }
+    },
+    {
+      "seatId": "45",
+      "geometry": {
+        "path": "M663.43,236.8l-23,16.09a245,245,0,0,0-16.33-20.76l21.1-18.49A273.28,273.28,0,0,1,663.43,236.8Z",
+        "x": 663.43,
+        "y": 236.8
+      },
+      "status": "occupied",
+      "verifiedAt": "2026-09-18",
+      "sourceUrl": "https://ws.parlament.ch/OData.svc/SeatOrganisationSr(ID=45,Language='DE')",
+      "member": {
+        "id": "4152",
+        "chamber": "sr",
+        "name": "Hans Wicki",
+        "canton": "NW",
+        "partyId": "15",
+        "groupId": "1",
+        "party": "FDP.Die Liberalen",
+        "partyAbbreviation": "FDP-Liberale",
+        "group": "FDP-Liberale Fraktion",
+        "groupAbbreviation": "RL",
+        "joined": "2023-12-04T00:00:00.000Z",
+        "left": null,
+        "sourceUrl": "https://ws.parlament.ch/OData.svc/MemberCouncil(ID=4152,Language='DE')",
+        "portraitUrl": "https://www.parlament.ch/sitecollectionimages/profil/original/3054.jpg"
+      }
+    },
+    {
+      "seatId": "47",
+      "geometry": {
+        "path": "M645.21,213.64l-21.1,18.49a245.49,245.49,0,0,0-18.93-19.36L624.09,192A273.82,273.82,0,0,1,645.21,213.64Z",
+        "x": 645.21,
+        "y": 213.64
+      },
+      "status": "occupied",
+      "verifiedAt": "2026-09-18",
+      "sourceUrl": "https://ws.parlament.ch/OData.svc/SeatOrganisationSr(ID=46,Language='DE')",
+      "member": {
+        "id": "4078",
+        "chamber": "sr",
+        "name": "Martin Schmid",
+        "canton": "GR",
+        "partyId": "15",
+        "groupId": "1",
+        "party": "FDP.Die Liberalen",
+        "partyAbbreviation": "FDP-Liberale",
+        "group": "FDP-Liberale Fraktion",
+        "groupAbbreviation": "RL",
+        "joined": "2023-12-04T00:00:00.000Z",
+        "left": null,
+        "sourceUrl": "https://ws.parlament.ch/OData.svc/MemberCouncil(ID=4078,Language='DE')",
+        "portraitUrl": "https://www.parlament.ch/sitecollectionimages/profil/original/2783.jpg"
+      }
+    }
+  ],
+  "parties": [
+    {
+      "id": "1586",
+      "name": "Die Mitte",
+      "abbreviation": "M-E",
+      "count": 15,
+      "color": "#ed7b24",
+      "pattern": 0
+    },
+    {
+      "id": "15",
+      "name": "FDP.Die Liberalen",
+      "abbreviation": "FDP-Liberale",
+      "count": 12,
+      "color": "#0065ab",
+      "pattern": 1
+    },
+    {
+      "id": "12",
+      "name": "Sozialdemokratische Partei der Schweiz",
+      "abbreviation": "SP",
+      "count": 7,
+      "color": "#d5202f",
+      "pattern": 3
+    },
+    {
+      "id": "13",
+      "name": "Schweizerische Volkspartei",
+      "abbreviation": "SVP",
+      "count": 6,
+      "color": "#36833c",
+      "pattern": 2
+    },
+    {
+      "id": "20",
+      "name": "GRÜNE Schweiz",
+      "abbreviation": "GRÜNE",
+      "count": 3,
+      "color": "#65a531",
+      "pattern": 1
+    },
+    {
+      "id": "1336",
+      "name": "Grünliberale Partei",
+      "abbreviation": "glp",
+      "count": 1,
+      "color": "#9cbf38",
+      "pattern": 0
+    },
+    {
+      "id": "1576",
+      "name": "Mouvement Citoyens Genevois",
+      "abbreviation": "MCG",
+      "count": 1,
+      "color": "#d89b22",
+      "pattern": 2
+    },
+    {
+      "id": "26",
+      "name": "parteilos",
+      "abbreviation": "Independent",
+      "count": 1,
+      "color": "#77776d",
+      "pattern": 3
+    }
+  ],
+  "groups": [
+    {
+      "id": "3",
+      "name": "Die Mitte-Fraktion. Die Mitte. EVP.",
+      "abbreviation": "M-E",
+      "count": 15,
+      "color": "#FB7203",
+      "pattern": 0
+    },
+    {
+      "id": "1",
+      "name": "FDP-Liberale Fraktion",
+      "abbreviation": "RL",
+      "count": 12,
+      "color": "#0044D5",
+      "pattern": 1
+    },
+    {
+      "id": "4",
+      "name": "Fraktion der Schweizerischen Volkspartei",
+      "abbreviation": "V",
+      "count": 7,
+      "color": "#007832",
+      "pattern": 2
+    },
+    {
+      "id": "2",
+      "name": "Sozialdemokratische Fraktion",
+      "abbreviation": "S",
+      "count": 7,
+      "color": "#FF0000",
+      "pattern": 3
+    },
+    {
+      "id": "6",
+      "name": "Grüne Fraktion",
+      "abbreviation": "G",
+      "count": 3,
+      "color": "#03F61A",
+      "pattern": 1
+    },
+    {
+      "id": "99",
+      "name": "Fraktionslos",
+      "abbreviation": "FRAKTIONSLOS",
+      "count": 1,
+      "color": "#77776d",
+      "pattern": 2
+    },
+    {
+      "id": "137",
+      "name": "Grünliberale Fraktion",
+      "abbreviation": "GL",
+      "count": 1,
+      "color": "#7e3874",
+      "pattern": 0
+    }
+  ],
+  "sources": [
+    {
+      "url": "https://www.parlament.ch/JavascriptBundleLoader.js?v=1983687063",
+      "retrievedAt": "2026-09-18T12:21:07.396Z",
+      "sha256": "9f4dc503fd54029bbe9978d135a468182ff78814c23d17d1807ada070954f01b"
+    },
+    {
+      "url": "https://ws.parlament.ch/odata.svc/MemberCouncil?%24format=json&%24filter=Language+eq+%27DE%27+and+Active+eq+true",
+      "retrievedAt": "2026-09-18T12:21:08.011Z",
+      "sha256": "055e61d62b36a70823f1a847f60bcfe3428464d75f06447825966625c15d04a9"
+    },
+    {
+      "url": "https://www.parlament.ch/de/organe/nationalrat/sitzordnung-nr",
+      "retrievedAt": "2026-09-18T12:21:08.578Z",
+      "sha256": "e21243b8465157e29cc9f3b2e324dce6e2f0b2e75e1242ae5ae7368951da9d86"
+    },
+    {
+      "url": "https://ws.parlament.ch/odata.svc/SeatOrganisationNr?%24format=json&%24filter=Language+eq+%27DE%27",
+      "retrievedAt": "2026-09-18T12:21:08.913Z",
+      "sha256": "a00d132736c777857e119ed1d72f98daba87e9c6a72091bf7d3c4114a94a01fb"
+    },
+    {
+      "url": "https://www.parlament.ch/de/organe/staenderat/sitzordnung-sr",
+      "retrievedAt": "2026-09-18T12:21:09.963Z",
+      "sha256": "57eb6890d56027355336384af2e519724b32faeacc6f7c23264841325b79a7c6"
+    },
+    {
+      "url": "https://ws.parlament.ch/odata.svc/SeatOrganisationSr?%24format=json&%24filter=Language+eq+%27DE%27",
+      "retrievedAt": "2026-09-18T12:21:10.330Z",
+      "sha256": "6d0746d401bddeeeb2ca44125fd97295491f8ca2e33c756d0ab06a4f79db1094"
+    }
+  ],
+  "officialPlanUrl": "https://www.parlament.ch/de/organe/staenderat/sitzordnung-sr",
+  "version": "2026-09-18-afdc7a772657"
+}

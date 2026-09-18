@@ -19,7 +19,7 @@ export function createStore(file = 'data/pilot.sqlite') {
   const getEvidence = id => { const e = parse(db.prepare('SELECT payload FROM evidence WHERE id=?').get(id)); return e ? {...e,source:parse(db.prepare('SELECT payload FROM sources WHERE id=?').get(e.sourceId))} : null; };
   const listEvidence = id => db.prepare('SELECT id FROM evidence WHERE dossier_id=?').all(id).map(row=>getEvidence(row.id));
   return { db, getEvidence, listEvidence,
-    listDossiers: () => db.prepare('SELECT payload FROM dossiers').all().map(parse).map(d => ({...d,coverage:listEvidence(d.id).some(e=>e.kind==='video')?'video-and-documents':'documents'})),
+    listDossiers: () => db.prepare('SELECT payload FROM dossiers').all().map(parse).map(d => ({...d,sourceLanguages:[...new Set(listEvidence(d.id).map(e=>e.language))],coverage:listEvidence(d.id).some(e=>e.kind==='video')?'video-and-documents':'documents'})),
     getDossier: id => { const d=parse(db.prepare('SELECT payload FROM dossiers WHERE id=?').get(id)); if(!d)return null;const evidence=listEvidence(id);return {...d,evidence,sources:[...new Set([...d.sourceIds,...evidence.map(e=>e.sourceId)])].map(id=>parse(db.prepare('SELECT payload FROM sources WHERE id=?').get(id)))}; },
     saved: uid => db.prepare('SELECT evidence_id,created_at FROM saved WHERE user_id=? ORDER BY created_at DESC').all(uid).map(r=>({...getEvidence(r.evidence_id),savedAt:r.created_at})),
     save: (uid,id) => db.prepare('INSERT OR IGNORE INTO saved VALUES(?,?,?)').run(uid,id,new Date().toISOString()),
