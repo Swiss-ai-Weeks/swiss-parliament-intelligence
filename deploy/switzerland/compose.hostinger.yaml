@@ -42,11 +42,12 @@ services:
     tmpfs: [/tmp:uid=1000,gid=1000,mode=1777,size=4m]
     mem_limit: 64m
     environment:
-      NVIDIA_SSH_KEY: ${NVIDIA_SSH_KEY}
       NVIDIA_KNOWN_HOSTS: ${NVIDIA_KNOWN_HOSTS}
+    volumes: [swiss-model-key:/keys]
     networks: [swiss-private]
 volumes:
   swiss-data:
+  swiss-model-key:
 networks:
   swiss-private:
   existing-edge:
