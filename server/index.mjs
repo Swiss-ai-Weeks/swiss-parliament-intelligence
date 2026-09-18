@@ -1,3 +1,4 @@
+import {officialRecording} from './official-recording.mjs';
 import http from 'node:http';
 import { readFile, stat } from 'node:fs/promises';
 import path from 'node:path';
@@ -55,6 +56,7 @@ export function createServer({store=createStore(path.join(root,'data/pilot.sqlit
       if(p.startsWith('/api/parliament/business/')&&req.method==='GET'){const d=par().business(p.split('/').pop());if(!d)throw fail('NOT_FOUND',404);return json(res,200,d);}
       if(p.startsWith('/api/parliament/person/')&&req.method==='GET'){const d=par().person(p.split('/').pop());if(!d)throw fail('NOT_FOUND',404);return json(res,200,d);}
       if(p==='/api/parliament/read'&&req.method==='GET')return json(res,200,par().readDebate(Object.fromEntries(url.searchParams)));
+      if(p==='/api/parliament/recording'&&req.method==='GET'){const speech=par().get('speech',url.searchParams.get('id')||'');if(!speech)throw fail('NOT_FOUND',404);return json(res,200,speech.video?{status:'available',scope:'aligned-passage',clip:speech.video}:await officialRecording(speech,fetchImpl));}
       if(p==='/api/parliament/context'&&req.method==='GET'){const context=par().passageContext(url.searchParams.get('id')||'');if(!context)throw fail('NOT_FOUND',404);return json(res,200,context);}
       if(p==='/api/parliament/search'&&req.method==='GET')return json(res,200,par().search((url.searchParams.get('q')||'').slice(0,500),{businessId:url.searchParams.get('business'),personId:url.searchParams.get('person'),limit:20}));
       if(p==='/api/parliament/video-search'&&req.method==='POST'){const b=await body(req);if(typeof b.query!=='string'||!b.query.trim()||b.query.length>500||!['spoken','visual'].includes(b.mode))throw fail('INVALID_REQUEST');for(const k of ['personId','businessId'])if(b[k]!==undefined&&(typeof b[k]!=='string'||!/^\d+$/.test(b[k])))throw fail('INVALID_SCOPE');try{return json(res,200,await searchVideo({root:path.join(root,'data/parliament'),store:par(),query:b.query,mode:b.mode,personId:b.personId,businessId:b.businessId,env,fetchImpl}));}catch{throw fail('VIDEO_SEARCH_UNAVAILABLE',502);}}
