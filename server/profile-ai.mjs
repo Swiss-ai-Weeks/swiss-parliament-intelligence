@@ -25,7 +25,7 @@ export async function answerProfile(store,input,env,fetchImpl=fetch){
  function passage(id,text,url,kind,speaker=p.name){return {id,evidenceId:id,text,language:'fr',officialUrl:url,sourceKind:kind,speaker,date:p.retrievedAt};}
  if(intent==='membership'||intent==='profile'){
   const text=intent==='membership'?`${p.name} — Parti : ${p.party||'non renseigné'}. Groupe parlementaire : ${p.group||'non renseigné'}.`:
-   `${p.name}. Parti : ${p.party||'non renseigné'}. Canton : ${p.canton}. Conseil : ${p.council}. Entrée au conseil : ${p.joined?.slice(0,10)||'non renseignée'}. Élection : ${p.elected?.slice(0,10)||'non renseignée'}.`;
+   `${p.name}. Parti : ${p.party||'non renseigné'}. Canton : ${p.canton}. Conseil : ${p.council}. Première entrée au Parlement : ${p.firstJoined?.slice(0,10)||'non renseignée'}. Début du mandat actuel : ${p.joined?.slice(0,10)||'non renseigné'}. Parcours déclaré : ${p.declaredMandates||'non renseigné'}. Élection : ${p.elected?.slice(0,10)||'non renseignée'}.`;
   if(p.sourceUrl)passages.push(passage('profile-'+p.id,text,p.sourceUrl,'official-structured-record'));
   if(intent==='profile'){
    for(const [i,o]of(p.occupations||[]).entries())passages.push(passage('occupation-'+p.id+'-'+i,`${p.name} — Profession déclarée : ${o.title}; employeur : ${o.employer||'non renseigné'}; fonction : ${o.role||'non renseignée'}; début : ${o.start?.slice(0,10)||'non renseigné'}; fin : ${o.end?.slice(0,10)||'non renseignée'}.`,o.sourceUrl,'official-structured-record'));

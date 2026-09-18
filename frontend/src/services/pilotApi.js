@@ -13,7 +13,14 @@ export function createPilotApi({baseUrl=publicBase+'api',fetchImpl=fetch}={}) {
     return prefixMedia(data);
   }
   return {
+    feedbackChallenge:()=>request('/feedback/challenge'),feedback:p=>request('/feedback','POST',p),
+    discoverySearch:p=>request('/discovery/search','POST',p),
+    broadcast:()=>request('/broadcast'),
+    providers:()=>request('/auth/providers'),recover:p=>request('/auth/recover','POST',p),password:p=>request('/auth/password','POST',p),google:()=>request('/auth/google','POST',{}),
+    items:(kind)=>request('/me/items/'+kind),putItem:(kind,id,payload,accountId)=>request('/me/items/'+kind,'POST',{id,payload,accountId}),deleteItem:(kind,id,accountId)=>request('/me/items/'+kind,'DELETE',{id,accountId}),
+    chamber:(council,version)=>request('/chambers/'+council+(version?'?version='+encodeURIComponent(version):'')),dashboard:()=>request('/dashboard'),agenda:()=>request('/agenda'),feed:()=>request('/feed'),
     readDebate:filters=>request('/parliament/read?'+new URLSearchParams(filters)),
+    recording:id=>request('/parliament/recording?id='+encodeURIComponent(id)),
     passageContext:id=>request('/parliament/context?id='+encodeURIComponent(id)),
     videoSearch:payload=>request('/parliament/video-search','POST',payload),
     translatePassage:payload=>request('/parliament/translate','POST',payload),

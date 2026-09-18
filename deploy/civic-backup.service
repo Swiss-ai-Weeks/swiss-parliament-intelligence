@@ -1,0 +1,10 @@
+[Unit]
+Description=Encrypted Swiss civic application-data backup
+[Service]
+Type=oneshot
+User=midnight
+WorkingDirectory=/opt/swiss-parliament-intelligence
+EnvironmentFile=/etc/midnight/backup.env
+ExecStart=/usr/bin/node scripts/backup-application.mjs
+UMask=0077
+NoNewPrivileges=true
