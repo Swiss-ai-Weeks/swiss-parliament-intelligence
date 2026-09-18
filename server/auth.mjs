@@ -1,30 +1,24 @@
-import { randomBytes } from 'node:crypto';
-export function createAuth(env=process.env,fetchImpl=fetch) {
-  const sessions=new Map();
-  const configured=Boolean(env.SUPABASE_URL&&env.SUPABASE_ANON_KEY);
-  async function call(path,body,token) {
-    const r=await fetchImpl(env.SUPABASE_URL+'/auth/v1/'+path,{method:body?'POST':'GET',signal:AbortSignal.timeout(12000),headers:{apikey:env.SUPABASE_ANON_KEY,'Content-Type':'application/json',...(token?{Authorization:'Bearer '+token}:{})},...(body?{body:JSON.stringify(body)}:{})});
-    if(!r.ok) throw Object.assign(new Error('AUTH_FAILED'),{status:r.status===429?429:401});
-    return r.json();
-  }
-  return {configured,
-    async login(email,password) {
-      if(!configured) throw Object.assign(new Error('AUTH_NOT_CONFIGURED'),{status:503});
-      const result=await call('token?grant_type=password',{email,password});
-      const sid=randomBytes(32).toString('hex');
-      const expires=Math.min(Number(result.expires_in)||3600,3600);
-      for(const [id,s] of sessions) if(s.expiresAt<Date.now()) sessions.delete(id);
-      sessions.set(sid,{user:result.user,token:result.access_token,expiresAt:Date.now()+expires*1000});
-      return {sid,expires,user:{id:result.user.id,email:result.user.email}};
-    },
-    async signup(email,password) {if(!configured) throw Object.assign(new Error('AUTH_NOT_CONFIGURED'),{status:503});await call('signup',{email,password});return {status:'check-email'};},
-    async user(cookie='') {
-      const sid=cookie.match(/(?:^|;\s*)pilot_session=([a-f0-9]{64})(?:;|$)/)?.[1];
-      const session=sessions.get(sid);
-      if(!session||session.expiresAt<=Date.now()) {sessions.delete(sid);throw Object.assign(new Error('SIGN_IN_REQUIRED'),{status:401});}
-      try {const user=await call('user',null,session.token); if(user.id!==session.user.id) throw new Error();return {id:user.id,email:user.email};}
-      catch {sessions.delete(sid);throw Object.assign(new Error('SESSION_EXPIRED'),{status:401});}
-    },
-    logout(cookie='') {const sid=cookie.match(/(?:^|;\s*)pilot_session=([a-f0-9]{64})(?:;|$)/)?.[1];sessions.delete(sid);},
-  };
+import {randomBytes,createHash} from 'node:crypto';
+import {sessionVault} from './session-vault.mjs';
+export function createAuth(env=process.env,fetchImpl=fetch,options={}){
+ const sessions=sessionVault(options.file),configured=Boolean(env.SUPABASE_URL&&env.SUPABASE_ANON_KEY),pending=new Map();
+ const publicUser=u=>({id:u.id,email:u.email,name:u.user_metadata?.display_name||u.user_metadata?.full_name||''});
+ const sidFrom=c=>c?.match(/(?:^|;\s*)pilot_session=([a-f0-9]{64})(?:;|$)/)?.[1];
+ const error=(m,status=401)=>Object.assign(new Error(m),{status});
+ async function call(path,body,token,method){if(!configured)throw error('AUTH_NOT_CONFIGURED',503);const r=await fetchImpl(env.SUPABASE_URL+'/auth/v1/'+path,{method:method||(body?'POST':'GET'),signal:AbortSignal.timeout(12000),headers:{apikey:env.SUPABASE_ANON_KEY,'Content-Type':'application/json',...(token?{Authorization:'Bearer '+token}:{})},...(body?{body:JSON.stringify(body)}:{})});if(!r.ok){let code;try{code=(await r.json()).error_code;}catch{}throw error(code==='email_not_confirmed'?'EMAIL_NOT_CONFIRMED':r.status===429?'AUTH_RATE_LIMITED':'AUTH_FAILED',r.status===429?429:r.status>=500?503:401);}return r.status===204?{}:r.json();}
+ function save(result,sid=randomBytes(32).toString('hex')){const expires=30*86400;const value={user:result.user,token:result.access_token,refresh:result.refresh_token,accessUntil:Date.now()+(Number(result.expires_in)||3600)*1000};sessions.set(sid,value,Date.now()+expires*1000);return {sid,expires,user:publicUser(value.user)};}
+ async function session(cookie){const sid=sidFrom(cookie);let s=sessions.get(sid);if(!s)throw error('SIGN_IN_REQUIRED');if(s.accessUntil<Date.now()+30000&&s.refresh){if(!pending.has(sid))pending.set(sid,call('token?grant_type=refresh_token',{refresh_token:s.refresh}).then(r=>{if(r.user.id!==s.user.id)throw error('SESSION_EXPIRED');save(r,sid);return sessions.get(sid);}).finally(()=>pending.delete(sid)));try{s=await pending.get(sid);}catch(e){if(e.status===401){sessions.delete(sid);throw error('SESSION_EXPIRED');}throw e;}}try{const u=await call('user',null,s.token);if(u.id!==s.user.id)throw error('SESSION_EXPIRED');return {...s,user:publicUser(u)};}catch(e){if(e.status===401){sessions.delete(sid);throw error('SESSION_EXPIRED');}throw e;}}
+ const callback=()=>(env.PUBLIC_ORIGIN||'http://127.0.0.1:4318')+(env.PUBLIC_BASE_PATH||'')+'/api/auth/callback';
+ function flow(mode){const verifier=randomBytes(48).toString('base64url'),id=randomBytes(32).toString('hex');sessions.set('oauth-'+id,{verifier,mode},Date.now()+3600000);return {id,challenge:createHash('sha256').update(verifier).digest('base64url')};}
+ return {configured,call,session,close:()=>sessions.close(),
+ async providers(){if(!configured)return {email:false,google:false,apple:false,discord:false,sso:false};try{const s=await call('settings');return {email:s.external?.email!==false,google:s.external?.google===true,apple:s.external?.apple===true,discord:s.external?.discord===true,sso:Boolean(env.SUPABASE_SSO_PROVIDER_ID)};}catch{return {email:false,google:false,apple:false,discord:false,sso:false};}},
+ async login(email,password){return save(await call('token?grant_type=password',{email,password}));},
+ async signup(email,password,name=''){const f=flow('signup');const r=await call('signup?redirect_to='+encodeURIComponent(callback()),{email,password,data:{display_name:name},code_challenge:f.challenge,code_challenge_method:'s256'});return r.access_token?{...save(r),status:'signed-in'}:{status:'check-email',flowId:f.id};},
+ async recover(email){const f=flow('recovery');await call('recover?redirect_to='+encodeURIComponent(callback()),{email,code_challenge:f.challenge,code_challenge_method:'s256'});return {status:'check-email',flowId:f.id};},
+ async password(cookie,password){const s=await session(cookie);await call('user',{password},s.token,'PUT');return {status:'password-updated'};},
+ async oauth(provider='google'){if(!['google','apple','discord'].includes(provider))throw error('INVALID_PROVIDER',400);const f=flow('oauth');const params=new URLSearchParams({provider,redirect_to:callback(),code_challenge:f.challenge,code_challenge_method:'s256'});return {id:f.id,url:env.SUPABASE_URL+'/auth/v1/authorize?'+params};},
+ async sso(){if(!env.SUPABASE_SSO_PROVIDER_ID)throw error('SSO_NOT_CONFIGURED',503);const f=flow('oauth');const r=await call('sso',{provider_id:env.SUPABASE_SSO_PROVIDER_ID,redirect_to:callback(),skip_http_redirect:true,code_challenge:f.challenge,code_challenge_method:'s256'});if(typeof r.url!=='string'||!r.url.startsWith('https://'))throw error('INVALID_SSO_URL',502);return {id:f.id,url:r.url};},
+ async exchange(code,id){const state=sessions.get('oauth-'+id);sessions.delete('oauth-'+id);if(!state)throw error('AUTH_FLOW_EXPIRED');return {...save(await call('token?grant_type=pkce',{auth_code:code,code_verifier:state.verifier})),mode:state.mode};},
+ async user(cookie=''){return (await session(cookie)).user;},logout(cookie=''){sessions.delete(sidFrom(cookie));},
+ };
 }

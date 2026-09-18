@@ -1,0 +1,93 @@
+services:
+  swiss-pilot:
+    image: node:24-bookworm-slim
+    user: "1000:1000"
+    working_dir: /app
+    command:
+      - node
+      - --input-type=module
+      - -e
+      - |
+        import {writeFileSync} from 'node:fs';
+        import {createHash} from 'node:crypto';
+        import {execFileSync} from 'node:child_process';
+        const r=await fetch(process.env.APP_ARCHIVE_URL);if(!r.ok)throw Error('APP_DOWNLOAD_FAILED');
+        const b=Buffer.from(await r.arrayBuffer());if(createHash('sha256').update(b).digest('hex')!==process.env.APP_ARCHIVE_SHA256)throw Error('APP_CHECKSUM_FAILED');
+        writeFileSync('/tmp/app.tgz',b);execFileSync('tar',['-xzf','/tmp/app.tgz','-C','/app']);
+        await import('/app/bootstrap.mjs');
+    depends_on:
+      swiss-volume-init: {condition: service_completed_successfully}
+    restart: unless-stopped
+    init: true
+    read_only: true
+    security_opt: [no-new-privileges:true]
+    cap_drop: [ALL]
+    tmpfs: ["/tmp:uid=1000,gid=1000,mode=1777,size=512m", "/app:uid=1000,gid=1000,size=16m"]
+    mem_limit: 1536m
+    cpus: 1.0
+    environment:
+      APP_ARCHIVE_URL: ${APP_ARCHIVE_URL}
+      APP_ARCHIVE_SHA256: ${APP_ARCHIVE_SHA256}
+      PUBLIC_BASE_PATH: /Switzerland
+      PUBLIC_ORIGIN: https://midnight.vote
+      PUBLIC_DATA_URL: ${PUBLIC_DATA_URL}
+      PUBLIC_DATA_SHA256: ${PUBLIC_DATA_SHA256}
+      SUPABASE_URL: ${SUPABASE_URL}
+      SUPABASE_ANON_KEY: ${SUPABASE_ANON_KEY}
+      INFERENCE_BASE_URL: http://swiss-model-tunnel:4319/v1
+      INFERENCE_MODEL: nvidia/nvidia-nemotron-nano-9b-v2
+      TRANSLATION_BASE_URL: http://swiss-model-tunnel:4320
+      VSS_EMBED_BASE_URL: http://swiss-model-tunnel:4321
+    volumes: [swiss-data:/app/data]
+    networks: [swiss-private, existing-edge]
+    healthcheck:
+      test: [CMD, node, -e, "fetch('http://127.0.0.1:4318/Switzerland/api/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 180s
+  swiss-volume-init:
+    image: alpine:3.22
+    command: [sh, -ec, "chown 1000:1000 /data /keys"]
+    restart: "no"
+    network_mode: none
+    cap_drop: [ALL]
+    cap_add: [CHOWN]
+    security_opt: [no-new-privileges:true]
+    volumes: [swiss-data:/data, swiss-model-key:/keys]
+  swiss-model-tunnel:
+    image: alpine:3.22
+    restart: unless-stopped
+    security_opt: [no-new-privileges:true]
+    mem_limit: 128m
+    environment:
+      NVIDIA_KNOWN_HOSTS: ${NVIDIA_KNOWN_HOSTS}
+    volumes: [swiss-model-key:/keys]
+    networks: [swiss-private]
+    depends_on:
+      swiss-volume-init: {condition: service_completed_successfully}
+    entrypoint: [/bin/sh, -ec]
+    command:
+      - |
+        apk add --no-cache openssh-client >/dev/null
+        id tunnel >/dev/null 2>&1 || adduser -D -u 1000 tunnel
+        cat > /tmp/tunnel.sh <<'EOF'
+        set -eu
+        umask 077
+        if [ ! -f /keys/id_ed25519 ]; then ssh-keygen -q -t ed25519 -N '' -C swiss-pilot-production -f /keys/id_ed25519; fi
+        printf 'SWISS_TUNNEL_PUBLIC_KEY '
+        cat /keys/id_ed25519.pub
+        printf '%s\n' "$$NVIDIA_KNOWN_HOSTS" > /tmp/known_hosts
+        exec ssh -N -i /keys/id_ed25519 -o IdentitiesOnly=yes -o BatchMode=yes -o StrictHostKeyChecking=yes -o UserKnownHostsFile=/tmp/known_hosts -o ExitOnForwardFailure=yes -o ServerAliveInterval=30 -o ServerAliveCountMax=3 -L 0.0.0.0:4319:127.0.0.1:30081 -L 0.0.0.0:4320:127.0.0.1:30082 -L 0.0.0.0:4321:127.0.0.1:8017 -p 12516 swiss-model@global.prd.ga.launchpad.nvidia.com
+        EOF
+        chmod 755 /tmp/tunnel.sh
+        exec su -s /bin/sh tunnel -c '/bin/sh /tmp/tunnel.sh'
+
+volumes:
+  swiss-data:
+  swiss-model-key:
+networks:
+  swiss-private:
+  existing-edge:
+    external: true
+    name: midnight-rarimo-nfc_rarimo-edge

@@ -1,0 +1,19 @@
+services:
+  swiss-pilot:
+    build:
+      context: ../..
+      dockerfile: deploy/switzerland/Dockerfile
+    restart: unless-stopped
+    env_file: pilot.env
+    environment:
+      PUBLIC_BASE_PATH: /Switzerland
+      PUBLIC_ORIGIN: https://midnight.vote
+    ports:
+      - "127.0.0.1:4318:4318"
+    volumes:
+      - ./public-data:/app/data
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:4318/Switzerland/api/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 30s
+      timeout: 5s
+      retries: 3

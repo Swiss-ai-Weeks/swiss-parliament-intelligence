@@ -1,3 +1,4 @@
+import {reviewClaims} from './claim-review.mjs';
 import {partyCatalog} from './party-catalog.mjs';
 import {research} from './research.mjs';
 const norm=s=>String(s||'').normalize('NFD').replace(/\p{Diacritic}/gu,'').toLowerCase();
@@ -25,7 +26,7 @@ export async function answerProfile(store,input,env,fetchImpl=fetch){
  function passage(id,text,url,kind,speaker=p.name){return {id,evidenceId:id,text,language:'fr',officialUrl:url,sourceKind:kind,speaker,date:p.retrievedAt};}
  if(intent==='membership'||intent==='profile'){
   const text=intent==='membership'?`${p.name} — Parti : ${p.party||'non renseigné'}. Groupe parlementaire : ${p.group||'non renseigné'}.`:
-   `${p.name}. Parti : ${p.party||'non renseigné'}. Canton : ${p.canton}. Conseil : ${p.council}. Entrée au conseil : ${p.joined?.slice(0,10)||'non renseignée'}. Élection : ${p.elected?.slice(0,10)||'non renseignée'}.`;
+   `${p.name}. Parti : ${p.party||'non renseigné'}. Canton : ${p.canton}. Conseil : ${p.council}. Première entrée au Parlement : ${p.firstJoined?.slice(0,10)||'non renseignée'}. Début du mandat actuel : ${p.joined?.slice(0,10)||'non renseigné'}. Parcours déclaré : ${p.declaredMandates||'non renseigné'}. Élection : ${p.elected?.slice(0,10)||'non renseignée'}.`;
   if(p.sourceUrl)passages.push(passage('profile-'+p.id,text,p.sourceUrl,'official-structured-record'));
   if(intent==='profile'){
    for(const [i,o]of(p.occupations||[]).entries())passages.push(passage('occupation-'+p.id+'-'+i,`${p.name} — Profession déclarée : ${o.title}; employeur : ${o.employer||'non renseigné'}; fonction : ${o.role||'non renseignée'}; début : ${o.start?.slice(0,10)||'non renseigné'}; fin : ${o.end?.slice(0,10)||'non renseignée'}.`,o.sourceUrl,'official-structured-record'));
@@ -44,7 +45,8 @@ export async function answerProfile(store,input,env,fetchImpl=fetch){
   return {...empty('Use the profile’s voting history to filter dated roll calls and inspect what yes and no meant. No aggregate stance is inferred.'),status:'open-vote-history',profileId:p.id,voteCount:p.votes.length};
  }
  if(!passages.length)return empty('This type of official profile evidence has not been imported yet. Load the profile’s official records.');
- const evidence=passages.slice(0,3).map(s=>({id:s.id,text:s.text,language:s.language,kind:'document',attribution:s.sourceKind==='party-self-description'?'Reviewed editorial summary of the party’s own description; attribute to the party, not the individual.':`Official structured record for ${p.name}, normalized into text.`,source:{url:s.officialUrl}}));
+ const evidence=passages.slice(0,3).map(s=>({id:s.id,text:s.text,language:s.language,kind:'document',sourceKind:s.sourceKind,speaker:s.speaker,date:s.date,attribution:s.sourceKind==='party-self-description'?'Reviewed editorial summary of the party’s own description; attribute to the party, not the individual.':`Official structured record for ${p.name}, normalized into text.`,source:{url:s.officialUrl}}));
  const started=performance.now();const answer=await research({id:'profile-'+p.id,title:{en:'Official profile and attributed party background'},evidence},{question:input.question,language:input.language||'en'},env,fetchImpl,evidence);
+ if(answer.mode==='live-inference'){const reviewed=await reviewClaims(answer.claims,env,fetchImpl,{question:input.question,evidence});answer.claims=reviewed.claims;answer.withheldClaims=(answer.withheldClaims||0)+reviewed.withheld;if(!answer.claims.length)answer.status='insufficient-evidence';}
  return {...answer,passages,context,latencyMs:Math.round(performance.now()-started),retrieval:{method:'source-type-routing',sourceType:intent},coverage:intent==='party'?'Reviewed summary of party self-description; not a personal position or independent evaluation.':'Official public profile snapshot; normalized structured fields.'};
 }

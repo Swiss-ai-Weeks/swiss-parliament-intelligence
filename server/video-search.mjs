@@ -1,5 +1,6 @@
 import {readFileSync,readdirSync,existsSync} from 'node:fs';
 import {join} from 'node:path';
+import {searchDebateText} from './debate-search.mjs';
 const MODEL='cosmos-embed1-448p';
 export function cosine(a,b){
  if(!Array.isArray(a)||!Array.isArray(b)||!a.length||a.length!==b.length||a.some(x=>!Number.isFinite(x))||b.some(x=>!Number.isFinite(x)))throw Error('INVALID_EMBEDDING');
@@ -28,8 +29,8 @@ export function rankVideoChunks(chunks,vector,limit=4){
 export async function searchVideo({root,store,query,mode='spoken',personId,businessId,env,fetchImpl=fetch}){
  const started=Date.now();
  if(mode==='spoken'){
-  const matches=store.search(query,{personId,businessId,limit:20});
-  return {mode,status:'ok',matches:matches.map(s=>({id:s.id,speaker:s.speaker,date:s.date,language:s.language,text:s.text,sourceUrl:s.officialUrl,...(s.video?{mediaUrl:s.video.url,start:s.video.start,end:s.video.end,reviewState:s.video.reviewState}:{})})),unavailableTiming:matches.filter(s=>!s.video).length,latencyMs:Date.now()-started};
+  const matches=searchDebateText(store,query,{personId,businessId,limit:20});
+  return {mode,query,status:'ok',matches:matches.map(s=>({id:s.id,personId:s.personId,businessId:s.businessId,speaker:s.speaker,date:s.date,language:s.language,text:s.text,highlights:s.highlights,corrections:s.corrections,sourceUrl:s.officialUrl,...(s.video?{mediaUrl:s.video.url,start:s.video.start,end:s.video.end,reviewState:s.video.reviewState}:{})})),unavailableTiming:matches.filter(s=>!s.video).length,latencyMs:Date.now()-started};
  }
  const chunks=loadVideoIndex(root,store).filter(c=>(!personId||c.personId===personId)&&(!businessId||c.businessId===businessId));
  if(!chunks.length)return {mode,status:'ok',matches:[],indexedChunks:0};

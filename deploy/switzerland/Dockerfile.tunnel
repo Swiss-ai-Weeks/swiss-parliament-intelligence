@@ -1,0 +1,5 @@
+FROM alpine:3.22
+RUN apk add --no-cache openssh-client && adduser -D -u 1000 tunnel && mkdir /keys && chown tunnel:tunnel /keys
+COPY deploy/switzerland/tunnel.sh /tunnel.sh
+USER tunnel
+ENTRYPOINT ["/bin/sh", "/tunnel.sh"]

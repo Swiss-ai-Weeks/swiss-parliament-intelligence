@@ -1,0 +1,254 @@
+[
+  {
+    "id": "supported-1-en",
+    "language": "en",
+    "question": "What years did the Socialist Party adopt its earlier programmes?",
+    "relevant": [
+      "sp-programme",
+      "sp-programm-de"
+    ]
+  },
+  {
+    "id": "supported-1-fr",
+    "language": "fr",
+    "question": "En quelles années le PS a-t-il adopté ses anciens programmes ?",
+    "relevant": [
+      "sp-programme",
+      "sp-programm-de"
+    ]
+  },
+  {
+    "id": "supported-1-de",
+    "language": "de",
+    "question": "In welchen Jahren verabschiedete die SP ihre früheren Parteiprogramme?",
+    "relevant": [
+      "sp-programme",
+      "sp-programm-de"
+    ]
+  },
+  {
+    "id": "supported-1-it",
+    "language": "it",
+    "question": "In quali anni il Partito socialista ha adottato i programmi precedenti?",
+    "relevant": [
+      "sp-programme",
+      "sp-programm-de"
+    ]
+  },
+  {
+    "id": "supported-2-en",
+    "language": "en",
+    "question": "Does the SVP see research as primarily a private-sector task?",
+    "relevant": [
+      "udc-formation",
+      "svp-bildung-de"
+    ]
+  },
+  {
+    "id": "supported-2-fr",
+    "language": "fr",
+    "question": "L’UDC considère-t-elle la recherche comme une tâche du secteur privé ?",
+    "relevant": [
+      "udc-formation",
+      "svp-bildung-de"
+    ]
+  },
+  {
+    "id": "supported-2-de",
+    "language": "de",
+    "question": "Sieht die SVP Forschung vor allem als Aufgabe der Privatwirtschaft?",
+    "relevant": [
+      "udc-formation",
+      "svp-bildung-de"
+    ]
+  },
+  {
+    "id": "supported-2-it",
+    "language": "it",
+    "question": "Per l’UDC la ricerca è soprattutto un compito dell’economia privata?",
+    "relevant": [
+      "udc-formation",
+      "svp-bildung-de"
+    ]
+  },
+  {
+    "id": "supported-3-en",
+    "language": "en",
+    "question": "Does the FDP support EU membership or the bilateral path?",
+    "relevant": [
+      "plr-exterieur",
+      "fdp-europa-de"
+    ]
+  },
+  {
+    "id": "supported-3-fr",
+    "language": "fr",
+    "question": "Le PLR soutient-il une adhésion à l’UE ou la voie bilatérale ?",
+    "relevant": [
+      "plr-exterieur",
+      "fdp-europa-de"
+    ]
+  },
+  {
+    "id": "supported-3-de",
+    "language": "de",
+    "question": "Unterstützt die FDP einen EU-Beitritt oder den bilateralen Weg?",
+    "relevant": [
+      "plr-exterieur",
+      "fdp-europa-de"
+    ]
+  },
+  {
+    "id": "supported-3-it",
+    "language": "it",
+    "question": "Il PLR sostiene l’adesione all’UE o la via bilaterale?",
+    "relevant": [
+      "plr-exterieur",
+      "fdp-europa-de"
+    ]
+  },
+  {
+    "id": "supported-4-en",
+    "language": "en",
+    "question": "Which three values does the Centre associate with national cohesion?",
+    "relevant": [
+      "centre-valeurs",
+      "mitte-werte-de"
+    ]
+  },
+  {
+    "id": "supported-4-fr",
+    "language": "fr",
+    "question": "Quelles trois valeurs Le Centre associe-t-il à la cohésion nationale ?",
+    "relevant": [
+      "centre-valeurs",
+      "mitte-werte-de"
+    ]
+  },
+  {
+    "id": "supported-4-de",
+    "language": "de",
+    "question": "Welche drei Werte verbindet Die Mitte mit dem Zusammenhalt der Schweiz?",
+    "relevant": [
+      "centre-valeurs",
+      "mitte-werte-de"
+    ]
+  },
+  {
+    "id": "supported-4-it",
+    "language": "it",
+    "question": "Quali tre valori associa il Centro alla coesione nazionale?",
+    "relevant": [
+      "centre-valeurs",
+      "mitte-werte-de"
+    ]
+  },
+  {
+    "id": "supported-5-en",
+    "language": "en",
+    "question": "How do the Greens connect environmental protection with social engagement?",
+    "relevant": [
+      "verts-portrait",
+      "gruene-portrait-de"
+    ]
+  },
+  {
+    "id": "supported-5-fr",
+    "language": "fr",
+    "question": "Comment les Verts relient-ils protection de l’environnement et engagement social ?",
+    "relevant": [
+      "verts-portrait",
+      "gruene-portrait-de"
+    ]
+  },
+  {
+    "id": "supported-5-de",
+    "language": "de",
+    "question": "Wie verbinden die Grünen Umweltschutz und soziales Engagement?",
+    "relevant": [
+      "verts-portrait",
+      "gruene-portrait-de"
+    ]
+  },
+  {
+    "id": "supported-5-it",
+    "language": "it",
+    "question": "Come collegano i Verdi la protezione ambientale e l’impegno sociale?",
+    "relevant": [
+      "verts-portrait",
+      "gruene-portrait-de"
+    ]
+  },
+  {
+    "id": "supported-6-en",
+    "language": "en",
+    "question": "How do the Green Liberals reconcile climate protection with market incentives?",
+    "relevant": [
+      "pvl-questions",
+      "glp-fragen-de"
+    ]
+  },
+  {
+    "id": "supported-6-fr",
+    "language": "fr",
+    "question": "Comment les Vert’libéraux associent-ils le climat aux incitations du marché ?",
+    "relevant": [
+      "pvl-questions",
+      "glp-fragen-de"
+    ]
+  },
+  {
+    "id": "supported-6-de",
+    "language": "de",
+    "question": "Wie verbinden die Grünliberalen Klimaschutz und marktwirtschaftliche Anreize?",
+    "relevant": [
+      "pvl-questions",
+      "glp-fragen-de"
+    ]
+  },
+  {
+    "id": "supported-6-it",
+    "language": "it",
+    "question": "Come conciliano i Verdi liberali la protezione del clima e gli incentivi di mercato?",
+    "relevant": [
+      "pvl-questions",
+      "glp-fragen-de"
+    ]
+  },
+  {
+    "id": "unsupported-1",
+    "language": "en",
+    "question": "What is tomorrow’s weather in Bern?",
+    "relevant": []
+  },
+  {
+    "id": "unsupported-2",
+    "language": "en",
+    "question": "What is Jessica Jaccoud’s private home address?",
+    "relevant": []
+  },
+  {
+    "id": "unsupported-3",
+    "language": "en",
+    "question": "How did every GLP member vote yesterday?",
+    "relevant": []
+  },
+  {
+    "id": "unsupported-4",
+    "language": "en",
+    "question": "What is the exact date of the next federal election?",
+    "relevant": []
+  },
+  {
+    "id": "unsupported-5",
+    "language": "fr",
+    "question": "Quelle est la recommandation du PS pour chaque votation communale de demain ?",
+    "relevant": []
+  },
+  {
+    "id": "unsupported-6",
+    "language": "de",
+    "question": "Welche Partei hat gestern ihre Position zum neuen E-ID-Gesetz geändert?",
+    "relevant": []
+  }
+]

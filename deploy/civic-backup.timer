@@ -1,0 +1,8 @@
+[Unit]
+Description=Daily Swiss civic backup with 30-day retention
+[Timer]
+OnCalendar=*-*-* 02:15:00 UTC
+Persistent=true
+RandomizedDelaySec=300
+[Install]
+WantedBy=timers.target

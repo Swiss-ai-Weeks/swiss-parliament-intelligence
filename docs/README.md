@@ -1,5 +1,7 @@
 # Product research and specification
 
+**Design integration, 18 September:** [Greek–Swiss landing, reading UI and production boundary](GREEK-SWISS-INTEGRATION.md) records the Lovable source, implemented behavior, checks and isolated `/Switzerland/` release plan.
+
 **Cleisthenes is implemented:** persistent compact/expanded chat, current-session batch ingestion, multilingual query expansion, bounded answer caching and two genuine parliamentary video alignments. See the latest section of [the runbook](PILOT-RUNBOOK.md). Stance-change work is paused; voice remains pending.
 
 **Parliament update, 17 September:** [Working data explorer and competitor extension](research/PARLIAMENT-INTELLIGENCE-UPDATE.md): official proposals, attributed speeches, individual votes, coverage limits, stance-comparison gates and the next ingestion stages.
@@ -33,3 +35,9 @@ Start with one real recording → timestamped evidence → cited answer → play
 
 ## Reader-first follow-up
 See [User guide](USER-GUIDE.md) and [Topics, debates and people roadmap](TOPICS-AND-READER-ROADMAP.md) for the latest interface, observed Parlacta dashboard and current limitations.
+
+Latest increment: [Content and debate reader specification](CONTENT-READER-SPEC.md) — original-text browsing, expanded session snapshots, bounded GPU batches and acceptance gates (18 September 2026).
+
+[Conversation and source inspection](CHAT-SOURCE-EXPERIENCE.md): compact suggestions, device chat history, source panels and official portrait identity correction.
+
+- [Swiss production release and H100 processing, 18 September](SWISS-RELEASE-2026-09-18.md) — verified release state, data receipts and operational limits.

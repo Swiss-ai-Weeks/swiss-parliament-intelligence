@@ -1,0 +1,129 @@
+[
+  {
+    "id": "sp-programme",
+    "extractedSha256": "549f987e133e6b4e08758a538be00c6351fe82e1712cd486f0a317bb9bb05931",
+    "sourceUrl": "https://www.sp-ps.ch/fr/nos-positions/programme-de-parti/",
+    "reviewer": "Codex agent",
+    "reviewedAt": "2026-09-18",
+    "scope": "Extraction and publisher attribution; not independent factual verification",
+    "notes": "Programme history overview only; linked programme PDFs not imported."
+  },
+  {
+    "id": "udc-formation",
+    "extractedSha256": "2163758cc389014c433f311df9fe90594ff606a359fc5f1dd1568cd83c401567",
+    "sourceUrl": "https://www.udc.ch/positions/themes/politique-de-la-formation/",
+    "reviewer": "Codex agent",
+    "reviewedAt": "2026-09-18",
+    "scope": "Extraction and publisher attribution; not independent factual verification",
+    "notes": "Party self-description; no individual stance inferred. Publication date unknown.",
+    "end": "\n Extrait du programme"
+  },
+  {
+    "id": "plr-exterieur",
+    "extractedSha256": "7859570a18520b32db680ad2db4104d19a179fbf3128b612b21480772208d28b",
+    "sourceUrl": "https://www.plr.ch/positions/politique-exterieure",
+    "reviewer": "Codex agent",
+    "reviewedAt": "2026-09-18",
+    "scope": "Extraction and publisher attribution; not independent factual verification",
+    "notes": "Party self-description; no individual stance inferred. Publication date unknown.",
+    "end": "\n Consultations"
+  },
+  {
+    "id": "centre-valeurs",
+    "extractedSha256": "093c1a9c0b691c886153af6f87a619e127696eca5c6476f039803eeff57a34d5",
+    "sourceUrl": "https://le-centre.ch/le-centre/valeurs/",
+    "reviewer": "Codex agent",
+    "reviewedAt": "2026-09-18",
+    "scope": "Extraction and publisher attribution; not independent factual verification",
+    "notes": "Party self-description; no individual stance inferred. Publication date unknown.",
+    "start": "Nous sommes",
+    "end": "\n Ensemble pour une Suisse unie.",
+    "removeLines": [
+      "Je souhaite participer"
+    ]
+  },
+  {
+    "id": "verts-portrait",
+    "extractedSha256": "e9f8c835a546649e6fd1bf4f9a1579ce75cfc4f9f312009397590c2c71d232b0",
+    "sourceUrl": "https://verts.ch/portrait-et-statuts",
+    "reviewer": "Codex agent",
+    "reviewedAt": "2026-09-18",
+    "scope": "Extraction and publisher attribution; not independent factual verification",
+    "notes": "Party self-description; no individual stance inferred. Publication date unknown.",
+    "start": "L’essentiel en bref",
+    "end": "\n Partager"
+  },
+  {
+    "id": "pvl-questions",
+    "extractedSha256": "81670c4193847ab0779ecaea6adcf0d19ca96c069bb8e031e9f901e189f51ba3",
+    "sourceUrl": "https://pvl.swiss/politique/questions-frequentes/",
+    "reviewer": "Codex agent",
+    "reviewedAt": "2026-09-18",
+    "scope": "Extraction and publisher attribution; not independent factual verification",
+    "notes": "Party self-description; no individual stance inferred. Publication date unknown.",
+    "start": "Réponses aux questions fréquentes"
+  },
+  {
+    "id": "sp-programm-de",
+    "extractedSha256": "1a56671e49394ed160b3d78ef0e738104c930ff90fdcda337c8861df5f7f5671",
+    "sourceUrl": "https://www.sp-ps.ch/wofuer-wir-stehen/parteiprogramm/",
+    "reviewer": "Codex agent",
+    "reviewedAt": "2026-09-18",
+    "scope": "Extraction and publisher attribution; not independent factual verification",
+    "notes": "Programme history overview only; linked programme PDFs not imported."
+  },
+  {
+    "id": "svp-bildung-de",
+    "extractedSha256": "796a6aac22dd0e8167e1ac1718e29df8b168f995994f24b0afebe71a6e40d80a",
+    "sourceUrl": "https://www.svp.ch/positionen/themen/bildungspolitik/",
+    "reviewer": "Codex agent",
+    "reviewedAt": "2026-09-18",
+    "scope": "Extraction and publisher attribution; not independent factual verification",
+    "notes": "Party self-description; no individual stance inferred. Publication date unknown.",
+    "end": "\n Ausschnitt aus dem Parteiprogramm"
+  },
+  {
+    "id": "fdp-europa-de",
+    "extractedSha256": "be65ed3b1cd4454980e887b1ebecb9d4f1a096ba28ea8bd3877e27c856d51c83",
+    "sourceUrl": "https://www.fdp.ch/positionen/aussenpolitik/europa",
+    "reviewer": "Codex agent",
+    "reviewedAt": "2026-09-18",
+    "scope": "Extraction and publisher attribution; not independent factual verification",
+    "notes": "Undated position page contains historical descriptions of EU relations. Never present those as verified current events."
+  },
+  {
+    "id": "mitte-werte-de",
+    "extractedSha256": "c1b9a399d103aa86649dc8d0b53713334382f23c93b9ceab4a6fd03d3ea49456",
+    "sourceUrl": "https://die-mitte.ch/die-mitte/werte/",
+    "reviewer": "Codex agent",
+    "reviewedAt": "2026-09-18",
+    "scope": "Extraction and publisher attribution; not independent factual verification",
+    "notes": "Party self-description; no individual stance inferred. Publication date unknown.",
+    "start": "Wir sind",
+    "end": "\n So halten wir die Schweiz zusammen.",
+    "removeLines": [
+      "Ich möchte mitmachen"
+    ]
+  },
+  {
+    "id": "gruene-portrait-de",
+    "extractedSha256": "8f312c23609421f3a9597677e3de5fccb1f2bd38bc8b9a15b40453dafa7512ba",
+    "sourceUrl": "https://gruene.ch/portraet-und-statuten",
+    "reviewer": "Codex agent",
+    "reviewedAt": "2026-09-18",
+    "scope": "Extraction and publisher attribution; not independent factual verification",
+    "notes": "Party self-description; no individual stance inferred. Publication date unknown.",
+    "start": "Über uns in Kürze",
+    "end": "\n Teilen"
+  },
+  {
+    "id": "glp-fragen-de",
+    "extractedSha256": "b0333863fa26646b066e93a74f18acb22550e333e06fd30dc5a1b166ccfabc75",
+    "sourceUrl": "https://glp.swiss/politik/haeufigste-fragen/",
+    "reviewer": "Codex agent",
+    "reviewedAt": "2026-09-18",
+    "scope": "Extraction and publisher attribution; not independent factual verification",
+    "notes": "Party self-description; no individual stance inferred. Publication date unknown.",
+    "start": "Antworten zu häufig gestellten Fragen"
+  }
+]
