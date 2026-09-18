@@ -14,6 +14,8 @@ test('Swiss subpath isolates API routes and preserves query parameters on redire
   assert.equal((await fetch(base+'/api/health')).status,404);
   assert.equal((await fetch(base+'/Switzerland-other/api/health')).status,404);
   const redirect=await fetch(base+'/Switzerland?view=parliament',{redirect:'manual'});
+  const lowercase=await fetch(base+'/switzerland/?view=parliament',{redirect:'manual'});
+  assert.equal(lowercase.status,308);assert.equal(lowercase.headers.get('location'),'/Switzerland/?view=parliament');
   assert.equal(redirect.status,308);
   assert.equal(redirect.headers.get('location'),'/Switzerland/?view=parliament');
  }finally{await new Promise(resolve=>server.close(resolve));store.close();}

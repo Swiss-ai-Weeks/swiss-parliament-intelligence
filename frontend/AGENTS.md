@@ -77,3 +77,6 @@ The first chamber release MUST remain 2D. Use the official interactive SVG desk 
 
 ### Speaker context and branch safety — 18 September 2026
 Citations should offer an inline expandable video, with exact aligned quotes distinguished from the full intervention. Never promise timings for unavailable/unverified recordings. About the speaker includes sourced career history, canton, party and separate group, with prominent navigation to our shareable profile and recorded votes. Official biography links must open the human-readable Parliament page, not raw OData. Current term start must not be presented as first entry into politics. Commit/push only to the local pilot branch and Tomas's fork; never upstream or main. Backup activation remains unapproved; explain privileged access in plain language before any approval request.
+
+### Real landing and feedback — 18 September 2026
+Replace the fictional research walkthrough with an actual processed official recording, original quotation and labelled translation. Keep copy brief. Privacy/voting simulations stay labelled concepts. Feedback explicitly routes to contact@midnight.vote with spam controls; never attach chat history or private account context. Public corpus backups/indexing must remain separate from user data.

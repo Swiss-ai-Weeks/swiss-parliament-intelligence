@@ -8,3 +8,5 @@
 @media(prefers-reduced-motion:reduce){.civic-landing .landing-walkthrough *,.civic-landing .landing-walkthrough *:after{animation:none!important;transition:none!important}}.civic-landing .landing-walkthrough[data-still=true] *,.civic-landing .landing-walkthrough[data-still=true] *:after{animation:none!important;transition:none!important}
 .civic-landing .fingerprint-confirm.is-confirming svg{animation:proof-pulse .8s ease-in-out infinite}
 @media(prefers-reduced-motion:reduce){.civic-landing .fingerprint-confirm.is-confirming svg{animation:none}}.civic-landing .landing-walkthrough[data-still=true] .fingerprint-confirm.is-confirming svg{animation:none}
+
+.civic-landing .real-research video{display:block;width:100%;aspect-ratio:16/9;background:#252823;border-radius:8px}.civic-landing .real-research .demo-quote{padding-top:20px}.civic-landing .real-demo-actions{display:flex;flex-wrap:wrap;gap:16px}.civic-landing .real-research .demo-footnote a{color:inherit;font-size:11px}

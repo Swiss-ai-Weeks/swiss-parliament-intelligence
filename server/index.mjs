@@ -1,3 +1,4 @@
+import {feedbackService} from './feedback.mjs';
 import {officialRecording} from './official-recording.mjs';
 import http from 'node:http';
 import { readFile, stat } from 'node:fs/promises';
@@ -24,6 +25,7 @@ async function body(req,limit=16384) {
   try {return JSON.parse(Buffer.concat(chunks).toString());}catch{throw fail('INVALID_JSON');}
 }
 export function createServer({store=createStore(path.join(root,'data/pilot.sqlite')),env=process.env,fetchImpl=fetch,authFile=':memory:'}={}) {
+  const feedback=feedbackService(env,fetchImpl);
   const publicBase=(env.PUBLIC_BASE_PATH||'').replace(/\/$/,'');
   if(publicBase&&!/^\/[A-Za-z0-9_-]+$/.test(publicBase))throw new Error('INVALID_PUBLIC_BASE_PATH');
   const auth=createAuth(env,fetchImpl,{file:authFile}),items=accountStore(env,fetchImpl);const rates=new Map();
@@ -37,11 +39,14 @@ export function createServer({store=createStore(path.join(root,'data/pilot.sqlit
     res.setHeader('X-Content-Type-Options','nosniff');res.setHeader('Referrer-Policy','strict-origin-when-cross-origin');
     try {
       const url=new URL(req.url,'http://localhost');
+      if(publicBase&&url.pathname.split('/')[1]?.toLowerCase()===publicBase.slice(1).toLowerCase()&&!url.pathname.startsWith(publicBase)){res.writeHead(308,{Location:publicBase+url.pathname.slice(publicBase.length)+url.search});return res.end();}
       if(publicBase && url.pathname===publicBase){res.writeHead(308,{Location:publicBase+'/'+url.search});return res.end();}
       if(publicBase && !url.pathname.startsWith(publicBase+'/'))throw fail('NOT_FOUND',404);
       const p=url.pathname.slice(publicBase.length);
       if(req.method!=='GET' && req.headers.origin && req.headers.origin!==(env.PUBLIC_ORIGIN||'http://localhost:5173') && req.headers.origin!==`http://${req.headers.host}`) throw fail('ORIGIN_DENIED',403);
       if(req.method!=='GET') {const key=req.socket.remoteAddress;const now=Date.now();for(const [k,v]of rates)if(v.until<now)rates.delete(k);const rate=rates.get(key)||{count:0,until:now+60000};rate.count++;rates.set(key,rate);if(rate.count>40)throw fail('RATE_LIMITED',429);}
+      if(p==='/api/feedback/challenge'&&req.method==='GET')return json(res,200,feedback.challenge(req.socket.remoteAddress));
+      if(p==='/api/feedback'&&req.method==='POST')return json(res,200,await feedback.send(await body(req),req.socket.remoteAddress));
       if(p==='/api/discovery/search'&&req.method==='POST'){const b=await body(req);if(typeof b.question!=='string'||b.question.length>500)throw fail('INVALID_SEARCH');return json(res,200,discover(store,par(),b));}
       if(p==='/api/dashboard'&&req.method==='GET')return json(res,200,await workspace.dashboard());
       if(p==='/api/agenda'&&req.method==='GET')return json(res,200,await workspace.agenda());

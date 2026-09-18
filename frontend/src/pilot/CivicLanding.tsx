@@ -17,7 +17,7 @@ const chapters = [
     label: "Understand",
     title: "Make sense of the debate.",
     summary: "Turn complex discussion into a clear, source-linked explanation.",
-    copy: "Filter the debate by speaker, follow who said what, and move from a key quotation to its full source context.",
+    copy: "Watch a real parliamentary passage. Read the original words, then switch to English.",
   },
   {
     id: "privacy",
@@ -297,7 +297,7 @@ export default function CivicLanding({onNavigate,language='en',reduceMotion=fals
               <h3>{active.title}</h3>
               <p>{active.copy}</p>
             </div>
-            <div key={active.id} className="active-demo">{active.id==='understand'?<ResearchDemo reduceMotion={reduceMotion} onExplore={()=>onNavigate(null,'parliament')}/>:active.id==='privacy'?<PrivacyDemo reduceMotion={reduceMotion}/>:<ParticipateDemo reduceMotion={reduceMotion} onExplore={()=>onNavigate(null,'explore')}/>}</div>
+            <div key={active.id} className="active-demo">{active.id==='understand'?<ResearchDemo reduceMotion={reduceMotion} onExplore={()=>{onNavigate(null,'parliament');const u=new URL(location.href);u.searchParams.set('business','20250082');history.replaceState({},'',u);}}/>:active.id==='privacy'?<PrivacyDemo reduceMotion={reduceMotion}/>:<ParticipateDemo reduceMotion={reduceMotion} onExplore={()=>onNavigate(null,'explore')}/>}</div>
           </article>
         </div>
       </section>
