@@ -1,319 +1,213 @@
-# Swiss Parliament Intelligence
+<div align="center">
 
-Turn hours of multilingual parliamentary video into evidence people can **find, understand, compare, and verify at the exact timestamp**.
+# midnight.vote · Switzerland
 
-This project is being developed for the HPE–NVIDIA Agentic AI Hackathon during Swiss {ai} Weeks.
+### A clearer view. Your own decision.
 
-**Direction update — 14 September 2026:** the next product cycle prioritizes a simple citizen journey, federal popular votes first, and an optional non-binding consultation. Read the [research and product specification](docs/README.md). The audience ordering and desktop prototype described below reflect the earlier exploration; the new documents distinguish proposed capabilities from implemented ones.
+A civic research workspace that connects questions about Swiss public life to **original parliamentary words, identifiable speakers and verifiable sources**.
 
-## Frontend prototype
+[Explore the experience](#the-experience) · [Architecture](#how-it-works) · [Run locally](#run-locally) · [Delivery status](#built-today-and-product-vision) · [Documentation](#documentation)
 
-The interactive desktop-first prototype lives in [`frontend/`](frontend/). It demonstrates the citizen-friendly Ask experience, source-linked citations, video controls, language and mode states, and the speaker list attached to each debate source.
+![Swiss civic landing with Alpine landscape and Cleisthenes](docs/images/landing.png)
 
-```bash
-cd frontend
-npm install
-npm run dev
-```
+**Independent Swiss pilot · Built during the HPE–NVIDIA Agentic AI Hackathon / Swiss {ai} Weeks**
 
-## Product promise
+</div>
 
-Swiss Parliament already publishes recordings. The remaining problem is finding the relevant moment and understanding it without losing the original context.
+## Why this exists
 
-Our product principle is:
+Public decisions deserve more than a headline. Parliamentary records are rich, multilingual and spread across long debates, proposals, individual votes and recordings. Finding the relevant statement—and checking what it actually meant—takes time.
 
-> No important answer without a direct path back to the source video.
+Midnight Vote brings that evidence into one place. Start with a question, inspect an attributed passage, return to its surrounding debate, and watch the corresponding recording where timing has been established. **Cleisthenes**, the contextual civic companion, helps explain the material while keeping the sources close.
 
-This is not just a transcript and not just a chatbot. It is an evidence workspace built around video moments.
+The aim is informed judgment: citizens forming their own views, with enough detail for journalists, students and researchers to inspect the evidence themselves.
 
-## Who we are building for
+## The experience
 
-### 1. Journalists, policy analysts, and researchers — beachhead user
+| Workspace | What you can do |
+| --- | --- |
+| **Home** | Browse dated proceedings, a calendar, explicit follows, recent research and public-source updates. |
+| **Parliament** | Explore separately verified National Council and Council of States seat maps; inspect representatives, proposals, original passages and recorded votes. |
+| **Topics & votes** | Search historical example dossiers, compare attributed arguments and open an Overview / Debate / Timeline / Sources workspace. |
+| **Cleisthenes** | Ask source-scoped questions, inspect citations, translate passages and continue researching without losing context. |
+| **Saved & settings** | Save research with an account; control reading preferences and optional personalisation. Anonymous conversations stay in the browser. |
 
-**Their job:** find and compare defensible evidence across speakers, topics, business items, and sessions.
+![Official-seat chamber explorer in the Swiss pilot](docs/images/parliament.png)
 
-They need to answer questions such as:
+### From a question to the original record
 
-- Who made this argument, and how did others respond?
-- Where was a law, organization, number, or policy discussed?
-- Did a speaker's position change over time?
-- Can I cite and reproduce the evidence behind my conclusion?
+1. Search a topic or ask Cleisthenes within a proposal, person or passage.
+2. Open the cited words, with speaker, date and official source.
+3. Read the original language or a clearly labelled translation.
+4. Play a bounded clip when alignment exists; otherwise open the full official intervention or transcript.
+5. Save the source or use it in a cited brief.
 
-**Current pain**
+The landing demonstrates a **real processed recording**: Thomas Rechsteiner discussing the electronic health record on 14 September 2026, at **3:47–4:13**. The quotation comes from the official Bulletin. NVIDIA Canary supplied machine timing; human timing review remains pending.
 
-- Scrubbing through hours of video is slow.
-- Exact-word search misses discussions phrased differently.
-- Names, numbers, dialects, and legal terminology are frequent transcription failure points.
-- Translations may hide ambiguity in the original wording.
-- Summaries can omit minority views or counterarguments.
-- Video, debate metadata, votes, and notes live in different places.
-- A prose answer without stable citations is difficult to publish or defend.
+![Real parliamentary recording with original words and translation controls](docs/images/real-passage.png)
 
-**Desired outcome:** move from a research question to a reproducible collection of video evidence in minutes rather than hours.
+## Built today and product vision
 
-### 2. Parliamentarians and parliamentary staff — second workflow
+Implementation is not the same as production acceptance. This table makes the distinction explicit.
 
-**Their job:** prepare for a business item, monitor debate, and produce a reliable briefing.
+| Capability | Current state | Next acceptance step |
+| --- | --- | --- |
+| Original parliamentary text and provenance | Imported, searchable and source-linked | Continue incremental updates and coverage audits |
+| Chamber explorer | Dated 2D snapshots: **200 National Council + 46 Council of States seats**; party and group remain distinct | Revalidate every new seating snapshot before publication |
+| Representative profiles | Official identity, canton, party/group, recorded terms, declared background and imported votes | Broaden biography and historical vote coverage |
+| Contextual AI answers | Implemented with original citations and scoped retrieval | Independent multilingual and semantic evaluation |
+| Translation | Original text retained; provider-dependent machine output labelled | Language review and production service acceptance |
+| Video | Real recordings, selected timed passages, full-intervention fallback | Full-session ASR and human timing review |
+| Text embeddings | **16,471 passages / 16,488 chunks** persisted and validated on H100 | Wire the new text index into evaluated semantic retrieval; it does not yet replace lexical retrieval |
+| Accounts | Separate email/OAuth flows, persistent encrypted sessions, per-user storage | Real email and Google provider acceptance in production |
+| Backups | Encrypted public-corpus backup and isolated restore tested | Off-device storage, independent key custody and daily scheduling |
+| Feedback | UI and spam-protected email adapter implemented | Connect and verify the production sender |
+| Private eligibility and community votes | Clearly labelled interactive concepts | Future protocol integration and independent security review |
 
-They need to answer:
+**No official vote is cast by this pilot.** Passport signatures, biometric confirmation, private eligibility proofs and community voting are not operational features. Missing records are not abstentions; visual similarity is not evidence of what someone said.
 
-- Which positions and objections were expressed?
-- What did the minister, committee, or another group commit to?
-- Which issues remain unresolved before the next sitting?
-- Was a speech or statement attributed correctly?
+## Data and compute snapshot
 
-**Current pain**
+Snapshot: **18 September 2026**. These counts describe the imported collection, not the entire history of Swiss Parliament.
 
-- Staff work against deadlines and cannot watch every sitting.
-- Relevant remarks are fragmented across sessions and speakers.
-- Incorrect names, numbers, or attribution create reputational risk.
-- Summaries without exact evidence cannot safely enter a briefing.
-- Political positions are nuanced and should not be reduced to model-generated labels.
+| Imported text scope | Passages | Text embedding chunks |
+| --- | ---: | ---: |
+| Session 5213 | 2,469 | 2,471 |
+| Session 5214 | 10,180 | 10,190 |
+| Session 5215, published material as imported | 3,575 | 3,580 |
+| Additional imported records | 247 | 247 |
+| **Total** | **16,471** | **16,488** |
 
-**Desired outcome:** open a business item, inspect the relevant interventions, and produce a source-linked briefing that another person can verify.
+The full text embedding run completed on an **NVIDIA H100 NVL** in 214 seconds after model loading. It uses `intfloat/multilingual-e5-large`, pinned by the recorded model revision, with 1,024-dimensional normalized vectors. Long passages use overlapping token windows. Validation checks source hashes, finite vectors, normalization, text boundaries and complete imported-passage coverage. This is a batch measurement, not a latency guarantee.
 
-### 3. Citizens and general readers — accessible public experience
+A resumable **3,346-recording queue** covers the three imported sessions, prioritising the current session. It verifies official recording URLs, preserves media hashes, transcribes bounded audio windows with NVIDIA Canary and records success/failure in SQLite. Queued does not mean completed; media, ASR, text embeddings, visual embeddings and alignment are tracked separately.
 
-**Their job:** understand a public issue well enough to form an informed view.
+The previously processed Cosmos visual embeddings remain distinct from the new multilingual text embeddings. Private conversations, account data and feedback are excluded from the public processing corpus.
 
-They ask:
-
-- What happened?
-- What were the main arguments and disagreements?
-- What did my representative say?
-- Where in the debate was this claim made?
-- What does this technical term mean?
-
-**Current pain**
-
-- Sessions are long and use specialist vocabulary.
-- Debate can switch between German, French, and Italian.
-- Generic summaries flatten disagreement and remove context.
-- It is hard to judge whether an AI answer is supported by the recording.
-
-**Desired outcome:** ask a normal question, understand the different viewpoints, and verify each important point with one click.
-
-### 4. Editors and data operators — enabling user
-
-**Their job:** review uncertainty, correct transcript or speaker errors, and maintain a trustworthy searchable record.
-
-This is a necessary operational role, but not the headline audience. Operators need a review queue, confidence signals, side-by-side audio/video context, and revision history that does not break existing citations.
-
-## One product, different working modes
-
-We should not build separate applications for every audience. Everyone uses the same source video, transcript, speakers, timestamps, and evidence identifiers. The interface changes its defaults and level of detail.
-
-| Shared foundation | Citizen mode | Research mode | Parliamentary mode |
-| --- | --- | --- | --- |
-| Video player with timestamp seek | Plain-language question | Advanced search and filters | Business-item starting point |
-| Original transcript | Short issue overview | Results table and bulk selection | Chronological intervention map |
-| Translation switch | Viewpoints and responses | Compare speakers or sessions | Objections and commitments |
-| Speaker and debate metadata | Explanations of jargon | Notes and evidence collections | Briefing collection |
-| Evidence cards | Minimal controls | Provenance and revisions | Names and numbers review |
-| Confidence and review state | Clear uncertainty message | Export citations and data | Attribution correction request |
-
-The default experience should be simple. Research and Parliamentary modes reveal additional controls without changing the underlying facts.
-
-## The evidence card
-
-Every search result and every generated answer is built from the same inspectable object:
-
-```text
-video moment
-+ exact start and end time
-+ original-language transcript
-+ identified speaker and language
-+ session and business item
-+ optional translation or interpretation
-+ confidence and review status
-+ stable evidence ID and revision
-```
-
-This evidence card is the bridge between all user journeys. A citizen opens it to verify a summary; a researcher cites it; parliamentary staff save it into a brief; an editor corrects it.
-
-## Shared journey
+## How it works
 
 ```mermaid
 flowchart LR
-    A[Open a debate,<br/>business item, or search] --> B[Ask a question<br/>or apply filters]
-    B --> C[Receive relevant<br/>evidence moments]
-    C --> D[Read an answer<br/>or compare viewpoints]
-    D --> E[Inspect source card]
-    E --> F[Jump to exact<br/>video timestamp]
-    F --> G{Evidence acceptable?}
-    G -->|Yes| H[Save, share,<br/>cite, or export]
-    G -->|Unclear or wrong| I[Flag the issue]
-    I --> J[Editor reviews<br/>and publishes revision]
-    J --> E
+    A[Swiss Parliament official records] --> B[Resumable import + source hashes]
+    B --> C[(Public parliamentary SQLite)]
+    A --> D[Verified official recordings]
+    D --> E[H100: Canary ASR]
+    E --> F[Word alignment + review state]
+    C --> G[H100: multilingual text embeddings]
+    G --> H[(Versioned vector SQLite)]
+    D --> I[Cosmos visual embeddings]
+    C --> J[Scoped retrieval]
+    F --> J
+    J --> K[Nemotron: cited explanation]
+    K --> L[React civic workspace]
+    C --> L
+    F --> L
+    H -. evaluated retrieval integration pending .-> J
 ```
 
-## Journey 1: researcher or journalist
+```mermaid
+flowchart TB
+    UI[Browser: Swiss civic workspace] --> API[Node API / backend for frontend]
+    API --> PUB[(Public corpus + processing receipts)]
+    API --> GPU[Private NVIDIA model connection]
+    API --> AUTH[Supabase Auth]
+    API --> PRIVATE[(Per-user research, follows and conversations)]
+    PUB --> BACKUP[Encrypted public backups + restore checks]
+    PRIVATE -. never included .-> EXCLUDED[Public embedding pipeline]
+```
 
-**Scenario:** “Find the discussion of implementation costs and compare the government and party responses.”
+**Frontend:** React 19, Vite, TypeScript/JavaScript, custom SVG chambers and the Greek–Swiss visual system.  
+**Backend:** Node.js 24, built-in SQLite, explicit HTTP API and server-managed sessions.  
+**AI:** Nemotron for explanations; Canary/Parakeet for recorded ASR work; Cosmos for experimental visual retrieval; multilingual E5 for the new text index.  
+**Accounts:** Supabase Auth and per-user access controls.  
+**Operations:** isolated deployment, source checksums, resumable processing and encrypted public-data restoration.
 
-| Stage | User action | Product response | Main risk | Success signal |
-| --- | --- | --- | --- | --- |
-| Scope | Select dates, chamber, business, or language | Show exactly which recordings are searched | An unknown corpus makes work irreproducible | Corpus definition is visible and saved |
-| Retrieve | Search using words or concepts | Return ranked, filterable video moments | Semantic search can overmatch | Relevant evidence appears in the first results |
-| Inspect | Open transcript and surrounding video | Show the preceding and following statements | A quote can be removed from context | Context is always one click away |
-| Compare | Group selected evidence by speaker or time | Summarize similarities and disagreements | The model may infer motive or position | Claims stay limited to explicit statements |
-| Annotate | Add notes and exclude weak evidence | Save a private evidence collection | Notes may be confused with source facts | Notes are visually separate from evidence |
-| Export | Download a cited evidence pack | Include source, timestamps, IDs, and versions | Prose-only output is unauditable | Another person can reproduce the result |
+## Evidence and privacy principles
 
-**Primary measures:** time to a reproducible evidence collection, relevant results in the top five, and citation correctness.
+- **Original wording stays visible.** Official text, ASR output, translation and generated explanation are separate records.
+- **Attribution is explicit.** A speaker's current party does not rewrite historical membership or turn a reported position into their own.
+- **Timing is earned.** A video URL alone does not establish an exact quotation timestamp.
+- **Coverage is disclosed.** Partial imports, unavailable recordings and stale sources remain visible.
+- **Personalisation is chosen.** Follows and optional canton preferences never imply political affiliation.
+- **Public and private data stay separate.** Public evidence can be processed and indexed; personal chats and account records are not a training or RAG shortcut.
+- **Failures stay honest.** Unavailable providers and unverified claims are not silently replaced with fabricated answers.
 
-## Journey 2: parliamentary staff
+## Run locally
 
-**Scenario:** “Prepare for the next debate using unresolved objections and previous commitments.”
+Requirements: **Node.js 24** and npm. A GPU is optional for browsing; model-backed features require configured services. Public datasets and credentials are intentionally not committed to Git.
 
-| Stage | User action | Product response | Main risk | Success signal |
-| --- | --- | --- | --- | --- |
-| Open business | Enter a business number or agenda item | Load its timeline, sessions, and speakers | Public information is fragmented | Correct business item opens immediately |
-| Review | Filter by speaker, role, party, or committee | Show interventions chronologically | Labels can oversimplify nuance | Source passage appears before any label |
-| Find obligations | Search for questions, objections, and commitments | Return the relevant exchange, not an isolated sentence | Important qualifiers may be missed | Evidence and counter-evidence appear together |
-| Build brief | Save moments into briefing sections | Draft text around selected evidence | Generated prose may detach from its source | Every paragraph retains citations |
-| Verify | Review names, numbers, speakers, and translations | Highlight uncertain fields | Errors create reputational risk | Nothing uncertain exports silently |
-| Hand off | Share a read-only collection | Preserve corpus version and timestamps | Later corrections may change meaning | The link remains stable and shows revisions |
+```bash
+npm ci --prefix frontend
+npm run build --prefix frontend
+npm start
+```
 
-**Primary measures:** time to a cited briefing and number of consequential errors caught before export.
+Open **http://127.0.0.1:4318/**. The historical example dossiers are seeded locally. To populate the parliamentary corpus, use the documented import scripts; a fresh clone does not include the operator's imported database or media.
 
-## Journey 3: citizen
+Optional: copy `.env.example` to `.env` and configure server-side providers. Never put private keys or server credentials in `VITE_*` variables. For frontend development, run `npm run dev --prefix frontend` alongside the API.
 
-**Scenario:** “Parliament debated electronic identity. What were the main disagreements?”
+```bash
+# Import one complete published text snapshot; processing is a separate stage.
+node scripts/ingest-session.mjs --session=5215
 
-| Stage | User action | Product response | Main risk | Success signal |
-| --- | --- | --- | --- | --- |
-| Enter | Search a phrase or ask a question | Resolve the likely topic or business item | The user may not know official terminology | Correct debate appears without specialist wording |
-| Orient | Read a short overview | Explain scope, date, and decision stage | A summary may sound biased or overly certain | Unresolved points and uncertainty are visible |
-| Compare | Open viewpoints and responses | Present attributed arguments with evidence | Minority views may disappear | Relevant perspectives are represented |
-| Verify | Click a citation | Open the original passage and seek the video | Speaker or translation may be wrong | Correct moment opens in one click |
-| Continue | Explore a speaker or share a moment | Create a contextual source link | Shared clips can remove context | Link includes surrounding discussion |
+# Prepare public-only input for the H100 batch.
+node scripts/export-public-embedding-input.mjs
 
-**Primary measure:** median time from a normal-language question to a verified video moment.
+# On the GPU host with its ML environment:
+CUDA_VISIBLE_DEVICES=1 python scripts/embed-public-corpus.py data/public-embedding-input.jsonl data/public-embeddings.sqlite
 
-## Core interface
+# Validate copied vectors against the local official corpus.
+node scripts/validate-public-embeddings.mjs
+```
 
-The hackathon can demonstrate all three audiences using one screen and a mode switch:
+GPU dependencies live in the processing environment, not the frontend install. See the pipeline documentation before running ASR or VSS services.
+
+## Validate a change
+
+```bash
+npm test
+npm run test:api --prefix frontend
+npm run test:sites --prefix frontend
+npm run build --prefix frontend
+```
+
+Tests cover source attribution, ownership, session handling, citation boundaries, chamber validation, timezones, search, media paths, feedback failures and backup restoration. Mocked provider tests do not prove real email delivery or live account configuration.
+
+## Documentation
+
+| Guide | Purpose |
+| --- | --- |
+| [Documentation index](docs/README.md) | Product and engineering reference map |
+| [Civic workspace delivery](docs/CIVIC-WORKSPACE-DELIVERY.md) | Accepted scope, completed work and remaining gates |
+| [Media pipeline](docs/SESSION-PIPELINE.md) | Recording verification, ASR, alignment and visual processing |
+| [Deployment and integration](docs/GREEK-SWISS-INTEGRATION.md) | Swiss mount, hosting isolation and release boundaries |
+| [Landing, routing and feedback](docs/LANDING-ROUTING-FEEDBACK.md) | Real example, feedback setup and public-data backups |
+| [Speaker context](docs/SPEAKER-CONTEXT-UPDATE.md) | Biographies, citation inspectors and recording fallback |
+| [Operational runbook](docs/PILOT-RUNBOOK.md) | Historical implementation log; later delivery notes supersede older limitations |
+| [Environment template](.env.example) | Server-side configuration names, without secrets |
+
+## Repository map
 
 ```text
-[Citizen] [Research] [Parliamentary]
-
-Left:    video player and topic timeline
-Center:  synchronized transcript and evidence passages
-Right:   question, cited answer, compare/save actions
+frontend/src/pilot/       Citizen-facing workspace and landing
+frontend/src/services/    API client boundary
+server/                  HTTP API, retrieval, accounts and public catalog
+server/chamber-snapshots/ Verified, versioned seating layouts
+server/tests/            Backend and data-integrity checks
+scripts/                 Import, H100 processing, validation and backup tools
+deploy/switzerland/      Isolated Swiss deployment and routing files
+docs/                    Product, architecture, operations and screenshots
+data/                    Ignored local databases, media and credentials
 ```
 
-The most important interaction is not the answer itself. It is selecting a citation and immediately seeing the original passage in the transcript and video.
+## Contributing and release discipline
 
-## Capabilities required for the first useful version
+This fork develops the Swiss pilot on **`feat/swiss-citizen-pilot`**. Submit focused changes against the fork's pilot branch; do not push directly to the upstream project's main branch. Keep source provenance, accessibility and honest coverage labels intact. Include relevant tests and disclose provider-dependent acceptance that has not been exercised.
 
-These describe user-visible needs, not a prescribed technical architecture.
+Report problems through the in-app feedback entry or **contact@midnight.vote**. Never include passwords, identity documents or private conversations in a public issue.
 
-| Priority | Capability | User value |
-| --- | --- | --- |
-| Must | Search a recording by words and concepts | Finds relevant discussion without knowing the exact phrase |
-| Must | Timestamped transcript in its original language | Makes spoken evidence readable and navigable |
-| Must | Speaker and session context | Establishes who said what and where |
-| Must | Cited answers with evidence cards | Lets users verify generated text |
-| Must | Click citation to seek video | Reduces verification to one action |
-| Must | Original/translation toggle | Preserves meaning while improving accessibility |
-| Must | Confidence and review labels | Makes uncertainty visible |
-| Must | Correction and revision flow | Allows errors to be fixed without breaking citations |
-| Should | Compare selected speakers or passages | Supports research and briefing work |
-| Should | Save and export evidence collections | Makes findings reusable and reproducible |
-| Could | Generate a cited business-item brief | Accelerates parliamentary preparation |
-| Later | Compare topics across multiple sessions | Supports longitudinal research |
+## Sources and acknowledgements
 
-## How it works, in simple engineering terms
+Built on the original **Swiss Parliament Intelligence** hackathon project, with public records and imagery from Swiss Parliamentary Services. Parliamentary media remains subject to its [source usage conditions](https://www.parlament.ch/de/services/Seiten/Nutzungsbedingungen.aspx); credit **© ParlCH** and any named photographer. This non-commercial civic pilot has no government affiliation.
 
-1. Register an official Parliament video and its public metadata.
-2. Transcribe the speech with timestamps and language information.
-3. Divide the recording into stable, searchable evidence moments.
-4. Add speaker, session, business-item, and useful visual context.
-5. Search those moments using keywords and meaning.
-6. Generate answers only from the retrieved evidence.
-7. Return timestamps and source cards with every material claim.
-
-The implementation can use [NVIDIA Video Search and Summarization](https://docs.nvidia.com/vss/latest/) for video understanding, search, clips, and agent workflows, plus [NVIDIA Riva](https://docs.nvidia.com/deeplearning/riva/user-guide/docs/asr/asr-overview.html) for multilingual speech recognition. The technical team can choose the final deployment architecture.
-
-## Trust and political-information rules
-
-- Keep original transcript, translation, and AI interpretation visibly separate.
-- Show the source passage before or beside an inferred position.
-- Use labels such as “supported” or “opposed” only when the passage directly supports them.
-- Allow `unclear`, `conflicting`, and `speaker unconfirmed`.
-- Do not infer political ideology, emotion, intent, truthfulness, or sensitive traits.
-- Show multiple relevant perspectives for broad comparison questions.
-- Keep private notes separate from the public evidence record.
-- Require human review before treating generated text as an official brief.
-
-## What success looks like
-
-For the hackathon, we should test a small set of real questions rather than claiming full archive coverage.
-
-| Measure | What we check |
-| --- | --- |
-| Time to evidence | How quickly a user reaches a useful video moment |
-| Search relevance | Whether the right passage appears in the first five results |
-| Citation correctness | Whether the cited timestamp actually supports the claim |
-| Speaker accuracy | Whether the statement is assigned to the right person |
-| Language fidelity | Whether original wording is preserved and translations are labelled |
-| User confidence | Whether users understand what is sourced, generated, or uncertain |
-| Reproducibility | Whether another person can reopen the same evidence collection |
-
-The single most important quality measure is **citation correctness**. A fluent answer pointing to the wrong parliamentary evidence is a product failure.
-
-## Proposed demo journey
-
-1. In Citizen mode, ask a plain-language question about a debate.
-2. Show a short answer containing different viewpoints.
-3. Open two citations and jump to the exact video moments.
-4. Switch to Research mode and compare those passages in context.
-5. Switch to Parliamentary mode and save them into a cited brief.
-6. Flag one uncertain transcript or attribution and show its review state.
-
-This demonstrates accessibility, analytical depth, and trust without pretending to build three separate products.
-
-## Assumptions to validate with users
-
-- Researchers begin with a topic or business item more often than a specific video.
-- A timestamp and surrounding passage are sufficient for first-pass verification.
-- Research exports must include stable evidence IDs, source URLs, timestamps, and versions.
-- Parliamentary staff prefer business-item timelines over session-first navigation.
-- Citizens benefit more from viewpoint comparison than from a single condensed summary.
-- Users understand and value visible confidence and review labels.
-
-## Validation questions
-
-**For researchers and journalists**
-
-- What must an evidence export contain before you can cite it?
-- How much surrounding context is needed to avoid quote mining?
-- Which transcription mistakes are most damaging to your work?
-
-**For parliamentary staff**
-
-- Do you normally begin with a business item, session, speaker, committee, or topic?
-- What belongs in a briefing: arguments, objections, commitments, votes, or all four?
-- Which generated labels would be too politically risky to use?
-
-**For citizens**
-
-- What would make you search a parliamentary recording?
-- Which navigation is most useful: topic, speaker, party, or business item?
-- Does one-click access to the original passage materially change your trust?
-
-## Data sources
-
-- [Swiss Parliament Media Library](https://www.parlament.ch/en/services/medialibrary)
-- [Swiss Parliament YouTube streams](https://www.youtube.com/@ParlCH/streams)
-- [Swiss Parliament Official Bulletin](https://www.parlament.ch/en/ratsbetrieb/official-bulletin)
-
-## Immediate product decisions
-
-- [ ] Select the first debate and three representative questions.
-- [ ] Confirm the beachhead workflow with one journalist or policy researcher.
-- [ ] Agree on the minimum contents of an evidence card.
-- [ ] Sketch the shared screen and its three modes.
-- [ ] Define the five-minute demo journey and fallback recording.
-- [ ] Ask the technical team which required capabilities can be completed reliably.
+Model weights, fonts and third-party assets retain their own licences. The repository does not assign a new blanket licence to those materials. The screenshots above show the implemented interface, not a design mockup.

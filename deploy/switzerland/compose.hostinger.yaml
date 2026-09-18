@@ -1,0 +1,54 @@
+services:
+  swiss-pilot:
+    build:
+      context: ${SWISS_SOURCE:?Pinned fork URL required}
+      dockerfile: deploy/switzerland/Dockerfile
+    command: [node, bootstrap.mjs]
+    restart: unless-stopped
+    init: true
+    read_only: true
+    security_opt: [no-new-privileges:true]
+    cap_drop: [ALL]
+    tmpfs: [/tmp:uid=1000,gid=1000,mode=1777,size=512m]
+    mem_limit: 1536m
+    cpus: 1.0
+    environment:
+      PUBLIC_BASE_PATH: /Switzerland
+      PUBLIC_ORIGIN: https://midnight.vote
+      PUBLIC_DATA_URL: ${PUBLIC_DATA_URL}
+      PUBLIC_DATA_SHA256: ${PUBLIC_DATA_SHA256}
+      SUPABASE_URL: ${SUPABASE_URL}
+      SUPABASE_ANON_KEY: ${SUPABASE_ANON_KEY}
+      INFERENCE_BASE_URL: http://swiss-model-tunnel:4319/v1
+      INFERENCE_MODEL: nvidia/nvidia-nemotron-nano-9b-v2
+      TRANSLATION_BASE_URL: http://swiss-model-tunnel:4320
+      VSS_EMBED_BASE_URL: http://swiss-model-tunnel:4321
+    volumes: [swiss-data:/app/data]
+    networks: [swiss-private, existing-edge]
+    healthcheck:
+      test: [CMD, node, -e, "fetch('http://127.0.0.1:4318/Switzerland/api/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 180s
+  swiss-model-tunnel:
+    build:
+      context: ${SWISS_SOURCE:?Pinned fork URL required}
+      dockerfile: deploy/switzerland/Dockerfile.tunnel
+    restart: unless-stopped
+    read_only: true
+    security_opt: [no-new-privileges:true]
+    cap_drop: [ALL]
+    tmpfs: [/tmp:uid=1000,gid=1000,mode=1777,size=4m]
+    mem_limit: 64m
+    environment:
+      NVIDIA_SSH_KEY: ${NVIDIA_SSH_KEY}
+      NVIDIA_KNOWN_HOSTS: ${NVIDIA_KNOWN_HOSTS}
+    networks: [swiss-private]
+volumes:
+  swiss-data:
+networks:
+  swiss-private:
+  existing-edge:
+    external: true
+    name: midnight-rarimo-nfc_rarimo-edge

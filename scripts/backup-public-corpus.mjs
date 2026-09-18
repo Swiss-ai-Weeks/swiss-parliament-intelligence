@@ -1,7 +1,7 @@
 // Public content only: never open pilot.sqlite, sessions.sqlite, .env or account exports.
 import {DatabaseSync} from 'node:sqlite';
 import {mkdir,readFile,writeFile,readdir,lstat,unlink} from 'node:fs/promises';
-import {createReadStream,createWriteStream} from 'node:fs';
+import {createReadStream,createWriteStream,existsSync} from 'node:fs';
 import {pipeline} from 'node:stream/promises';
 import {createCipheriv,createDecipheriv,randomBytes,createHash} from 'node:crypto';
 import {execFileSync} from 'node:child_process';
@@ -24,6 +24,11 @@ async function protect(file,name){
  if(restored.digest('hex')!==entry.sha256)throw Error('RESTORE_HASH_MISMATCH');manifest.files.push(entry);
 }
 await protect(snapshot,'data/parliament.sqlite');
+if(existsSync('data/public-embeddings.sqlite')){
+ const vectorSnapshot=path.join(destination,'vectors.sqlite'),vectors=new DatabaseSync('data/public-embeddings.sqlite',{readOnly:true});
+ vectors.exec(`VACUUM INTO '${vectorSnapshot.replaceAll("'","''")}'`);vectors.close();
+ await protect(vectorSnapshot,'data/public-embeddings.sqlite');await unlink(vectorSnapshot);
+}
 const corpus=new DatabaseSync(snapshot,{readOnly:true}),ragFile=path.join(destination,'public-passages.jsonl');
 const passages=corpus.prepare("SELECT id,payload,source_url,retrieved_at,sha256 FROM records WHERE kind='speech' ORDER BY id").all();
 await writeFile(ragFile,passages.map(r=>JSON.stringify({id:r.id,sourceUrl:r.source_url,retrievedAt:r.retrieved_at,sourceHash:r.sha256,passage:JSON.parse(r.payload)})).join('\n')+'\n',{flag:'wx',mode:0o600});corpus.close();
