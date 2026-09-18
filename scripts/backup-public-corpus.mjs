@@ -24,10 +24,10 @@ async function protect(file,name){
  if(restored.digest('hex')!==entry.sha256)throw Error('RESTORE_HASH_MISMATCH');manifest.files.push(entry);
 }
 await protect(snapshot,'data/parliament.sqlite');
-if(existsSync('data/public-embeddings.sqlite')){
- const vectorSnapshot=path.join(destination,'vectors.sqlite'),vectors=new DatabaseSync('data/public-embeddings.sqlite',{readOnly:true});
+for(const publicDb of ['public-embeddings.sqlite','public-processing.sqlite'])if(existsSync('data/'+publicDb)){
+ const vectorSnapshot=path.join(destination,publicDb),vectors=new DatabaseSync('data/'+publicDb,{readOnly:true});
  vectors.exec(`VACUUM INTO '${vectorSnapshot.replaceAll("'","''")}'`);vectors.close();
- await protect(vectorSnapshot,'data/public-embeddings.sqlite');await unlink(vectorSnapshot);
+ await protect(vectorSnapshot,'data/'+publicDb);await unlink(vectorSnapshot);
 }
 const corpus=new DatabaseSync(snapshot,{readOnly:true}),ragFile=path.join(destination,'public-passages.jsonl');
 const passages=corpus.prepare("SELECT id,payload,source_url,retrieved_at,sha256 FROM records WHERE kind='speech' ORDER BY id").all();

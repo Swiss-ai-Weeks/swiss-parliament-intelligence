@@ -6,7 +6,7 @@ const auth=JSON.parse(await readFile(credentials,'utf8'));
 const headers={'X-Auth':auth.auth_key,'X-Auth-Rest':auth.rest_auth_key,'Tus-Resumable':'1.0.0'};
 async function walk(dir){let files=[];for(const item of await readdir(dir,{withFileTypes:true})){const p=path.join(dir,item.name);if(item.isDirectory())files.push(...await walk(p));else if(item.isFile())files.push(p);}return files;}
 for(const file of await walk(root)){
- const name=path.relative(root,file).replaceAll('\\','/');
+ const name=path.relative(root,file).replaceAll('\\','/').replace(/^switzerland-alias\//,'switzerland/');
  if(!/^(Switzerland\/|switzerland\/\.htaccess$)/.test(name))throw Error('OUTSIDE_SWISS_DIRECTORY');
  const activates=/(^|\/)(index\.html|proxy\.php|\.htaccess)$/.test(name);
  if(activates!==(phase==='activate'))continue;

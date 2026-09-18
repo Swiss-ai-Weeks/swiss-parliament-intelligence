@@ -6,7 +6,7 @@
 
 A civic research workspace that connects questions about Swiss public life to **original parliamentary words, identifiable speakers and verifiable sources**.
 
-[Explore the experience](#the-experience) · [Architecture](#how-it-works) · [Run locally](#run-locally) · [Delivery status](#built-today-and-product-vision) · [Documentation](#documentation)
+[Swiss landing](https://midnight.vote/Switzerland/) · [Explore the experience](#the-experience) · [Architecture](#how-it-works) · [Run locally](#run-locally) · [Delivery status](#built-today-and-product-vision) · [Documentation](#documentation)
 
 ![Swiss civic landing with Alpine landscape and Cleisthenes](docs/images/landing.png)
 
@@ -23,6 +23,8 @@ Midnight Vote brings that evidence into one place. Start with a question, inspec
 The aim is informed judgment: citizens forming their own views, with enough detail for journalists, students and researchers to inspect the evidence themselves.
 
 ## The experience
+
+![Live Swiss civic dashboard with proceedings and calendar](docs/images/live-dashboard.png)
 
 | Workspace | What you can do |
 | --- | --- |
@@ -66,6 +68,8 @@ Implementation is not the same as production acceptance. This table makes the di
 
 **No official vote is cast by this pilot.** Passport signatures, biometric confirmation, private eligibility proofs and community voting are not operational features. Missing records are not abstentions; visual similarity is not evidence of what someone said.
 
+The Swiss workspace is live at [midnight.vote/Switzerland](https://midnight.vote/Switzerland/). The landing, dashboard, both chamber maps, public API, source video, real cited AI answer and translation were verified on the public domain. Google sign-in is currently disabled in the provider configuration; email delivery and account lifecycle still need production acceptance.
+
 ## Data and compute snapshot
 
 Snapshot: **18 September 2026**. These counts describe the imported collection, not the entire history of Swiss Parliament.
@@ -80,7 +84,7 @@ Snapshot: **18 September 2026**. These counts describe the imported collection, 
 
 The full text embedding run completed on an **NVIDIA H100 NVL** in 214 seconds after model loading. It uses `intfloat/multilingual-e5-large`, pinned by the recorded model revision, with 1,024-dimensional normalized vectors. Long passages use overlapping token windows. Validation checks source hashes, finite vectors, normalization, text boundaries and complete imported-passage coverage. This is a batch measurement, not a latency guarantee.
 
-A resumable **3,346-recording queue** covers the three imported sessions, prioritising the current session. It verifies official recording URLs, preserves media hashes, transcribes bounded audio windows with NVIDIA Canary and records success/failure in SQLite. Queued does not mean completed; media, ASR, text embeddings, visual embeddings and alignment are tracked separately.
+A resumable **3,346-recording queue** covers the three imported sessions, prioritising the current session. It verifies official recording URLs, preserves media hashes, transcribes bounded audio windows with NVIDIA Canary and records success/failure in SQLite. At the 16:08 UTC checkpoint, 212 queue entries were complete; 110 new full ASR receipts were validated into `data/public-processing.sqlite` (one existing queue receipt and older receipts remain separate). The H100 continues independently. Queued does not mean completed; media, ASR, text embeddings, visual embeddings and alignment are tracked separately.
 
 The previously processed Cosmos visual embeddings remain distinct from the new multilingual text embeddings. Private conversations, account data and feedback are excluded from the public processing corpus.
 
@@ -116,10 +120,10 @@ flowchart TB
     PRIVATE -. never included .-> EXCLUDED[Public embedding pipeline]
 ```
 
-**Frontend:** React 19, Vite, TypeScript/JavaScript, custom SVG chambers and the Greek–Swiss visual system.  
-**Backend:** Node.js 24, built-in SQLite, explicit HTTP API and server-managed sessions.  
-**AI:** Nemotron for explanations; Canary/Parakeet for recorded ASR work; Cosmos for experimental visual retrieval; multilingual E5 for the new text index.  
-**Accounts:** Supabase Auth and per-user access controls.  
+**Frontend:** React 19, Vite, TypeScript/JavaScript, custom SVG chambers and the Greek–Swiss visual system.
+**Backend:** Node.js 24, built-in SQLite, explicit HTTP API and server-managed sessions.
+**AI:** Nemotron for explanations; Canary/Parakeet for recorded ASR work; Cosmos for experimental visual retrieval; multilingual E5 for the new text index.
+**Accounts:** Supabase Auth and per-user access controls.
 **Operations:** isolated deployment, source checksums, resumable processing and encrypted public-data restoration.
 
 ## Evidence and privacy principles
@@ -180,6 +184,7 @@ Tests cover source attribution, ownership, session handling, citation boundaries
 | [Documentation index](docs/README.md) | Product and engineering reference map |
 | [Civic workspace delivery](docs/CIVIC-WORKSPACE-DELIVERY.md) | Accepted scope, completed work and remaining gates |
 | [Media pipeline](docs/SESSION-PIPELINE.md) | Recording verification, ASR, alignment and visual processing |
+| [September release and compute](docs/SWISS-RELEASE-2026-09-18.md) | Live mount, isolated backend, H100 receipts and approval gates |
 | [Deployment and integration](docs/GREEK-SWISS-INTEGRATION.md) | Swiss mount, hosting isolation and release boundaries |
 | [Landing, routing and feedback](docs/LANDING-ROUTING-FEEDBACK.md) | Real example, feedback setup and public-data backups |
 | [Speaker context](docs/SPEAKER-CONTEXT-UPDATE.md) | Biographies, citation inspectors and recording fallback |

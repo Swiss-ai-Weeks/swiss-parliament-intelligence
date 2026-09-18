@@ -7,7 +7,7 @@ const stamp=new Date().toISOString().replace(/[:.]/g,'-'),base='artifacts/swiss-
 mkdirSync(site,{recursive:true});mkdirSync(data,{recursive:true});
 cpSync('frontend/dist/client',site,{recursive:true});
 copyFileSync('deploy/switzerland/subdirectory.htaccess',site+'/.htaccess');copyFileSync('deploy/switzerland/proxy.php',site+'/proxy.php');
-mkdirSync(base+'/site/switzerland',{recursive:true});copyFileSync('deploy/switzerland/lowercase.htaccess',base+'/site/switzerland/.htaccess');
+mkdirSync(base+'/site/switzerland-alias',{recursive:true});copyFileSync('deploy/switzerland/lowercase.htaccess',base+'/site/switzerland-alias/.htaccess');
 cpSync('data/media',site+'/media',{recursive:true});
 for(const name of ['parliament.sqlite','public-embeddings.sqlite','pilot.sqlite']){
  const db=new DatabaseSync('data/'+name,{readOnly:true});db.exec(`VACUUM INTO '${data+'/'+name}'`);db.close();

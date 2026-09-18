@@ -11,7 +11,7 @@ try{await access(target);throw Error('RESTORE_DESTINATION_MUST_NOT_EXIST');}catc
 const manifest=JSON.parse(await readFile(path.join(archive,'manifest.json'),'utf8'));
 if(manifest.version!==1||manifest.scope!=='official-public-corpus-only'||!Array.isArray(manifest.files))throw Error('INVALID_MANIFEST');
 const names=new Set();for(const entry of manifest.files){
- if(!/^(code\.tar|public-passages\.jsonl|data\/(parliament|public-embeddings)\.sqlite|data\/media\/parliament-\d+\.mp4|data\/parliament\/(session-\d+\/)?(\d+-(asr|canary|vss|embeddings)|video-alignments)\.json)$/.test(entry.name)||!/^\d+\.enc$/.test(entry.blob)||names.has(entry.name))throw Error('INVALID_ARCHIVE_PATH');names.add(entry.name);
+ if(!/^(code\.tar|public-passages\.jsonl|data\/(parliament|public-embeddings|public-processing)\.sqlite|data\/media\/parliament-\d+\.mp4|data\/parliament\/(session-\d+\/)?(\d+-(asr|canary|vss|embeddings)|video-alignments)\.json)$/.test(entry.name)||!/^\d+\.enc$/.test(entry.blob)||names.has(entry.name))throw Error('INVALID_ARCHIVE_PATH');names.add(entry.name);
 }
 await mkdir(target,{recursive:true});
 for(const entry of manifest.files){
