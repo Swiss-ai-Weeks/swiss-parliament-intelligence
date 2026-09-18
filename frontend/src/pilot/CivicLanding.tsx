@@ -1,0 +1,345 @@
+import React,{useEffect,useRef,useState} from 'react';
+import {ArrowDown,ArrowRight,Check,CaretDown as ChevronDown,ArrowSquareOut as ExternalLink,Pause,Play,ArrowCounterClockwise as RotateCcw,ShieldCheck} from '@phosphor-icons/react';
+import './landing.css';
+const asset=name=>import.meta.env.BASE_URL+'brand/'+name;
+const alpineLandscape=asset('alpine-landscape.png'),porticoForeground=asset('portico.png'),cleisthenesBust=asset('cleisthenes-bust.png'),midnightMark=asset('midnight-mark.svg'),genevaFooter={url:asset('geneva-footer.png')};
+function Button({asChild,variant,size,className='',children,...props}){const cls='civic-button '+(variant||'civic')+' '+className;return asChild?React.cloneElement(children,{...props,className:cls}):<button type="button" {...props} className={cls}>{children}</button>;}
+const statements = [
+  "Public decisions shape the places we share.",
+  "Understanding them should feel open to everyone.",
+] as const;
+
+const chapters = [
+  {
+    id: "understand",
+    number: "01",
+    label: "Understand",
+    title: "Make sense of the debate.",
+    summary: "Turn complex discussion into a clear, source-linked explanation.",
+    copy: "Filter the debate by speaker, follow who said what, and move from a key quotation to its full source context.",
+  },
+  {
+    id: "privacy",
+    number: "02",
+    label: "Stay private",
+    title: "Your reading. Your privacy.",
+    summary: "Understand what stays on this device and what you choose to share.",
+    copy: "Understand what is stored in this browser and what requires an account. Private eligibility proofs remain a future concept.",
+  },
+  {
+    id: "participate",
+    number: "03",
+    label: "Participate",
+    title: "Understand first. Then have your say.",
+    summary: "Consider the arguments, then respond on your own terms.",
+    copy: "Explore a civic issue, compare the arguments, and revisit the official outcome of historical Swiss votes.",
+  },
+] as const;
+
+type ChapterId = (typeof chapters)[number]["id"];
+function WordStatement({ text, className }: { text: string; className: string }) {
+  return (
+    <div className={className}>
+      <p className="sr-only">{text}</p>
+      <p aria-hidden="true" className="statement-words">
+        {text.split(" ").map((word, index) => (
+          <span className="statement-word" key={`${word}-${index}`}>
+            {word}
+          </span>
+        ))}
+      </p>
+    </div>
+  );
+}
+
+export default function CivicLanding({onNavigate,language='en',reduceMotion=false}) {
+  const sceneRef = useRef<HTMLElement>(null);
+  const [ready, setReady] = useState(false);
+  const [activeChapter, setActiveChapter] = useState<ChapterId>("understand");
+  const [navState, setNavState] = useState<"opening" | "visible" | "hidden">("opening");
+
+  useEffect(() => {
+    if (reduceMotion || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setReady(true);
+      return;
+    }
+    let live = true;
+    const timer = window.setTimeout(() => live && setReady(true), 2800);
+    Promise.all(
+      [alpineLandscape, porticoForeground, cleisthenesBust].map(
+        (src) =>
+          new Promise<void>((resolve) => {
+            const image = new Image();
+            image.onload = () => resolve();
+            image.onerror = () => resolve();
+            image.src = src;
+          }),
+      ),
+    ).then(() => live && setReady(true));
+    return () => {
+      live = false;
+      window.clearTimeout(timer);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!ready || !sceneRef.current || reduceMotion) return;
+    let cancelled=false;
+    let cleanup = () => {};
+    void import("gsap").then(async ({ gsap }) => {
+      const { ScrollTrigger } = await import("gsap/ScrollTrigger");
+      if(cancelled)return;
+      gsap.registerPlugin(ScrollTrigger);
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || !sceneRef.current)
+        return;
+      const ctx = gsap.context(() => {
+        const timeline = gsap.timeline({
+          scrollTrigger: {
+            trigger: sceneRef.current,
+            start: "top top",
+            end: "bottom bottom",
+            scrub: 0.45,
+            invalidateOnRefresh: true,
+          },
+        });
+        timeline
+          .to(".hero-copy, .mascot, .scroll-cue", { opacity: 0, y: -24, duration: 10 }, 4)
+          .to(".portico-layer", { scale: 2.15, duration: 26, ease: "power1.in" }, 0)
+          .to(".portico-layer", { opacity: 0, duration: 7, ease: "power1.out" }, 23)
+          .to(".landscape-layer", { scale: 1.12, yPercent: -2, duration: 100, ease: "none" }, 0)
+          .to(".statement-one", { opacity: 1, duration: 4 }, 31)
+          .fromTo(
+            ".statement-one .statement-word",
+            { opacity: 0.12 },
+            { opacity: 1, stagger: 1.4, duration: 8 },
+            34,
+          )
+          .to(".statement-one", { opacity: 0, y: -28, duration: 8 }, 57)
+          .to(".statement-two", { opacity: 1, duration: 4 }, 65)
+          .fromTo(
+            ".statement-two .statement-word",
+            { opacity: 0.12 },
+            { opacity: 1, stagger: 1.4, duration: 8 },
+            68,
+          )
+          .to(".statement-two", { opacity: 0, y: -22, duration: 7 }, 91);
+      }, sceneRef);
+      cleanup = () => ctx.revert();
+    });
+    return () => {cancelled=true;cleanup();};
+  }, [ready,reduceMotion]);
+
+  useEffect(() => {
+    const featuresTop = document.getElementById("features")?.offsetTop ?? Number.POSITIVE_INFINITY;
+    const initialY = window.scrollY;
+    if (initialY < 48) setNavState("opening");
+    else if (initialY < featuresTop + 160) setNavState("visible");
+    else setNavState("hidden");
+
+    let previousY = initialY;
+    const updateNavigation = () => {
+      const currentY = window.scrollY;
+      const delta = currentY - previousY;
+      if (currentY < 48) {
+        setNavState("opening");
+      } else if (delta < -2) {
+        setNavState("visible");
+      } else if (delta > 2) {
+        setNavState("hidden");
+      }
+      previousY = currentY;
+    };
+    window.addEventListener("scroll", updateNavigation, { passive: true });
+    return () => window.removeEventListener("scroll", updateNavigation);
+  }, []);
+
+  const active = chapters.find((chapter) => chapter.id === activeChapter) ?? chapters[0];
+  const selectChapter = (id: ChapterId, scroll = false) => {
+    setActiveChapter(id);
+    if (scroll)
+      document.getElementById("features")?.scrollIntoView({
+        behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
+      });
+  };
+
+  return (
+    <div className="civic-landing" data-reduce-motion={reduceMotion}>
+      <div
+        className={`loading-curtain ${ready ? "is-ready" : ""}`}
+        role="status"
+        aria-live="polite"
+      >
+        <img src={midnightMark} alt="" className="loading-mark" />
+        <span>Preparing the view</span>
+      </div>
+      <header className={`site-header nav-${navState}`}>
+        <a href="#top" className="brand" aria-label="midnight.vote, Switzerland">
+          <img src={midnightMark} alt="" />
+          <span>
+            <strong>midnight.vote</strong>
+            <small>Switzerland</small>
+          </span>
+        </a>
+        <nav aria-label="Main navigation">
+          <a href="#features">How it works</a>
+          <a href="#features" onClick={() => selectChapter("understand")}>
+            Sources
+          </a>
+          <a href="#site-footer">About</a><button className="landing-enter" onClick={()=>onNavigate(null,"parliament")}>Enter the pilot <ArrowRight/></button>
+        </nav>
+      </header>
+
+      <section
+        className="opening-sequence"
+        ref={sceneRef}
+        aria-label="An opening view across the Swiss Alps"
+      >
+        <div className="opening-sticky">
+          <img
+            className="landscape-layer"
+            src={alpineLandscape}
+            alt="A painted Swiss lake surrounded by Alpine mountains"
+            fetchPriority="high"
+          />
+          <img className="portico-layer" src={porticoForeground} alt="" aria-hidden="true" />
+          <img
+            className="portico-layer portico-side portico-side-left"
+            src={porticoForeground}
+            alt=""
+            aria-hidden="true"
+          />
+          <img
+            className="portico-layer portico-side portico-side-right"
+            src={porticoForeground}
+            alt=""
+            aria-hidden="true"
+          />
+          <div className="hero-copy" id="top">
+            <h1>
+              A clearer view.
+              <br />
+              Your own decision.
+            </h1>
+            <p className="hero-subtitle">Meet Cleisthenes, your thoughtful civic companion.</p>
+            <Button variant="civic" size="lg" asChild>
+              <a href="#features">
+                Explore the idea <ArrowRight />
+              </a>
+            </Button>
+          </div>
+          <div className="mascot" aria-label="Cleisthenes, the civic companion">
+            <img
+              src={cleisthenesBust}
+              alt="Cleisthenes, a friendly sculpted-paper civic companion"
+            />
+            <p>
+              <span>Cleisthenes</span>Your civic companion
+            </p>
+          </div>
+          <a className="scroll-cue" href="#opening-thoughts">
+            <span>Scroll to enter</span>
+            <ArrowDown aria-hidden="true" />
+          </a>
+          <div className="motion-statements">
+            <WordStatement text={statements[0]} className="narrative-statement statement-one" />
+            <WordStatement text={statements[1]} className="narrative-statement statement-two" />
+          </div>
+        </div>
+        <div className="scene-anchor" id="opening-thoughts" aria-hidden="true" />
+        <div className="reduced-statements">
+          <p>{statements[0]}</p>
+          <p>{statements[1]}</p>
+        </div>
+      </section>
+
+      <div className="paper-tear" aria-hidden="true" />
+      <section className="features-section" id="features">
+        <div className="section-intro">
+          <p className="eyebrow">Three ways in</p>
+          <h2>
+            Democracy begins
+            <br />
+            with understanding.
+          </h2>
+          <p>
+            Move from a difficult question to a clearer view—without losing the source, your
+            privacy, or your voice.
+          </p>
+        </div>
+        <div className="feature-explorer">
+          <div className="chapter-list" aria-label="Explore features">
+            {chapters.map((chapter) => (
+              <Button
+                key={chapter.id}
+                id={`chapter-${chapter.id}`}
+                variant="ghost"
+                className={`chapter-button ${activeChapter === chapter.id ? "is-active" : ""}`}
+                aria-pressed={activeChapter === chapter.id}
+                aria-controls={`panel-${chapter.id}`}
+                onClick={() => setActiveChapter(chapter.id)}
+              >
+                <span className="chapter-number">{chapter.number}</span>
+                <span>
+                  <strong>{chapter.label}</strong>
+                  <small>{chapter.summary}</small>
+                </span>
+                <ArrowRight />
+              </Button>
+            ))}
+          </div>
+          <article
+            className="feature-panel"
+            id={`panel-${active.id}`}
+            aria-labelledby={`chapter-${active.id}`}
+          >
+            <div className="feature-copy">
+              <h3>{active.title}</h3>
+              <p>{active.copy}</p>
+            </div>
+            <div key={active.id} className="active-demo live-feature">
+ {active.id==='understand'?<><span className="demo-label">The Swiss public record</span><h3>Start with the words themselves.</h3><p>Read original parliamentary passages, translate them, and ask Cleisthenes a question with the source in view.</p><Button onClick={()=>onNavigate(null,'parliament')}>Explore Parliament <ArrowRight/></Button></>:active.id==='privacy'?<><ShieldCheck size={36}/><h3>Know what stays where.</h3><p>Read without an account. Pilot chat history stays in this browser. Saving sources requires an account. Private eligibility proofs are a future concept.</p><Button onClick={()=>onNavigate(null,'settings')}>Your settings <ArrowRight/></Button></>:<><img src={cleisthenesBust} alt="" style={{width:90}}/><h3>Your own view, at your own pace.</h3><p>Explore five historical Swiss votes. Compare the arguments and return to the original sources. This pilot does not cast votes.</p><Button onClick={()=>onNavigate(null,'explore')}>Explore topics &amp; votes <ArrowRight/></Button></>}
+ </div>
+          </article>
+        </div>
+      </section>
+
+      <footer className="site-footer" id="site-footer">
+        <div className="footer-top">
+          <h2>Your voice. Your choice.</h2>
+          <Button
+            variant="civicOutline"
+            size="sm"
+            onClick={() => onNavigate(null,"parliament")}
+          >
+            Enter the pilot <ArrowRight />
+          </Button>
+        </div>
+        <div className="footer-art" aria-hidden="true">
+          <img src={genevaFooter.url} alt="" />
+        </div>
+        <div className="footer-bottom">
+          <a href="#top" className="brand footer-brand" aria-label="midnight.vote home">
+            <img src={midnightMark} alt="" />
+            <strong>midnight.vote</strong>
+          </a>
+          <nav className="footer-links" aria-label="Feature navigation">
+            <div className="footer-feature-links">
+              <button onClick={() => selectChapter("understand", true)}>Understand</button>
+              <button onClick={() => selectChapter("privacy", true)}>Privacy</button>
+              <button onClick={() => selectChapter("participate", true)}>Participate</button>
+            </div>
+            <Button variant="ghost" size="sm" asChild>
+              <a href="https://midnight.vote" target="_blank" rel="noreferrer">
+                Explore midnight.vote <ExternalLink />
+              </a>
+            </Button>
+          </nav>
+          <div className="footer-meta">
+            <p>Independent Swiss pilot · Public sources, personal understanding</p>
+            <p>No government affiliation</p>
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+}

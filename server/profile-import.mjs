@@ -1,5 +1,6 @@
 import {mkdirSync,writeFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
+import {officialPortrait} from './official-portrait.mjs';
 import {officialDate,plainText} from './parliament.mjs';
 const base='https://ws.parlament.ch/odata.svc/';
 const hash=s=>createHash('sha256').update(s).digest('hex');
@@ -26,13 +27,15 @@ export async function syncPerson(store,id,{fetchImpl=fetch,rawDir='data/parliame
  for(let skip=0;skip<20000;skip+=500){const page=await query('Voting',{'$orderby':'ID asc','$top':'500','$skip':String(skip)});votes.push(...page);if(page.length<500){complete=true;break;}}
  if(!complete)throw new Error('VOTE_HISTORY_PAGE_LIMIT');
  if(new Set(votes.map(v=>v.ID)).size!==votes.length)throw new Error('UNSTABLE_VOTE_PAGINATION');
- const portrait='https://www.parlament.ch/sitecollectionimages/profil/original/'+id+'.jpg';let portraitUrl=null;
- try{const img=await fetchImpl(portrait,{method:'HEAD',signal:AbortSignal.timeout(10000)});if(img.ok&&img.headers.get('content-type')?.startsWith('image/'))portraitUrl=portrait;}catch{}
+ let portrait={portraitUrl:null,portraitIdentityVerified:false};
+ try{portrait=await officialPortrait(id,fetchImpl);}catch{}
+ const portraitUrl=portrait.portraitUrl;
  const profile={id,name:[r.FirstName,r.LastName].join(' '),active:r.Active,canton:r.CantonAbbreviation,council:r.CouncilName,group:r.ParlGroupName,party:r.PartyName,partyId:String(r.Party),joined:officialDate(r.DateJoining),elected:officialDate(r.DateElection),left:officialDate(r.DateLeaving),declaredMandates:plainText(r.Mandates),portraitUrl,
   contacts:contacts.flatMap(c=>{const safe=safeContact(c.Address);return safe?[{...safe,sourceUrl:c.__metadata.uri}]:[];}),
   occupations:occupations.map(o=>({title:o.OccupationName,employer:o.Employer,role:o.JobTitle,start:officialDate(o.StartDate),end:officialDate(o.EndDate),sourceUrl:o.__metadata.uri})),
   committees:committees.map(c=>({name:c.CommitteeName,role:c.CommitteeFunctionName,sourceUrl:c.__metadata.uri})),
   profileCoverage:'enriched-official-profile',voteHistory:{status:'complete-service-query',count:votes.length,retrievedAt:started,scope:'All individual roll-call records returned by the official Voting service for this person. National Council service coverage; not all political decisions or a guarantee of a complete career archive.'}};
+ Object.assign(profile,portrait);
  function put(kind,row,payload){const text=JSON.stringify(payload),sha=hash(text),url=row.__metadata?.uri;if(!url?.startsWith('https://ws.parlament.ch/'))throw new Error('MISSING_PROVENANCE');store.db.prepare('INSERT OR IGNORE INTO revisions VALUES(?,?,?,?,?)').run(kind,payload.id,sha,text,started);store.db.prepare('INSERT OR REPLACE INTO records VALUES(?,?,?,?,?,?)').run(kind,payload.id,text,url,started,sha);}
  store.db.exec('BEGIN');try{
   put('person',r,profile);

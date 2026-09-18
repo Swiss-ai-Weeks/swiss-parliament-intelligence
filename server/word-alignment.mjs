@@ -19,7 +19,10 @@ export function alignEditedParagraph(text,words,duration){
  const normalized=words.flatMap(w=>tokens(w.word).map(token=>({...w,token})));
  const near=(a,b)=>{if(a===b)return true;if(Math.min(a.length,b.length)<5||Math.abs(a.length-b.length)>1)return false;let i=0,j=0,edits=0;while(i<a.length&&j<b.length){if(a[i]===b[j]){i++;j++;}else{if(++edits>1)return false;if(a.length>=b.length)i++;if(b.length>=a.length)j++;}}return edits+a.length-i+b.length-j<=1;};
  const anchor=(a,i)=>a.every((t,j)=>normalized[i+j]&&near(t,normalized[i+j].token));
- const starts=normalized.flatMap((_,i)=>anchor(target.slice(0,5),i)?[i]:[]),ends=normalized.flatMap((_,i)=>anchor(target.slice(-5),i)?[i]:[]),candidates=[];
+ // Edited Bulletin text can change the first word (e.g. Die/Diese).
+ // Permit one boundary substitution only with the next five words anchored;
+ // retain the same length, monotonicity, overlap and ambiguity checks below.
+ const starts=normalized.flatMap((_,i)=>(anchor(target.slice(0,5),i)||(target.length>=20&&anchor(target.slice(1,6),i+1)))?[i]:[]),ends=normalized.flatMap((_,i)=>anchor(target.slice(-5),i)?[i]:[]),candidates=[];
  for(const start of starts)for(const end of ends){
   if(end<start||end+5-start>target.length*1.35||end+5-start<target.length*.75)continue;
   const slice=normalized.slice(start,end+5),a=slice[0].start,b=slice.at(-1).end;

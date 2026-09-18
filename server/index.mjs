@@ -19,6 +19,8 @@ async function body(req) {
   try {return JSON.parse(Buffer.concat(chunks).toString());}catch{throw fail('INVALID_JSON');}
 }
 export function createServer({store=createStore(path.join(root,'data/pilot.sqlite')),env=process.env,fetchImpl=fetch}={}) {
+  const publicBase=(env.PUBLIC_BASE_PATH||'').replace(/\/$/,'');
+  if(publicBase&&!/^\/[A-Za-z0-9_-]+$/.test(publicBase))throw new Error('INVALID_PUBLIC_BASE_PATH');
   const auth=createAuth(env,fetchImpl);const rates=new Map();
   let profileImportBusy=false;
   let parliament;const par=()=>parliament||(parliament=openParliament(path.join(root,'data/parliament.sqlite')));
@@ -26,7 +28,10 @@ export function createServer({store=createStore(path.join(root,'data/pilot.sqlit
   const server=http.createServer(async(req,res)=>{
     res.setHeader('X-Content-Type-Options','nosniff');res.setHeader('Referrer-Policy','strict-origin-when-cross-origin');
     try {
-      const url=new URL(req.url,'http://localhost');const p=url.pathname;
+      const url=new URL(req.url,'http://localhost');
+      if(publicBase && url.pathname===publicBase){res.writeHead(308,{Location:publicBase+'/'+url.search});return res.end();}
+      if(publicBase && !url.pathname.startsWith(publicBase+'/'))throw fail('NOT_FOUND',404);
+      const p=url.pathname.slice(publicBase.length);
       if(req.method!=='GET' && req.headers.origin && req.headers.origin!==(env.PUBLIC_ORIGIN||'http://localhost:5173') && req.headers.origin!==`http://${req.headers.host}`) throw fail('ORIGIN_DENIED',403);
       if(req.method!=='GET') {const key=req.socket.remoteAddress;const now=Date.now();for(const [k,v]of rates)if(v.until<now)rates.delete(k);const rate=rates.get(key)||{count:0,until:now+60000};rate.count++;rates.set(key,rate);if(rate.count>40)throw fail('RATE_LIMITED',429);}
       if(p==='/api/health'&&req.method==='GET')return json(res,200,{status:'ok',auth:auth.configured,ai:env.DEMO_REPLAY_FILE?'recorded-replay':env.INFERENCE_BASE_URL&&env.INFERENCE_MODEL?'configured-not-verified':'editorial-extracts',identity:'concept',videoCount:store.listDossiers().reduce((n,d)=>n+store.listEvidence(d.id).filter(e=>e.kind==='video').length,0)});
@@ -36,6 +41,8 @@ export function createServer({store=createStore(path.join(root,'data/pilot.sqlit
       if(p==='/api/parliament/draft'&&req.method==='POST'){const b=await body(req);if(typeof b.topic!=='string'||!b.topic.trim()||b.topic.length>1500||!languages.includes(b.language||'en'))throw fail('INVALID_REQUEST');const person=par().person(b.personId);if(!person)throw fail('NOT_FOUND',404);try{return json(res,200,await draftMessage(person,b,env,fetchImpl));}catch{throw fail('DRAFT_MODEL_UNAVAILABLE',502);}}
       if(p.startsWith('/api/parliament/business/')&&req.method==='GET'){const d=par().business(p.split('/').pop());if(!d)throw fail('NOT_FOUND',404);return json(res,200,d);}
       if(p.startsWith('/api/parliament/person/')&&req.method==='GET'){const d=par().person(p.split('/').pop());if(!d)throw fail('NOT_FOUND',404);return json(res,200,d);}
+      if(p==='/api/parliament/read'&&req.method==='GET')return json(res,200,par().readDebate(Object.fromEntries(url.searchParams)));
+      if(p==='/api/parliament/context'&&req.method==='GET'){const context=par().passageContext(url.searchParams.get('id')||'');if(!context)throw fail('NOT_FOUND',404);return json(res,200,context);}
       if(p==='/api/parliament/search'&&req.method==='GET')return json(res,200,par().search((url.searchParams.get('q')||'').slice(0,500),{businessId:url.searchParams.get('business'),personId:url.searchParams.get('person'),limit:20}));
       if(p==='/api/parliament/video-search'&&req.method==='POST'){const b=await body(req);if(typeof b.query!=='string'||!b.query.trim()||b.query.length>500||!['spoken','visual'].includes(b.mode))throw fail('INVALID_REQUEST');for(const k of ['personId','businessId'])if(b[k]!==undefined&&(typeof b[k]!=='string'||!/^\d+$/.test(b[k])))throw fail('INVALID_SCOPE');try{return json(res,200,await searchVideo({root:path.join(root,'data/parliament'),store:par(),query:b.query,mode:b.mode,personId:b.personId,businessId:b.businessId,env,fetchImpl}));}catch{throw fail('VIDEO_SEARCH_UNAVAILABLE',502);}}
       if(p==='/api/parliament/translate'&&req.method==='POST'){const b=await body(req);if(typeof b.evidenceId!=='string'||!languages.includes(b.language))throw fail('INVALID_REQUEST');const passage=par().get('speech',b.evidenceId);if(!passage)throw fail('NOT_FOUND',404);try{return json(res,200,await translatePassage(passage,b.language,env,fetchImpl));}catch(e){throw fail(e.status===429?'TRANSLATOR_BUSY':'TRANSLATION_UNAVAILABLE',e.status===429?429:502);}}
@@ -52,9 +59,9 @@ export function createServer({store=createStore(path.join(root,'data/pilot.sqlit
       if(['/api/auth/login','/api/auth/signup'].includes(p)&&req.method==='POST') {
         const b=await body(req);if(typeof b.email!=='string'||!b.email.includes('@')||b.email.length>254||typeof b.password!=='string'||b.password.length<8||b.password.length>256)throw fail('INVALID_CREDENTIALS');
         if(p.endsWith('signup'))return json(res,200,await auth.signup(b.email,b.password));
-        const result=await auth.login(b.email,b.password);return json(res,200,result.user,{'Set-Cookie':`pilot_session=${result.sid}; HttpOnly; SameSite=Lax; Path=/; Max-Age=${result.expires}${env.PUBLIC_ORIGIN?.startsWith('https:')?'; Secure':''}`});
+        const result=await auth.login(b.email,b.password);return json(res,200,result.user,{'Set-Cookie':`pilot_session=${result.sid}; HttpOnly; SameSite=Lax; Path=${publicBase||'/'}; Max-Age=${result.expires}${env.PUBLIC_ORIGIN?.startsWith('https:')?'; Secure':''}`});
       }
-      if(p==='/api/auth/logout'&&req.method==='POST'){auth.logout(req.headers.cookie);return json(res,200,{status:'signed-out'},{'Set-Cookie':'pilot_session=; HttpOnly; SameSite=Lax; Path=/; Max-Age=0'});}
+      if(p==='/api/auth/logout'&&req.method==='POST'){auth.logout(req.headers.cookie);return json(res,200,{status:'signed-out'},{'Set-Cookie':`pilot_session=; HttpOnly; SameSite=Lax; Path=${publicBase||'/'}; Max-Age=0`});}
       if(p==='/api/me'&&req.method==='GET')return json(res,200,await auth.user(req.headers.cookie));
       if(p==='/api/me/saved'){
         const user=await auth.user(req.headers.cookie);
@@ -67,7 +74,7 @@ export function createServer({store=createStore(path.join(root,'data/pilot.sqlit
       const rel=p.startsWith('/media/')?p.slice(7):p.slice(1);
       let file=path.resolve(base,decodeURIComponent(rel||'index.html'));if(file!==base&&!file.startsWith(base+path.sep))throw fail('NOT_FOUND',404);
       try {if(!(await stat(file)).isFile())throw new Error();}catch{if(p.startsWith('/media/'))throw fail('NOT_FOUND',404);file=path.join(base,'index.html');}
-      const types={'.html':'text/html; charset=utf-8','.js':'text/javascript','.css':'text/css','.png':'image/png','.woff2':'font/woff2','.mp4':'video/mp4','.vtt':'text/vtt','.json':'application/json'};
+      const types={'.html':'text/html; charset=utf-8','.js':'text/javascript','.css':'text/css','.svg':'image/svg+xml','.jpg':'image/jpeg','.jpeg':'image/jpeg','.webp':'image/webp','.png':'image/png','.woff2':'font/woff2','.mp4':'video/mp4','.vtt':'text/vtt','.json':'application/json'};
       const data=await readFile(file);const range=req.headers.range?.match(/^bytes=(\d+)-(\d*)$/);const headers={'Content-Type':types[path.extname(file)]||'application/octet-stream','Accept-Ranges':'bytes'};
       if(range){const start=Number(range[1]);const end=Math.min(range[2]?Number(range[2]):data.length-1,data.length-1);if(start>end||start>=data.length) {res.writeHead(416,{'Content-Range':`bytes */${data.length}`});return res.end();}res.writeHead(206,{...headers,'Content-Range':`bytes ${start}-${end}/${data.length}`,'Content-Length':end-start+1});return res.end(data.subarray(start,end+1));}
       res.writeHead(200,headers);res.end(data);

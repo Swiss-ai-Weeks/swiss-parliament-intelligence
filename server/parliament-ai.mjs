@@ -13,14 +13,16 @@ export async function multilingualQueries(question,env,fetchImpl=fetch){
 }
 export async function answerParliament(store,input,env,fetchImpl=fetch){
  const profileAnswer=await answerProfile(store,input,env,fetchImpl);if(profileAnswer)return profileAnswer;
+ const focus=input.passageId?store.get?.('speech',input.passageId):null;
+ if(input.passageId&&(!focus||(input.personId&&focus.personId!==input.personId)||(input.businessId&&focus.businessId!==input.businessId&&!focus.businessIds?.includes(input.businessId))))return {status:'insufficient-evidence',claims:[],passages:[]};
  const started=performance.now(),scope={businessId:input.businessId,personId:input.personId,limit:4};
  const collection=store.speeches?.().filter(s=>(!input.businessId||s.businessId===input.businessId)&&(!input.personId||s.personId===input.personId));
- const key=JSON.stringify([input.question,input.language,input.businessId,input.personId,env.INFERENCE_MODEL,env.DEMO_REPLAY_FILE,collection?.map(s=>s.sha256)]);
+ const key=JSON.stringify([input.question,input.language,input.businessId,input.personId,input.passageId,env.INFERENCE_MODEL,env.DEMO_REPLAY_FILE,collection?.map(s=>s.sha256)]);
  const prior=answerCache.get(key);if(prior&&Date.now()-prior.at<600000)return {...prior.answer,cacheHit:true,latencyMs:Math.round(performance.now()-started)};
  let passages=store.search(input.question,scope).filter(s=>s.text.length<7000),retrieval={method:'lexical',translatedQueries:[]};
  if(!env.INFERENCE_BASE_URL&&!env.DEMO_REPLAY_FILE)return {status:'provider-unavailable',claims:[],passages};
  if(collection?.length===0)return {status:'insufficient-evidence',claims:[],passages:[],coverage:'No speech evidence imported for this selection.'};
- const overview=overviewEvidence(input,collection);if(overview){passages=overview;retrieval={method:'selected-record-overview',translatedQueries:[]};}
+ const overview=focus?[focus]:overviewEvidence(input,collection);if(overview){passages=overview;retrieval={method:focus?'selected-passage':'selected-record-overview',translatedQueries:[]};}
  if(!overview&&env.INFERENCE_BASE_URL&&!env.DEMO_REPLAY_FILE){try{const q=await multilingualQueries(input.question,env,fetchImpl);retrieval={method:'multilingual-query-expansion',translatedQueries:q.queries,queryCacheHit:q.cached};const score=new Map();for(const list of [passages,...q.queries.map(t=>store.search(t,scope))])for(const [i,s]of list.entries()){if(s.text.length>=7000)continue;const prior=score.get(s.id);score.set(s.id,{passage:s,score:(prior?.score||0)+1/(10+i)});}passages=[...score.values()].sort((a,b)=>b.score-a.score).slice(0,3).map(x=>x.passage);}catch{retrieval.warning='Query translation unavailable; using original-language search.';}}
  passages=passages.slice(0,3);const evidence=passages.map(speechEvidence);const d={id:'parliament-'+(input.businessId||'collection'),title:{en:'Imported Swiss parliamentary speeches'},evidence};
  const answer=await research(d,{question:input.question,language:input.language||'en'},env,fetchImpl,evidence);

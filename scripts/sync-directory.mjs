@@ -1,6 +1,7 @@
 import {createHash} from 'node:crypto';
 import {mkdirSync,writeFileSync} from 'node:fs';
 import {openParliament,officialDate} from '../server/parliament.mjs';
+import {officialPortrait} from '../server/official-portrait.mjs';
 // Lightweight official identity import; detailed votes/contacts remain a separate sync.
 const store=openParliament(),at=new Date().toISOString(),wanted=new Set(store.people().map(p=>p.id));
 const hash=s=>createHash('sha256').update(s).digest('hex');
@@ -20,10 +21,11 @@ try{
   const active=members.filter(r=>r.Active),candidates=active.length?active:members;if(candidates.length!==1)continue;
   const r=candidates[0],sourceUrl=r.__metadata?.uri;if(!sourceUrl?.startsWith('https://ws.parlament.ch/'))continue;
   const previous=store.get('person',id)||{};
-  const portrait='https://www.parlament.ch/sitecollectionimages/profil/original/'+id+'.jpg';let portraitUrl=previous.portraitUrl||null;
-  try{const image=await fetch(portrait,{method:'HEAD',signal:AbortSignal.timeout(5000)});if(image.ok&&image.headers.get('content-type')?.startsWith('image/'))portraitUrl=portrait;}catch{}
+  let image=previous.portraitIdentityVerified?{portraitUrl:previous.portraitUrl,portraitSourceUrl:previous.portraitSourceUrl,portraitIdentityVerified:true}:{portraitUrl:null,portraitIdentityVerified:false};
+  try{image=await officialPortrait(id);}catch{}
+  const portraitUrl=image.portraitUrl;
   const payload={...previous,id,name:[r.FirstName,r.LastName].join(' '),active:r.Active,canton:r.CantonAbbreviation,council:r.CouncilName,group:r.ParlGroupName,party:r.PartyName,partyId:String(r.Party),joined:officialDate(r.DateJoining),elected:officialDate(r.DateElection),left:officialDate(r.DateLeaving),portraitUrl,portraitSourceUrl:portraitUrl,profileCoverage:previous.profileCoverage==='enriched-official-profile'?previous.profileCoverage:'official-directory'};
-  delete payload.sha256;delete payload.retrievedAt;delete payload.sourceUrl;
+  Object.assign(payload,image);delete payload.sha256;delete payload.retrievedAt;delete payload.sourceUrl;
   const text=JSON.stringify(payload),sha=hash(text);
   store.db.exec('BEGIN');try{store.db.prepare('INSERT OR IGNORE INTO revisions VALUES(?,?,?,?,?)').run('person',id,sha,text,at);store.db.prepare('INSERT OR REPLACE INTO records VALUES(?,?,?,?,?,?)').run('person',id,text,sourceUrl,at,sha);store.db.exec('COMMIT');}catch(e){store.db.exec('ROLLBACK');throw e;}
   updated++;if(portraitUrl)portraits++;if(updated%25===0)console.log(JSON.stringify({updated,portraits}));

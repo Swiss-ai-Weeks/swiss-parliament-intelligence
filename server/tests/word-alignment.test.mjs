@@ -12,3 +12,10 @@ test('alignment needs unique start and end anchors and valid media bounds',()=>{
 test('matching outer anchors cannot validate unrelated middle content',()=>{
  const altered=words.map((w,i)=>i>4&&i<10?{...w,word:'inconnu'}:w);assert.equal(alignParagraph(text,altered,20),null);
 });
+test('one edited boundary word still requires strong unique interior alignment',()=>{
+ const original='Die Vorlage ist primär eine Digitalisierung für unsere Bevölkerung mit klaren Regeln für Datenschutz und einer gemeinsamen sicheren Datenplattform der Verwaltung';
+ const sequence=tokens(original).map((word,i)=>({word:i===0?'diese':word,start:i,end:i+.5}));
+ assert.equal(alignEditedParagraph(original,sequence,30)?.start,0);
+ assert.equal(alignEditedParagraph(original,[...sequence,...sequence.map(w=>({...w,start:w.start+30,end:w.end+30}))],60),null);
+ assert.equal(alignEditedParagraph(original,sequence.map((w,i)=>i>6&&i<17?{...w,word:'unrelated'}:w),30),null);
+});
