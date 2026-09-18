@@ -4,6 +4,8 @@ Turn hours of multilingual parliamentary video into evidence people can **find, 
 
 This project is being developed for the HPE–NVIDIA Agentic AI Hackathon during Swiss {ai} Weeks.
 
+**Direction update — 14 September 2026:** the next product cycle prioritizes a simple citizen journey, federal popular votes first, and an optional non-binding consultation. Read the [research and product specification](docs/README.md). The audience ordering and desktop prototype described below reflect the earlier exploration; the new documents distinguish proposed capabilities from implemented ones.
+
 ## Frontend prototype
 
 The interactive desktop-first prototype lives in [`frontend/`](frontend/). It demonstrates the citizen-friendly Ask experience, source-linked citations, video controls, language and mode states, and the speaker list attached to each debate source.

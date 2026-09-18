@@ -1,0 +1,58 @@
+import React,{useEffect,useRef,useState} from 'react';
+import {ArrowUpRight,ArrowUp,ArrowsOutSimple,ArrowsInSimple,X,BookOpen,ClockCounterClockwise,Plus,Trash} from '@phosphor-icons/react';
+import {pilotApi as api} from '../services/pilotApi.js';
+import {newConversation,loadConversations,saveConversations,appendMessage} from './chat-history.mjs';
+import CitationInspector from './CitationInspector.jsx';
+import './cleisthenes.css';
+
+export default function Cleisthenes({language,expanded,onExpand,onCollapse,context,openRequest}){
+ const fr=language==='fr',t=(en,frText)=>fr?frText:en;
+ const [chats,setChats]=useState(()=>{const saved=loadConversations(localStorage);return saved.length?saved:[newConversation()];});
+ const [activeId,setActiveId]=useState(()=>{try{return localStorage.getItem('swiss-pilot-active-chat')||chats[0].id;}catch{return chats[0].id;}}),[open,setOpen]=useState(false),[question,setQuestion]=useState(''),[pending,setPending]=useState(null),[historyOpen,setHistoryOpen]=useState(false),[source,setSource]=useState(null),[storageOk,setStorageOk]=useState(true),[action,setAction]=useState('explain');
+ const input=useRef(null),bottom=useRef(null),launcher=useRef(null),sending=useRef(false);
+ const chat=chats.find(c=>c.id===activeId)||chats[0],messages=chat?.messages||[],scope=chat?.scope,busy=pending===chat?.id;
+ useEffect(()=>{setStorageOk(saveConversations(localStorage,chats));},[chats]);
+ useEffect(()=>{try{localStorage.setItem('swiss-pilot-active-chat',chat.id);}catch{setStorageOk(false);}},[chat?.id]);
+ // Navigation and language changes must not clear an existing conversation.
+ useEffect(()=>{if(!openRequest)return;setOpen(true);setHistoryOpen(false);setQuestion(openRequest.prompt||'');setAction(openRequest.action||'explain');
+  const same=chat?.scope?.id===context?.id&&chat?.scope?.kind===context?.kind&&chat?.scope?.passageId===context?.passageId;
+  if(!same){const next=newConversation(context||null);setChats(c=>[next,...c].slice(0,20));setActiveId(next.id);}
+  requestAnimationFrame(()=>input.current?.focus());
+ },[openRequest]);
+ useEffect(()=>{if(open||expanded)input.current?.focus();},[open,expanded]);
+ useEffect(()=>{bottom.current?.scrollIntoView({block:'nearest',behavior:'smooth'});},[messages.length,busy]);
+ function start(scopeOverride=context){const next=newConversation(scopeOverride||null);setChats(c=>[next,...c].slice(0,20));setActiveId(next.id);setQuestion('');setSource(null);setHistoryOpen(false);setAction('explain');setOpen(true);requestAnimationFrame(()=>input.current?.focus());}
+ function remove(id){setChats(c=>{const rest=c.filter(row=>row.id!==id);return rest.length?rest:[newConversation()];});if(chat.id===id){setActiveId(chats.find(c=>c.id!==id)?.id||null);setQuestion('');}}
+ async function send(e,prompt,requestedAction=action,scopeOverride){
+  e?.preventDefault();const q=(prompt||question).trim();if(!q||sending.current)return;
+  const id=chat.id,selectedScope=scopeOverride===undefined?scope:scopeOverride;
+  const previous=messages.filter(m=>m.role==='assistant').at(-1);
+  const conversation=previous?.scopeId===(selectedScope?.id||null)?previous?.answer?.context:undefined;
+  sending.current=true;setPending(id);setQuestion('');setHistoryOpen(false);setChats(c=>appendMessage(c,id,{role:'user',text:q}));
+  try{
+   const answer=selectedScope?.kind==='dossier'?await api.ask({dossierId:selectedScope.id,question:q,language,action:requestedAction}):await api.parliamentAsk({question:q,language,context:conversation,...(selectedScope?{[selectedScope.kind==='person'?'personId':'businessId']:selectedScope.id,...(selectedScope.passageId?{passageId:selectedScope.passageId}:{})}:{})});
+   if(selectedScope?.kind==='dossier'){const d=await api.dossier(selectedScope.id);answer.passages=d.evidence.map(e=>({id:e.id,evidenceId:e.id,speaker:e.attribution,text:e.text,language:e.language,sourceKind:e.sourceKind,officialUrl:e.source.url,date:d.date,...(e.kind==='video'?{video:{url:e.mediaUrl||e.videoUrl,start:e.start||0,end:e.end}}:{})}));}
+   setChats(c=>appendMessage(c,id,{role:'assistant',answer,scopeId:selectedScope?.id||null}));
+  }catch{setChats(c=>appendMessage(c,id,{role:'assistant',retry:q,retryAction:requestedAction,retryScope:selectedScope,error:t('I couldn’t reach the model. Your question is ready to retry.','Je n’ai pas pu joindre le modèle. Vous pouvez réessayer.')}));}
+  finally{sending.current=false;setPending(null);setAction('explain');}
+ }
+ function close(){setOpen(false);if(expanded)onCollapse();requestAnimationFrame(()=>launcher.current?.focus());}
+ function followUp({prompt,scope:nextScope}){setSource(null);setChats(c=>c.map(row=>row.id===chat.id?{...row,scope:nextScope}:row));setQuestion(prompt);setHistoryOpen(false);requestAnimationFrame(()=>input.current?.focus());}
+ const suggestions=scope?.kind==='dossier'?[[t('Compare arguments','Comparer les arguments'),t('What are the arguments for and against?','Quels sont les arguments pour et contre ?')],[t('Vote result','Résultat du vote'),t('What was the result of the vote?','Quel a été le résultat de la votation ?')]]:[[t('Data protection','Protection des données'),t('What does Parliament say about data protection?','Que dit le débat sur la protection des données ?')],[t('Cybercrime','Cybercriminalité'),t('What was discussed about cybercrime?','Comment lutter contre la cybercriminalité ?')]];
+ return <>
+ {!(open||expanded)&&<button ref={launcher} className="cleisthenes-launcher" onClick={()=>setOpen(true)} aria-label={t('Chat with Cleisthenes','Discuter avec Cleisthenes')} aria-expanded={false}><img src={import.meta.env.BASE_URL+'brand/cleisthenes-bust.png'} alt=""/><span>Cleisthenes<small>{t('Let’s understand together','Comprenons ensemble')}</small></span><span className="cleisthenes-dot"/></button>}
+ {(open||expanded)&&<section className={`cleisthenes-chat ${expanded?'expanded':''}`} role={expanded?'region':'dialog'} aria-label="Cleisthenes" onKeyDown={e=>{if(e.key==='Escape')close();}}>
+ <header><img src={import.meta.env.BASE_URL+'brand/cleisthenes-bust.png'} alt=""/><div><strong>Cleisthenes</strong><small>{t('Your Swiss civic companion','Votre compagnon civique suisse')}</small></div><button aria-label={t('Recent chats','Discussions récentes')} title={t('Recent chats','Discussions récentes')} aria-pressed={historyOpen} onClick={()=>setHistoryOpen(v=>!v)}><ClockCounterClockwise/></button><button aria-label={t('New chat','Nouvelle discussion')} title={t('New chat','Nouvelle discussion')} onClick={()=>start()}><Plus/></button><button aria-label={expanded?t('Compact chat','Réduire'):t('Expand chat','Agrandir')} onClick={()=>{setOpen(true);expanded?onCollapse():onExpand();}}>{expanded?<ArrowsInSimple/>:<ArrowsOutSimple/>}</button><button aria-label={t('Close chat','Fermer')} onClick={close}><X/></button></header>
+ {scope&&<div className="cleisthenes-scope"><BookOpen size={14}/><span>{scope.title}{scope.passageId?t(' · selected passage',' · extrait sélectionné'):''}</span><button onClick={()=>start(null)}>{t('New topic','Autre sujet')}</button></div>}
+ {historyOpen?<div className="cleisthenes-history"><h2>{t('Recent chats','Discussions récentes')}</h2><p>{t('Saved on this device · up to 20 chats.','Enregistrées sur cet appareil · jusqu’à 20 discussions.')}</p>{chats.filter(c=>c.messages.length).map(c=><div key={c.id}><button onClick={()=>{setActiveId(c.id);setQuestion('');setHistoryOpen(false);}} aria-current={c.id===chat.id?'true':undefined}><strong>{c.messages.find(m=>m.role==='user')?.text||t('Conversation','Discussion')}</strong><small>{new Date(c.updatedAt).toLocaleDateString(fr?'fr-CH':'en-GB')} · {c.messages.filter(m=>m.role==='user').length} {t('questions','questions')}</small></button><button disabled={pending===c.id} onClick={()=>remove(c.id)} aria-label={t('Delete chat: ','Supprimer la discussion : ')+(c.messages.find(m=>m.role==='user')?.text||'')}><Trash/></button></div>)}{!chats.some(c=>c.messages.length)&&<p>{t('Your conversations will appear here.','Vos discussions apparaîtront ici.')}</p>}<button className="chat-return" onClick={()=>setHistoryOpen(false)}>{t('Back to conversation','Retour à la conversation')}</button></div>:<div className="cleisthenes-messages" aria-live="polite">
+ {!messages.length&&<div className="cleisthenes-welcome"><img src={import.meta.env.BASE_URL+'brand/cleisthenes-bust.png'} alt=""/><h2>{t('What’s on your mind?','Qu’aimeriez-vous comprendre ?')}</h2><p>{t('A question about Swiss politics. A source to explore.','Une question sur la politique suisse. Une source à explorer.')}</p><div className="cleisthenes-suggestions">{suggestions.map(([label,prompt])=><button key={label} title={prompt} onClick={()=>{setQuestion(prompt);input.current?.focus();}}>{label}<ArrowUpRight size={14}/></button>)}</div></div>}
+ {messages.map((m,i)=><article key={i} className={'cleisthenes-message '+m.role}>{m.role==='user'?<p>{m.text}</p>:m.error?<div role="alert"><p>{m.error}</p><button disabled={!!pending} onClick={()=>send(null,m.retry,m.retryAction,m.retryScope)}>{t('Try again','Réessayer')}</button></div>:<>
+ {m.answer.mode==='recorded-replay'&&<small>{t('Recorded demo','Démo enregistrée')}</small>}
+ {m.answer.claims?.length?m.answer.claims.slice(0,3).map((c,j)=>{const s=m.answer.passages?.find(p=>p.evidenceId===c.evidenceId||'parl-'+p.id===c.evidenceId);return <div className="cleisthenes-point" key={j}><p>{c.text}</p>{s&&<button className="chat-citation" onClick={()=>setSource({source:s,quote:c.quote})}><BookOpen size={14}/><span>{s.speaker||t('Source','Source')}<small>{s.date?.slice(0,10)}{s.video?.url?t(' · video extract',' · extrait vidéo'):t(' · read context',' · lire le contexte')}</small></span><ArrowUpRight size={14}/></button>}</div>;}):<p>{m.answer.status==='provider-unavailable'?t('The answer service is unavailable. You can still browse the original texts.','Le service de réponse est indisponible. Les textes originaux restent accessibles.'):t('I don’t have enough imported evidence for this question in this selection. Try a new topic or another source.','Je n’ai pas assez de sources importées pour cette question. Essayez un autre sujet ou une autre source.')}</p>}
+ </>}</article>)}{busy&&<div className="cleisthenes-thinking" role="status"><span/><span/><span/>{t('Reading the sources…','Lecture des sources…')}</div>}<div ref={bottom}/></div>}
+ {!historyOpen&&<form className="cleisthenes-composer" onSubmit={send}><label className="sr-only" htmlFor="cleisthenes-question">{t('Ask Cleisthenes','Interroger Cleisthenes')}</label><input ref={input} id="cleisthenes-question" value={question} maxLength={500} onChange={e=>setQuestion(e.target.value)} placeholder={t('What would you like to understand?','Que souhaitez-vous comprendre ?')}/><button disabled={!!pending||!question.trim()} aria-label={t('Send question','Envoyer la question')}><ArrowUp/></button></form>}
+ <footer>{storageOk?t('AI can be wrong. Check the sources. Chats stay on this device.','L’IA peut se tromper. Vérifiez les sources. Discussions sur cet appareil.'):t('Device storage unavailable; this chat will not survive a reload.','Stockage indisponible ; cette discussion sera perdue au rechargement.')}</footer>
+ </section>}
+ {source&&<CitationInspector {...source} language={language} onClose={()=>setSource(null)} onFollowUp={followUp}/>}
+ </>;
+}

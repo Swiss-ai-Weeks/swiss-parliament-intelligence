@@ -1,0 +1,33 @@
+services:
+  rtvi-embed:
+    image: nvcr.io/nvidia/vss-core/vss-rt-embed:3.2.1
+    container_name: swiss-pilot-rtvi-embed
+    user: '1001:1001'
+    ports: ['127.0.0.1:8017:8000']
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              device_ids: ['1']
+              capabilities: [gpu]
+    environment:
+      MODEL_PATH: git:https://huggingface.co/nvidia/Cosmos-Embed1-448p
+      MODEL_IMPLEMENTATION_PATH: /opt/nvidia/rtvi/rtvi/models/custom/samples/cosmos-embed1
+      MODEL_REPOSITORY_SCRIPT_PATH: /opt/nvidia/rtvi/rtvi/models/custom/samples/cosmos-embed1/create_triton_model_repo.py
+      KAFKA_ENABLED: 'false'
+      ENABLE_OTEL_MONITORING: 'false'
+      NUM_GPUS: '1'
+      NUM_VLM_PROCS: '1'
+      NVIDIA_VISIBLE_DEVICES: 'all'
+    volumes:
+      - pilot-rtvi-hf:/tmp/huggingface
+      - pilot-rtvi-repo:/tmp/triton_model_repo
+      - pilot-rtvi-ngc:/opt/nvidia/rtvi/.rtvi/ngc_model_cache
+    shm_size: 8gb
+    extra_hosts:
+      - host.docker.internal:host-gateway
+volumes:
+  pilot-rtvi-hf:
+  pilot-rtvi-repo:
+  pilot-rtvi-ngc:

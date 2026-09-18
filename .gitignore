@@ -1,3 +1,8 @@
 frontend/node_modules/
 frontend/dist/
-
+data/
+.env
+deploy/switzerland/pilot.env
+deploy/switzerland/public-data/
+!*.env.example
+artifacts/

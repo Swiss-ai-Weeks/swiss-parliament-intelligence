@@ -1,0 +1,4 @@
+import {writeFileSync} from 'node:fs';import {openParliament} from '../server/parliament.mjs';import {translatePassage} from '../server/translation.mjs';
+const store=openParliament(),results=[];
+for(const [id,target]of [['374406-0','en'],['374407-0','en'],['374574-0','fr'],['374574-1','en']]){const p=store.get('speech',id);try{const response=await translatePassage(p,target,process.env);results.push({id,source:p.text,response});console.log(JSON.stringify({id,target,text:response.text,ms:response.latencyMs,warnings:response.warnings,status:response.status}));}catch(e){results.push({id,error:e.message});console.error(id,e.message);}}
+writeFileSync('artifacts/riva-translation-evaluation.json',JSON.stringify({at:new Date().toISOString(),results},null,2));store.close();if(results.some(r=>r.error||r.response?.status!=='ok'))process.exitCode=1;
