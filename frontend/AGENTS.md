@@ -92,3 +92,6 @@ Keep the desktop logo, centered exploration links and Get started action in thre
 
 ### Passwordless clarification — 19 September 2026
 The user meant email magic links when requesting SSO. Remove organization SSO from account entry; default the landing dialog to passwordless email and retain password access for existing users. Use branded midnight.vote authentication emails. Apple remains disabled until a Developer membership exists. Google and Discord must reflect actual provider activation, not adapter availability.
+
+### Personal account dashboard — 19 September 2026
+Use preferred first names for greetings and account controls. Saved research belongs in Home and account settings, not the main navbar. Settings has Profile, Appearance, Security, Privacy and Advanced sections, with warm Greek–Swiss styling, readable type and generous space. Avatar edits require explicit Save. Security controls must use real provider state: TOTP is enabled only after code verification, with protected account APIs and restrictive database assurance policy. Do not invent backup codes or final legal/operator details. Apple stays disabled without membership; organization SSO is out of scope.

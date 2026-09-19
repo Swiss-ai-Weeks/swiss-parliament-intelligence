@@ -13,6 +13,7 @@ export function createPilotApi({baseUrl=publicBase+'api',fetchImpl=fetch}={}) {
     return prefixMedia(data);
   }
   return {
+    security:()=>request('/me/security'),profile:p=>request('/me/profile','POST',p),enrollMfa:()=>request('/auth/mfa/enroll','POST',{}),verifyMfa:p=>request('/auth/mfa/verify','POST',p),removeMfa:id=>request('/auth/mfa/remove','POST',{id}),logoutAll:()=>request('/auth/logout-all','POST',{}),
     feedbackChallenge:()=>request('/feedback/challenge'),feedback:p=>request('/feedback','POST',p),
     discoverySearch:p=>request('/discovery/search','POST',p),
     broadcast:()=>request('/broadcast'),
