@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+  <body style="margin:0;background:#f3eddf;color:#252823;font-family:Arial,sans-serif">
+    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#f3eddf;padding:32px 16px">
+      <tr>
+        <td align="center">
+          <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:560px;background:#fffaf0;border:1px solid #d9cbb4;border-radius:18px">
+            <tr><td style="padding:34px 34px 12px;font-family:Georgia,serif;font-size:24px">midnight.vote</td></tr>
+            <tr>
+              <td style="padding:12px 34px 36px">
+                <p style="margin:0 0 16px;font-size:16px;line-height:1.6">{{ if .Data.display_name }}Hello {{ .Data.display_name }},{{ else }}Hello,{{ end }}</p>
+                <h1 style="margin:0 0 14px;font-family:Georgia,serif;font-size:32px;font-weight:400;line-height:1.2">Confirm your account</h1>
+                <p style="margin:0 0 24px;font-size:16px;line-height:1.6">Confirm this email address to save sources, follow topics and continue your Cleisthenes conversations.</p>
+                <p style="margin:0 0 28px"><a href="{{ .ConfirmationURL }}" style="display:inline-block;background:#2c4438;color:#fffaf0;text-decoration:none;border-radius:10px;padding:14px 20px;font-weight:700">Confirm email address</a></p>
+                <p style="margin:0 0 10px;font-size:13px;line-height:1.6;color:#616555">This link expires shortly and should be opened in the same browser where you created the account.</p>
+                <p style="margin:0;font-size:12px;line-height:1.6;color:#787b73">If you did not create a midnight.vote account, you can ignore this email.</p>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>
