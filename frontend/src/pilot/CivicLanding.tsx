@@ -190,8 +190,9 @@ export default function CivicLanding({onNavigate,user,onUser,language='en',reduc
           <a href="#features" onClick={() => selectChapter("understand")}>
             Sources
           </a>
-          <a href="#site-footer">About</a><button className="landing-enter" onClick={getStarted}>Get started <ArrowRight/></button>
+          <a href="#site-footer">About</a>
         </nav>
+        <button className="landing-enter" onClick={getStarted}>Get started <ArrowRight/></button>
       </header>
 
       <section

@@ -86,3 +86,9 @@ Get started opens a clean Greek–Swiss account dialog while preserving the land
 
 ### Account and Home refinement — 19 September 2026
 Keep account entry concise: one heading, email sign-up first, then the existing-account link, then social and organization methods. Collect a display name for a personalized Home welcome and confirmation email. A successful sign-up replaces the form with a dedicated full-dialog inbox state, including a path to sign in after verification. Production confirmation and recovery links must return to `https://midnight.vote/Switzerland/api/auth/callback`; never ship a localhost Site URL. Home begins with `Welcome, [Name]`, removes the former civic-workspace eyebrow and descriptive slogan, and provides a direct Cleisthenes composer. In Parliament may show a compact chamber preview only from the verified official seating snapshot. Calendar day selection opens an adjacent detail popover and must not filter or replace the In Parliament list. Use previous/next arrows for month navigation and a custom month chooser from the centered month label rather than the native month control.
+
+### Landing navigation alignment — 19 September 2026
+Keep the desktop logo, centered exploration links and Get started action in three aligned columns. Navigation links use readable UI text and generous click targets. Preserve the existing artwork, scroll behavior and mobile logo/CTA layout.
+
+### Passwordless clarification — 19 September 2026
+The user meant email magic links when requesting SSO. Remove organization SSO from account entry; default the landing dialog to passwordless email and retain password access for existing users. Use branded midnight.vote authentication emails. Apple remains disabled until a Developer membership exists. Google and Discord must reflect actual provider activation, not adapter availability.

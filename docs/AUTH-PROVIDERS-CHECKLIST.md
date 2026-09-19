@@ -1,6 +1,14 @@
 # Sign-in activation: what I need from you
 
-Email accounts already work. Google, Apple, Discord and organization SSO are implemented but disabled until their real provider connections exist. Start with Google, then Discord; Apple and institutional SSO can follow.
+Status on 19 September 2026: Google is enabled and a production sign-in reached the correct account. Google remains in Testing with the owner's email explicitly allowed; public consent branding/release is pending. Passwordless email is deployed, Titan SMTP is configured, and a production magic-link request succeeded. Inbox delivery was confirmed by the owner, but the first link returned otp_expired. The revised confirmation flow has been sent for a fresh end-to-end test. Discord is not enabled: the prepared new application awaits the owner's acceptance of Discord's developer agreement. Apple remains disabled without an Apple Developer membership. Organization SSO was removed from the account UI: the user meant passwordless email, not enterprise SAML.
+
+## Passwordless email release
+
+Landing and in-app account entry default to email magic links; password access remains available. The API stores the PKCE verifier server-side, uses an HttpOnly flow cookie, and exchanges the callback once. New email users can create an account through the same flow. Request the link and open it in the same browser; never copy private links into chat or logs.
+
+Supabase Site URL is `https://midnight.vote/Switzerland/`, with the exact production callback allowlisted. Titan SMTP uses `smtp.titan.email:465`, mailbox/sender `contact@midnight.vote`, and sender name `midnight.vote`. The owner entered the mailbox password directly in Supabase. The branded Magic link template was saved and its rendered preview checked. Editable template assets are in `deploy/switzerland/supabase-email-templates/`.
+
+Production release archive SHA-256: `b8b6c63f1344f795257c7090b91fe1dd5a9c2862733c08d4f37ab8edb804ebf7`. The navbar and passwordless flow were deployed to `/Switzerland/`, preserving the existing API data volume and the root site. Validation: 71 backend tests, frontend build, four Sites tests, successful live Google callback/logout, and successful live email request. The revised email callback, a fresh email signup, Discord and public Google availability remain acceptance checks.
 
 | Provider | What you need to locate | What I will configure/test |
 |---|---|---|
@@ -35,3 +43,7 @@ Also prepare the public app name, support email, logo and actual privacy-policy 
 My activation gate: provider enabled in discovery; successful callback establishes the correct account; cancellation and expired PKCE fail cleanly; logout clears access; no secrets in browser bundles or logs. No paid subscriptions or new cloud machines are needed for the initial Google setup.
 
 Official setup references: [redirect URLs](https://supabase.com/docs/guides/auth/redirect-urls), [email templates](https://supabase.com/docs/guides/auth/auth-email-templates), [Google](https://supabase.com/docs/guides/auth/social-login/auth-google), [Apple](https://supabase.com/docs/guides/auth/social-login/auth-apple), [Discord](https://supabase.com/docs/guides/auth/social-login/auth-discord).
+
+## Email link recovery follow-up
+
+The first delivered email returned `otp_expired`; the cause is not confirmed. The revised template opens an intermediate confirmation screen before navigating to Supabase verification, reducing accidental consumption by simple email-link prefetching. It preserves the existing PKCE flow and same-browser requirement. The verification URL is held in the fragment, removed from browser history after loading, and accepted only for this Supabase project and the exact application callback. No request consumes the token until the user presses Confirm sign-in. A success screen checks the real account session before saying the user is signed in; expired/failed links offer a fresh request. The owner requested the Cleisthenes portrait and larger email typography; both are now published. Frontend follow-up deployed from `artifacts/auth-email-ui/site`, retaining the previously deployed backend.
