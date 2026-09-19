@@ -1,0 +1,1411 @@
+{
+  "model": "intfloat/multilingual-e5-large",
+  "revision": "3d7cfbdacd47fdda877c5cd8a79fbcc4f2a574f3",
+  "gpu": "NVIDIA H100 NVL",
+  "documents": 12,
+  "chunks": 17,
+  "corpusSha256": "762b408ab2f139982df9281e817b6053638e40b34d37ac8f61fb9f2ed1f3af80",
+  "casesSha256": "45ee9875c08698e6d20917c52859688cd66e3a9095ac10c4645f909ea9637898",
+  "scope": "Agent-authored known-topic seed benchmark; no independent adjudication. BM25 has accent normalization only, no translation/stemming/stopwords. First query includes warm-up. All documents ranked; no tuned cutoff. Six unsupported probes diagnose similarity, NOT calibrated abstention. No production activation.",
+  "summary": {
+    "bm25": {
+      "hitAt1": 0.9167,
+      "hitAt3": 1.0,
+      "reciprocalRank": 0.9514
+    },
+    "dense": {
+      "hitAt1": 1.0,
+      "hitAt3": 1.0,
+      "reciprocalRank": 1.0
+    },
+    "hybrid": {
+      "hitAt1": 1.0,
+      "hitAt3": 1.0,
+      "reciprocalRank": 1.0
+    }
+  },
+  "results": [
+    {
+      "id": "supported-1-en",
+      "language": "en",
+      "question": "What years did the Socialist Party adopt its earlier programmes?",
+      "relevant": [
+        "sp-programme",
+        "sp-programm-de"
+      ],
+      "rankings": {
+        "bm25": {
+          "top3": [
+            "sp-programme"
+          ],
+          "hitAt1": true,
+          "hitAt3": true,
+          "reciprocalRank": 1.0
+        },
+        "dense": {
+          "top3": [
+            "sp-programme",
+            "sp-programm-de",
+            "verts-portrait"
+          ],
+          "hitAt1": true,
+          "hitAt3": true,
+          "reciprocalRank": 1.0
+        },
+        "hybrid": {
+          "top3": [
+            "sp-programme",
+            "sp-programm-de",
+            "verts-portrait"
+          ],
+          "hitAt1": true,
+          "hitAt3": true,
+          "reciprocalRank": 1.0
+        }
+      },
+      "latencyMs": {
+        "bm25": 0.41,
+        "dense": 299.89,
+        "hybridTotal": 300.32
+      },
+      "topDenseScore": 0.8113
+    },
+    {
+      "id": "supported-1-fr",
+      "language": "fr",
+      "question": "En quelles années le PS a-t-il adopté ses anciens programmes ?",
+      "relevant": [
+        "sp-programme",
+        "sp-programm-de"
+      ],
+      "rankings": {
+        "bm25": {
+          "top3": [
+            "sp-programme",
+            "pvl-questions",
+            "centre-valeurs"
+          ],
+          "hitAt1": true,
+          "hitAt3": true,
+          "reciprocalRank": 1.0
+        },
+        "dense": {
+          "top3": [
+            "sp-programme",
+            "sp-programm-de",
+            "verts-portrait"
+          ],
+          "hitAt1": true,
+          "hitAt3": true,
+          "reciprocalRank": 1.0
+        },
+        "hybrid": {
+          "top3": [
+            "sp-programme",
+            "pvl-questions",
+            "verts-portrait"
+          ],
+          "hitAt1": true,
+          "hitAt3": true,
+          "reciprocalRank": 1.0
+        }
+      },
+      "latencyMs": {
+        "bm25": 0.31,
+        "dense": 10.1,
+        "hybridTotal": 10.43
+      },
+      "topDenseScore": 0.8572
+    },
+    {
+      "id": "supported-1-de",
+      "language": "de",
+      "question": "In welchen Jahren verabschiedete die SP ihre früheren Parteiprogramme?",
+      "relevant": [
+        "sp-programme",
+        "sp-programm-de"
+      ],
+      "rankings": {
+        "bm25": {
+          "top3": [
+            "sp-programm-de",
+            "fdp-europa-de",
+            "glp-fragen-de"
+          ],
+          "hitAt1": true,
+          "hitAt3": true,
+          "reciprocalRank": 1.0
+        },
+        "dense": {
+          "top3": [
+            "sp-programm-de",
+            "sp-programme",
+            "gruene-portrait-de"
+          ],
+          "hitAt1": true,
+          "hitAt3": true,
+          "reciprocalRank": 1.0
+        },
+        "hybrid": {
+          "top3": [
+            "sp-programm-de",
+            "glp-fragen-de",
+            "gruene-portrait-de"
+          ],
+          "hitAt1": true,
+          "hitAt3": true,
+          "reciprocalRank": 1.0
+        }
+      },
+      "latencyMs": {
+        "bm25": 0.29,
+        "dense": 9.96,
+        "hybridTotal": 10.26
+      },
+      "topDenseScore": 0.8689
+    },
+    {
+      "id": "supported-1-it",
+      "language": "it",
+      "question": "In quali anni il Partito socialista ha adottato i programmi precedenti?",
+      "relevant": [
+        "sp-programme",
+        "sp-programm-de"
+      ],
+      "rankings": {
+        "bm25": {
+          "top3": [
+            "sp-programme",
+            "sp-programm-de",
+            "pvl-questions"
+          ],
+          "hitAt1": true,
+          "hitAt3": true,
+          "reciprocalRank": 1.0
+        },
+        "dense": {
+          "top3": [
+            "sp-programme",
+            "sp-programm-de",
+            "verts-portrait"
+          ],
+          "hitAt1": true,
+          "hitAt3": true,
+          "reciprocalRank": 1.0
+        },
+        "hybrid": {
+          "top3": [
+            "sp-programme",
+            "sp-programm-de",
+            "pvl-questions"
+          ],
+          "hitAt1": true,
+          "hitAt3": true,
+          "reciprocalRank": 1.0
+        }
+      },
+      "latencyMs": {
+        "bm25": 0.25,
+        "dense": 9.03,
+        "hybridTotal": 9.29
+      },
+      "topDenseScore": 0.8429
+    },
+    {
+      "id": "supported-2-en",
+      "language": "en",
+      "question": "Does the SVP see research as primarily a private-sector task?",
+      "relevant": [
+        "udc-formation",
+        "svp-bildung-de"
+      ],
+      "rankings": {
+        "bm25": {
+          "top3": [
+            "svp-bildung-de",
+            "sp-programme",
+            "pvl-questions"
+          ],
+          "hitAt1": true,
+          "hitAt3": true,
+          "reciprocalRank": 1.0
+        },
+        "dense": {
+          "top3": [
+            "svp-bildung-de",
+            "udc-formation",
+            "pvl-questions"
+          ],
+          "hitAt1": true,
+          "hitAt3": true,
+          "reciprocalRank": 1.0
+        },
+        "hybrid": {
+          "top3": [
+            "svp-bildung-de",
+            "pvl-questions",
+            "udc-formation"
+          ],
+          "hitAt1": true,
+          "hitAt3": true,
+          "reciprocalRank": 1.0
+        }
+      },
+      "latencyMs": {
+        "bm25": 0.22,
+        "dense": 9.5,
+        "hybridTotal": 9.73
+      },
+      "topDenseScore": 0.8161
+    },
+    {
+      "id": "supported-2-fr",
+      "language": "fr",
+      "question": "L’UDC considère-t-elle la recherche comme une tâche du secteur privé ?",
+      "relevant": [
+        "udc-formation",
+        "svp-bildung-de"
+      ],
+      "rankings": {
+        "bm25": {
+          "top3": [
+            "udc-formation",
+            "pvl-questions",
+            "centre-valeurs"
+          ],
+          "hitAt1": true,
+          "hitAt3": true,
+          "reciprocalRank": 1.0
+        },
+        "dense": {
+          "top3": [
+            "udc-formation",
+            "pvl-questions",
+            "svp-bildung-de"
+          ],
+          "hitAt1": true,
+          "hitAt3": true,
+          "reciprocalRank": 1.0
+        },
+        "hybrid": {
+          "top3": [
+            "udc-formation",
+            "pvl-questions",
+            "centre-valeurs"
+          ],
+          "hitAt1": true,
+          "hitAt3": true,
+          "reciprocalRank": 1.0
+        }
+      },
+      "latencyMs": {
+        "bm25": 0.3,
+        "dense": 9.01,
+        "hybridTotal": 9.32
+      },
+      "topDenseScore": 0.8809
+    },
+    {
+      "id": "supported-2-de",
+      "language": "de",
+      "question": "Sieht die SVP Forschung vor allem als Aufgabe der Privatwirtschaft?",
+      "relevant": [
+        "udc-formation",
+        "svp-bildung-de"
+      ],
+      "rankings": {
+        "bm25": {
+          "top3": [
+            "svp-bildung-de",
+            "mitte-werte-de",
+            "fdp-europa-de"
+          ],
+          "hitAt1": true,
+          "hitAt3": true,
+          "reciprocalRank": 1.0
+        },
+        "dense": {
+          "top3": [
+            "svp-bildung-de",
+            "udc-formation",
+            "glp-fragen-de"
+          ],
+          "hitAt1": true,
+          "hitAt3": true,
+          "reciprocalRank": 1.0
+        },
+        "hybrid": {
+          "top3": [
+            "svp-bildung-de",
+            "glp-fragen-de",
+            "fdp-europa-de"
+          ],
+          "hitAt1": true,
+          "hitAt3": true,
+          "reciprocalRank": 1.0
+        }
+      },
+      "latencyMs": {
+        "bm25": 0.24,
+        "dense": 9.49,
+        "hybridTotal": 9.74
+      },
+      "topDenseScore": 0.9001
+    },
+    {
+      "id": "supported-2-it",
+      "language": "it",
+      "question": "Per l’UDC la ricerca è soprattutto un compito dell’economia privata?",
+      "relevant": [
+        "udc-formation",
+        "svp-bildung-de"
+      ],
+      "rankings": {
+        "bm25": {
+          "top3": [
+            "udc-formation",
+            "verts-portrait",
+            "pvl-questions"
+          ],
+          "hitAt1": true,
+          "hitAt3": true,
+          "reciprocalRank": 1.0
+        },
+        "dense": {
+          "top3": [
+            "udc-formation",
+            "svp-bildung-de",
+            "pvl-questions"
+          ],
+          "hitAt1": true,
+          "hitAt3": true,
+          "reciprocalRank": 1.0
+        },
+        "hybrid": {
+          "top3": [
+            "udc-formation",
+            "verts-portrait",
+            "pvl-questions"
+          ],
+          "hitAt1": true,
+          "hitAt3": true,
+          "reciprocalRank": 1.0
+        }
+      },
+      "latencyMs": {
+        "bm25": 0.29,
+        "dense": 9.0,
+        "hybridTotal": 9.3
+      },
+      "topDenseScore": 0.8644
+    },
+    {
+      "id": "supported-3-en",
+      "language": "en",
+      "question": "Does the FDP support EU membership or the bilateral path?",
+      "relevant": [
+        "plr-exterieur",
+        "fdp-europa-de"
+      ],
+      "rankings": {
+        "bm25": {
+          "top3": [
+            "fdp-europa-de",
+            "sp-programme",
+            "verts-portrait"
+          ],
+          "hitAt1": true,
+          "hitAt3": true,
+          "reciprocalRank": 1.0
+        },
+        "dense": {
+          "top3": [
+            "fdp-europa-de",
+            "plr-exterieur",
+            "glp-fragen-de"
+          ],
+          "hitAt1": true,
+          "hitAt3": true,
+          "reciprocalRank": 1.0
+        },
+        "hybrid": {
+          "top3": [
+            "fdp-europa-de",
+            "verts-portrait",
+            "sp-programme"
+          ],
+          "hitAt1": true,
+          "hitAt3": true,
+          "reciprocalRank": 1.0
+        }
+      },
+      "latencyMs": {
+        "bm25": 0.21,
+        "dense": 9.52,
+        "hybridTotal": 9.74
+      },
+      "topDenseScore": 0.8381
+    },
+    {
+      "id": "supported-3-fr",
+      "language": "fr",
+      "question": "Le PLR soutient-il une adhésion à l’UE ou la voie bilatérale ?",
+      "relevant": [
+        "plr-exterieur",
+        "fdp-europa-de"
+      ],
+      "rankings": {
+        "bm25": {
+          "top3": [
+            "plr-exterieur",
+            "pvl-questions",
+            "centre-valeurs"
+          ],
+          "hitAt1": true,
+          "hitAt3": true,
+          "reciprocalRank": 1.0
+        },
+        "dense": {
+          "top3": [
+            "plr-exterieur",
+            "pvl-questions",
+            "fdp-europa-de"
+          ],
+          "hitAt1": true,
+          "hitAt3": true,
+          "reciprocalRank": 1.0
+        },
+        "hybrid": {
+          "top3": [
+            "plr-exterieur",
+            "pvl-questions",
+            "centre-valeurs"
+          ],
+          "hitAt1": true,
+          "hitAt3": true,
+          "reciprocalRank": 1.0
+        }
+      },
+      "latencyMs": {
+        "bm25": 0.29,
+        "dense": 9.93,
+        "hybridTotal": 10.24
+      },
+      "topDenseScore": 0.8653
+    },
+    {
+      "id": "supported-3-de",
+      "language": "de",
+      "question": "Unterstützt die FDP einen EU-Beitritt oder den bilateralen Weg?",
+      "relevant": [
+        "plr-exterieur",
+        "fdp-europa-de"
+      ],
+      "rankings": {
+        "bm25": {
+          "top3": [
+            "fdp-europa-de",
+            "glp-fragen-de",
+            "svp-bildung-de"
+          ],
+          "hitAt1": true,
+          "hitAt3": true,
+          "reciprocalRank": 1.0
+        },
+        "dense": {
+          "top3": [
+            "fdp-europa-de",
+            "glp-fragen-de",
+            "plr-exterieur"
+          ],
+          "hitAt1": true,
+          "hitAt3": true,
+          "reciprocalRank": 1.0
+        },
+        "hybrid": {
+          "top3": [
+            "fdp-europa-de",
+            "glp-fragen-de",
+            "gruene-portrait-de"
+          ],
+          "hitAt1": true,
+          "hitAt3": true,
+          "reciprocalRank": 1.0
+        }
+      },
+      "latencyMs": {
+        "bm25": 0.36,
+        "dense": 9.72,
+        "hybridTotal": 10.1
+      },
+      "topDenseScore": 0.8794
+    },
+    {
+      "id": "supported-3-it",
+      "language": "it",
+      "question": "Il PLR sostiene l’adesione all’UE o la via bilaterale?",
+      "relevant": [
+        "plr-exterieur",
+        "fdp-europa-de"
+      ],
+      "rankings": {
+        "bm25": {
+          "top3": [
+            "plr-exterieur",
+            "sp-programme",
+            "pvl-questions"
+          ],
+          "hitAt1": true,
+          "hitAt3": true,
+          "reciprocalRank": 1.0
+        },
+        "dense": {
+          "top3": [
+            "plr-exterieur",
+            "fdp-europa-de",
+            "pvl-questions"
+          ],
+          "hitAt1": true,
+          "hitAt3": true,
+          "reciprocalRank": 1.0
+        },
+        "hybrid": {
+          "top3": [
+            "plr-exterieur",
+            "pvl-questions",
+            "fdp-europa-de"
+          ],
+          "hitAt1": true,
+          "hitAt3": true,
+          "reciprocalRank": 1.0
+        }
+      },
+      "latencyMs": {
+        "bm25": 0.24,
+        "dense": 8.97,
+        "hybridTotal": 9.22
+      },
+      "topDenseScore": 0.8355
+    },
+    {
+      "id": "supported-4-en",
+      "language": "en",
+      "question": "Which three values does the Centre associate with national cohesion?",
+      "relevant": [
+        "centre-valeurs",
+        "mitte-werte-de"
+      ],
+      "rankings": {
+        "bm25": {
+          "top3": [
+            "centre-valeurs",
+            "verts-portrait"
+          ],
+          "hitAt1": true,
+          "hitAt3": true,
+          "reciprocalRank": 1.0
+        },
+        "dense": {
+          "top3": [
+            "centre-valeurs",
+            "mitte-werte-de",
+            "gruene-portrait-de"
+          ],
+          "hitAt1": true,
+          "hitAt3": true,
+          "reciprocalRank": 1.0
+        },
+        "hybrid": {
+          "top3": [
+            "centre-valeurs",
+            "verts-portrait",
+            "mitte-werte-de"
+          ],
+          "hitAt1": true,
+          "hitAt3": true,
+          "reciprocalRank": 1.0
+        }
+      },
+      "latencyMs": {
+        "bm25": 0.23,
+        "dense": 10.01,
+        "hybridTotal": 10.25
+      },
+      "topDenseScore": 0.7819
+    },
+    {
+      "id": "supported-4-fr",
+      "language": "fr",
+      "question": "Quelles trois valeurs Le Centre associe-t-il à la cohésion nationale ?",
+      "relevant": [
+        "centre-valeurs",
+        "mitte-werte-de"
+      ],
+      "rankings": {
+        "bm25": {
+          "top3": [
+            "centre-valeurs",
+            "pvl-questions",
+            "sp-programme"
+          ],
+          "hitAt1": true,
+          "hitAt3": true,
+          "reciprocalRank": 1.0
+        },
+        "dense": {
+          "top3": [
+            "centre-valeurs",
+            "pvl-questions",
+            "verts-portrait"
+          ],
+          "hitAt1": true,
+          "hitAt3": true,
+          "reciprocalRank": 1.0
+        },
+        "hybrid": {
+          "top3": [
+            "centre-valeurs",
+            "pvl-questions",
+            "verts-portrait"
+          ],
+          "hitAt1": true,
+          "hitAt3": true,
+          "reciprocalRank": 1.0
+        }
+      },
+      "latencyMs": {
+        "bm25": 0.27,
+        "dense": 9.1,
+        "hybridTotal": 9.38
+      },
+      "topDenseScore": 0.8419
+    },
+    {
+      "id": "supported-4-de",
+      "language": "de",
+      "question": "Welche drei Werte verbindet Die Mitte mit dem Zusammenhalt der Schweiz?",
+      "relevant": [
+        "centre-valeurs",
+        "mitte-werte-de"
+      ],
+      "rankings": {
+        "bm25": {
+          "top3": [
+            "mitte-werte-de",
+            "fdp-europa-de",
+            "gruene-portrait-de"
+          ],
+          "hitAt1": true,
+          "hitAt3": true,
+          "reciprocalRank": 1.0
+        },
+        "dense": {
+          "top3": [
+            "mitte-werte-de",
+            "centre-valeurs",
+            "gruene-portrait-de"
+          ],
+          "hitAt1": true,
+          "hitAt3": true,
+          "reciprocalRank": 1.0
+        },
+        "hybrid": {
+          "top3": [
+            "mitte-werte-de",
+            "gruene-portrait-de",
+            "fdp-europa-de"
+          ],
+          "hitAt1": true,
+          "hitAt3": true,
+          "reciprocalRank": 1.0
+        }
+      },
+      "latencyMs": {
+        "bm25": 0.25,
+        "dense": 9.65,
+        "hybridTotal": 9.91
+      },
+      "topDenseScore": 0.8702
+    },
+    {
+      "id": "supported-4-it",
+      "language": "it",
+      "question": "Quali tre valori associa il Centro alla coesione nazionale?",
+      "relevant": [
+        "centre-valeurs",
+        "mitte-werte-de"
+      ],
+      "rankings": {
+        "bm25": {
+          "top3": [
+            "sp-programme",
+            "pvl-questions",
+            "centre-valeurs"
+          ],
+          "hitAt1": false,
+          "hitAt3": true,
+          "reciprocalRank": 0.3333333333333333
+        },
+        "dense": {
+          "top3": [
+            "centre-valeurs",
+            "mitte-werte-de",
+            "gruene-portrait-de"
+          ],
+          "hitAt1": true,
+          "hitAt3": true,
+          "reciprocalRank": 1.0
+        },
+        "hybrid": {
+          "top3": [
+            "centre-valeurs",
+            "pvl-questions",
+            "verts-portrait"
+          ],
+          "hitAt1": true,
+          "hitAt3": true,
+          "reciprocalRank": 1.0
+        }
+      },
+      "latencyMs": {
+        "bm25": 0.2,
+        "dense": 8.95,
+        "hybridTotal": 9.16
+      },
+      "topDenseScore": 0.8032
+    },
+    {
+      "id": "supported-5-en",
+      "language": "en",
+      "question": "How do the Greens connect environmental protection with social engagement?",
+      "relevant": [
+        "verts-portrait",
+        "gruene-portrait-de"
+      ],
+      "rankings": {
+        "bm25": {
+          "top3": [
+            "verts-portrait",
+            "pvl-questions",
+            "gruene-portrait-de"
+          ],
+          "hitAt1": true,
+          "hitAt3": true,
+          "reciprocalRank": 1.0
+        },
+        "dense": {
+          "top3": [
+            "verts-portrait",
+            "gruene-portrait-de",
+            "glp-fragen-de"
+          ],
+          "hitAt1": true,
+          "hitAt3": true,
+          "reciprocalRank": 1.0
+        },
+        "hybrid": {
+          "top3": [
+            "verts-portrait",
+            "gruene-portrait-de",
+            "pvl-questions"
+          ],
+          "hitAt1": true,
+          "hitAt3": true,
+          "reciprocalRank": 1.0
+        }
+      },
+      "latencyMs": {
+        "bm25": 0.23,
+        "dense": 9.47,
+        "hybridTotal": 9.72
+      },
+      "topDenseScore": 0.7984
+    },
+    {
+      "id": "supported-5-fr",
+      "language": "fr",
+      "question": "Comment les Verts relient-ils protection de l’environnement et engagement social ?",
+      "relevant": [
+        "verts-portrait",
+        "gruene-portrait-de"
+      ],
+      "rankings": {
+        "bm25": {
+          "top3": [
+            "verts-portrait",
+            "pvl-questions",
+            "sp-programme"
+          ],
+          "hitAt1": true,
+          "hitAt3": true,
+          "reciprocalRank": 1.0
+        },
+        "dense": {
+          "top3": [
+            "verts-portrait",
+            "pvl-questions",
+            "centre-valeurs"
+          ],
+          "hitAt1": true,
+          "hitAt3": true,
+          "reciprocalRank": 1.0
+        },
+        "hybrid": {
+          "top3": [
+            "verts-portrait",
+            "pvl-questions",
+            "centre-valeurs"
+          ],
+          "hitAt1": true,
+          "hitAt3": true,
+          "reciprocalRank": 1.0
+        }
+      },
+      "latencyMs": {
+        "bm25": 0.3,
+        "dense": 8.99,
+        "hybridTotal": 9.3
+      },
+      "topDenseScore": 0.8689
+    },
+    {
+      "id": "supported-5-de",
+      "language": "de",
+      "question": "Wie verbinden die Grünen Umweltschutz und soziales Engagement?",
+      "relevant": [
+        "verts-portrait",
+        "gruene-portrait-de"
+      ],
+      "rankings": {
+        "bm25": {
+          "top3": [
+            "gruene-portrait-de",
+            "mitte-werte-de",
+            "fdp-europa-de"
+          ],
+          "hitAt1": true,
+          "hitAt3": true,
+          "reciprocalRank": 1.0
+        },
+        "dense": {
+          "top3": [
+            "gruene-portrait-de",
+            "glp-fragen-de",
+            "verts-portrait"
+          ],
+          "hitAt1": true,
+          "hitAt3": true,
+          "reciprocalRank": 1.0
+        },
+        "hybrid": {
+          "top3": [
+            "gruene-portrait-de",
+            "glp-fragen-de",
+            "mitte-werte-de"
+          ],
+          "hitAt1": true,
+          "hitAt3": true,
+          "reciprocalRank": 1.0
+        }
+      },
+      "latencyMs": {
+        "bm25": 0.24,
+        "dense": 9.32,
+        "hybridTotal": 9.58
+      },
+      "topDenseScore": 0.8495
+    },
+    {
+      "id": "supported-5-it",
+      "language": "it",
+      "question": "Come collegano i Verdi la protezione ambientale e l’impegno sociale?",
+      "relevant": [
+        "verts-portrait",
+        "gruene-portrait-de"
+      ],
+      "rankings": {
+        "bm25": {
+          "top3": [
+            "verts-portrait",
+            "pvl-questions",
+            "udc-formation"
+          ],
+          "hitAt1": true,
+          "hitAt3": true,
+          "reciprocalRank": 1.0
+        },
+        "dense": {
+          "top3": [
+            "verts-portrait",
+            "gruene-portrait-de",
+            "pvl-questions"
+          ],
+          "hitAt1": true,
+          "hitAt3": true,
+          "reciprocalRank": 1.0
+        },
+        "hybrid": {
+          "top3": [
+            "verts-portrait",
+            "pvl-questions",
+            "plr-exterieur"
+          ],
+          "hitAt1": true,
+          "hitAt3": true,
+          "reciprocalRank": 1.0
+        }
+      },
+      "latencyMs": {
+        "bm25": 0.25,
+        "dense": 10.31,
+        "hybridTotal": 10.57
+      },
+      "topDenseScore": 0.8292
+    },
+    {
+      "id": "supported-6-en",
+      "language": "en",
+      "question": "How do the Green Liberals reconcile climate protection with market incentives?",
+      "relevant": [
+        "pvl-questions",
+        "glp-fragen-de"
+      ],
+      "rankings": {
+        "bm25": {
+          "top3": [
+            "pvl-questions",
+            "verts-portrait"
+          ],
+          "hitAt1": true,
+          "hitAt3": true,
+          "reciprocalRank": 1.0
+        },
+        "dense": {
+          "top3": [
+            "glp-fragen-de",
+            "pvl-questions",
+            "verts-portrait"
+          ],
+          "hitAt1": true,
+          "hitAt3": true,
+          "reciprocalRank": 1.0
+        },
+        "hybrid": {
+          "top3": [
+            "pvl-questions",
+            "verts-portrait",
+            "glp-fragen-de"
+          ],
+          "hitAt1": true,
+          "hitAt3": true,
+          "reciprocalRank": 1.0
+        }
+      },
+      "latencyMs": {
+        "bm25": 0.24,
+        "dense": 10.44,
+        "hybridTotal": 10.69
+      },
+      "topDenseScore": 0.8051
+    },
+    {
+      "id": "supported-6-fr",
+      "language": "fr",
+      "question": "Comment les Vert’libéraux associent-ils le climat aux incitations du marché ?",
+      "relevant": [
+        "pvl-questions",
+        "glp-fragen-de"
+      ],
+      "rankings": {
+        "bm25": {
+          "top3": [
+            "pvl-questions",
+            "verts-portrait",
+            "sp-programme"
+          ],
+          "hitAt1": true,
+          "hitAt3": true,
+          "reciprocalRank": 1.0
+        },
+        "dense": {
+          "top3": [
+            "pvl-questions",
+            "verts-portrait",
+            "glp-fragen-de"
+          ],
+          "hitAt1": true,
+          "hitAt3": true,
+          "reciprocalRank": 1.0
+        },
+        "hybrid": {
+          "top3": [
+            "pvl-questions",
+            "verts-portrait",
+            "plr-exterieur"
+          ],
+          "hitAt1": true,
+          "hitAt3": true,
+          "reciprocalRank": 1.0
+        }
+      },
+      "latencyMs": {
+        "bm25": 0.32,
+        "dense": 9.19,
+        "hybridTotal": 9.52
+      },
+      "topDenseScore": 0.8475
+    },
+    {
+      "id": "supported-6-de",
+      "language": "de",
+      "question": "Wie verbinden die Grünliberalen Klimaschutz und marktwirtschaftliche Anreize?",
+      "relevant": [
+        "pvl-questions",
+        "glp-fragen-de"
+      ],
+      "rankings": {
+        "bm25": {
+          "top3": [
+            "glp-fragen-de",
+            "gruene-portrait-de",
+            "fdp-europa-de"
+          ],
+          "hitAt1": true,
+          "hitAt3": true,
+          "reciprocalRank": 1.0
+        },
+        "dense": {
+          "top3": [
+            "glp-fragen-de",
+            "gruene-portrait-de",
+            "pvl-questions"
+          ],
+          "hitAt1": true,
+          "hitAt3": true,
+          "reciprocalRank": 1.0
+        },
+        "hybrid": {
+          "top3": [
+            "glp-fragen-de",
+            "gruene-portrait-de",
+            "fdp-europa-de"
+          ],
+          "hitAt1": true,
+          "hitAt3": true,
+          "reciprocalRank": 1.0
+        }
+      },
+      "latencyMs": {
+        "bm25": 0.25,
+        "dense": 9.4,
+        "hybridTotal": 9.66
+      },
+      "topDenseScore": 0.8658
+    },
+    {
+      "id": "supported-6-it",
+      "language": "it",
+      "question": "Come conciliano i Verdi liberali la protezione del clima e gli incentivi di mercato?",
+      "relevant": [
+        "pvl-questions",
+        "glp-fragen-de"
+      ],
+      "rankings": {
+        "bm25": {
+          "top3": [
+            "verts-portrait",
+            "pvl-questions",
+            "centre-valeurs"
+          ],
+          "hitAt1": false,
+          "hitAt3": true,
+          "reciprocalRank": 0.5
+        },
+        "dense": {
+          "top3": [
+            "pvl-questions",
+            "verts-portrait",
+            "glp-fragen-de"
+          ],
+          "hitAt1": true,
+          "hitAt3": true,
+          "reciprocalRank": 1.0
+        },
+        "hybrid": {
+          "top3": [
+            "pvl-questions",
+            "verts-portrait",
+            "centre-valeurs"
+          ],
+          "hitAt1": true,
+          "hitAt3": true,
+          "reciprocalRank": 1.0
+        }
+      },
+      "latencyMs": {
+        "bm25": 0.28,
+        "dense": 8.95,
+        "hybridTotal": 9.24
+      },
+      "topDenseScore": 0.824
+    },
+    {
+      "id": "unsupported-1",
+      "language": "en",
+      "question": "What is tomorrow’s weather in Bern?",
+      "relevant": [],
+      "rankings": {
+        "bm25": {
+          "top3": [
+            "verts-portrait",
+            "sp-programm-de",
+            "centre-valeurs"
+          ],
+          "hitAt1": false,
+          "hitAt3": false,
+          "reciprocalRank": 0
+        },
+        "dense": {
+          "top3": [
+            "glp-fragen-de",
+            "pvl-questions",
+            "gruene-portrait-de"
+          ],
+          "hitAt1": false,
+          "hitAt3": false,
+          "reciprocalRank": 0
+        },
+        "hybrid": {
+          "top3": [
+            "verts-portrait",
+            "pvl-questions",
+            "gruene-portrait-de"
+          ],
+          "hitAt1": false,
+          "hitAt3": false,
+          "reciprocalRank": 0
+        }
+      },
+      "latencyMs": {
+        "bm25": 0.17,
+        "dense": 60.38,
+        "hybridTotal": 60.57
+      },
+      "topDenseScore": 0.7585
+    },
+    {
+      "id": "unsupported-2",
+      "language": "en",
+      "question": "What is Jessica Jaccoud’s private home address?",
+      "relevant": [],
+      "rankings": {
+        "bm25": {
+          "top3": [
+            "verts-portrait",
+            "centre-valeurs",
+            "pvl-questions"
+          ],
+          "hitAt1": false,
+          "hitAt3": false,
+          "reciprocalRank": 0
+        },
+        "dense": {
+          "top3": [
+            "verts-portrait",
+            "pvl-questions",
+            "gruene-portrait-de"
+          ],
+          "hitAt1": false,
+          "hitAt3": false,
+          "reciprocalRank": 0
+        },
+        "hybrid": {
+          "top3": [
+            "verts-portrait",
+            "pvl-questions",
+            "centre-valeurs"
+          ],
+          "hitAt1": false,
+          "hitAt3": false,
+          "reciprocalRank": 0
+        }
+      },
+      "latencyMs": {
+        "bm25": 0.2,
+        "dense": 9.47,
+        "hybridTotal": 9.68
+      },
+      "topDenseScore": 0.7226
+    },
+    {
+      "id": "unsupported-3",
+      "language": "en",
+      "question": "How did every GLP member vote yesterday?",
+      "relevant": [],
+      "rankings": {
+        "bm25": {
+          "top3": [
+            "glp-fragen-de"
+          ],
+          "hitAt1": false,
+          "hitAt3": false,
+          "reciprocalRank": 0
+        },
+        "dense": {
+          "top3": [
+            "glp-fragen-de",
+            "gruene-portrait-de",
+            "pvl-questions"
+          ],
+          "hitAt1": false,
+          "hitAt3": false,
+          "reciprocalRank": 0
+        },
+        "hybrid": {
+          "top3": [
+            "glp-fragen-de",
+            "gruene-portrait-de",
+            "pvl-questions"
+          ],
+          "hitAt1": false,
+          "hitAt3": false,
+          "reciprocalRank": 0
+        }
+      },
+      "latencyMs": {
+        "bm25": 0.16,
+        "dense": 7.89,
+        "hybridTotal": 8.06
+      },
+      "topDenseScore": 0.7702
+    },
+    {
+      "id": "unsupported-4",
+      "language": "en",
+      "question": "What is the exact date of the next federal election?",
+      "relevant": [],
+      "rankings": {
+        "bm25": {
+          "top3": [],
+          "hitAt1": false,
+          "hitAt3": false,
+          "reciprocalRank": 0
+        },
+        "dense": {
+          "top3": [
+            "pvl-questions",
+            "centre-valeurs",
+            "glp-fragen-de"
+          ],
+          "hitAt1": false,
+          "hitAt3": false,
+          "reciprocalRank": 0
+        },
+        "hybrid": {
+          "top3": [
+            "pvl-questions",
+            "centre-valeurs",
+            "glp-fragen-de"
+          ],
+          "hitAt1": false,
+          "hitAt3": false,
+          "reciprocalRank": 0
+        }
+      },
+      "latencyMs": {
+        "bm25": 0.18,
+        "dense": 8.33,
+        "hybridTotal": 8.52
+      },
+      "topDenseScore": 0.7527
+    },
+    {
+      "id": "unsupported-5",
+      "language": "fr",
+      "question": "Quelle est la recommandation du PS pour chaque votation communale de demain ?",
+      "relevant": [],
+      "rankings": {
+        "bm25": {
+          "top3": [
+            "sp-programme",
+            "udc-formation",
+            "pvl-questions"
+          ],
+          "hitAt1": false,
+          "hitAt3": false,
+          "reciprocalRank": 0
+        },
+        "dense": {
+          "top3": [
+            "pvl-questions",
+            "sp-programme",
+            "centre-valeurs"
+          ],
+          "hitAt1": false,
+          "hitAt3": false,
+          "reciprocalRank": 0
+        },
+        "hybrid": {
+          "top3": [
+            "sp-programme",
+            "pvl-questions",
+            "verts-portrait"
+          ],
+          "hitAt1": false,
+          "hitAt3": false,
+          "reciprocalRank": 0
+        }
+      },
+      "latencyMs": {
+        "bm25": 0.26,
+        "dense": 9.13,
+        "hybridTotal": 9.39
+      },
+      "topDenseScore": 0.8026
+    },
+    {
+      "id": "unsupported-6",
+      "language": "de",
+      "question": "Welche Partei hat gestern ihre Position zum neuen E-ID-Gesetz geändert?",
+      "relevant": [],
+      "rankings": {
+        "bm25": {
+          "top3": [
+            "fdp-europa-de",
+            "glp-fragen-de",
+            "sp-programm-de"
+          ],
+          "hitAt1": false,
+          "hitAt3": false,
+          "reciprocalRank": 0
+        },
+        "dense": {
+          "top3": [
+            "fdp-europa-de",
+            "glp-fragen-de",
+            "pvl-questions"
+          ],
+          "hitAt1": false,
+          "hitAt3": false,
+          "reciprocalRank": 0
+        },
+        "hybrid": {
+          "top3": [
+            "fdp-europa-de",
+            "glp-fragen-de",
+            "pvl-questions"
+          ],
+          "hitAt1": false,
+          "hitAt3": false,
+          "reciprocalRank": 0
+        }
+      },
+      "latencyMs": {
+        "bm25": 0.26,
+        "dense": 9.01,
+        "hybridTotal": 9.28
+      },
+      "topDenseScore": 0.7948
+    }
+  ]
+}

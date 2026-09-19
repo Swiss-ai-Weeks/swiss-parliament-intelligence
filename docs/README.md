@@ -39,3 +39,5 @@ See [User guide](USER-GUIDE.md) and [Topics, debates and people roadmap](TOPICS-
 Latest increment: [Content and debate reader specification](CONTENT-READER-SPEC.md) — original-text browsing, expanded session snapshots, bounded GPU batches and acceptance gates (18 September 2026).
 
 [Conversation and source inspection](CHAT-SOURCE-EXPERIENCE.md): compact suggestions, device chat history, source panels and official portrait identity correction.
+
+- [Swiss production release and H100 processing, 18 September](SWISS-RELEASE-2026-09-18.md) — verified release state, data receipts and operational limits.

@@ -1,3 +1,4 @@
+import {reviewClaims} from './claim-review.mjs';
 import {partyCatalog} from './party-catalog.mjs';
 import {research} from './research.mjs';
 const norm=s=>String(s||'').normalize('NFD').replace(/\p{Diacritic}/gu,'').toLowerCase();
@@ -44,7 +45,8 @@ export async function answerProfile(store,input,env,fetchImpl=fetch){
   return {...empty('Use the profile’s voting history to filter dated roll calls and inspect what yes and no meant. No aggregate stance is inferred.'),status:'open-vote-history',profileId:p.id,voteCount:p.votes.length};
  }
  if(!passages.length)return empty('This type of official profile evidence has not been imported yet. Load the profile’s official records.');
- const evidence=passages.slice(0,3).map(s=>({id:s.id,text:s.text,language:s.language,kind:'document',attribution:s.sourceKind==='party-self-description'?'Reviewed editorial summary of the party’s own description; attribute to the party, not the individual.':`Official structured record for ${p.name}, normalized into text.`,source:{url:s.officialUrl}}));
+ const evidence=passages.slice(0,3).map(s=>({id:s.id,text:s.text,language:s.language,kind:'document',sourceKind:s.sourceKind,speaker:s.speaker,date:s.date,attribution:s.sourceKind==='party-self-description'?'Reviewed editorial summary of the party’s own description; attribute to the party, not the individual.':`Official structured record for ${p.name}, normalized into text.`,source:{url:s.officialUrl}}));
  const started=performance.now();const answer=await research({id:'profile-'+p.id,title:{en:'Official profile and attributed party background'},evidence},{question:input.question,language:input.language||'en'},env,fetchImpl,evidence);
+ if(answer.mode==='live-inference'){const reviewed=await reviewClaims(answer.claims,env,fetchImpl,{question:input.question,evidence});answer.claims=reviewed.claims;answer.withheldClaims=(answer.withheldClaims||0)+reviewed.withheld;if(!answer.claims.length)answer.status='insufficient-evidence';}
  return {...answer,passages,context,latencyMs:Math.round(performance.now()-started),retrieval:{method:'source-type-routing',sourceType:intent},coverage:intent==='party'?'Reviewed summary of party self-description; not a personal position or independent evaluation.':'Official public profile snapshot; normalized structured fields.'};
 }

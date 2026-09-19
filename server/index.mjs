@@ -1,4 +1,5 @@
 import {feedbackService} from './feedback.mjs';
+import {allowedRequestOrigin} from './request-origin.mjs';
 import {officialRecording} from './official-recording.mjs';
 import http from 'node:http';
 import { readFile, stat } from 'node:fs/promises';
@@ -43,7 +44,7 @@ export function createServer({store=createStore(path.join(root,'data/pilot.sqlit
       if(publicBase && url.pathname===publicBase){res.writeHead(308,{Location:publicBase+'/'+url.search});return res.end();}
       if(publicBase && !url.pathname.startsWith(publicBase+'/'))throw fail('NOT_FOUND',404);
       const p=url.pathname.slice(publicBase.length);
-      if(req.method!=='GET' && req.headers.origin && req.headers.origin!==(env.PUBLIC_ORIGIN||'http://localhost:5173') && req.headers.origin!==`http://${req.headers.host}`) throw fail('ORIGIN_DENIED',403);
+      if(req.method!=='GET' && !allowedRequestOrigin(req.headers.origin,env)) throw fail('ORIGIN_DENIED',403);
       if(req.method!=='GET') {const key=req.socket.remoteAddress;const now=Date.now();for(const [k,v]of rates)if(v.until<now)rates.delete(k);const rate=rates.get(key)||{count:0,until:now+60000};rate.count++;rates.set(key,rate);if(rate.count>40)throw fail('RATE_LIMITED',429);}
       if(p==='/api/feedback/challenge'&&req.method==='GET')return json(res,200,feedback.challenge(req.socket.remoteAddress));
       if(p==='/api/feedback'&&req.method==='POST')return json(res,200,await feedback.send(await body(req),req.socket.remoteAddress));
@@ -85,6 +86,7 @@ export function createServer({store=createStore(path.join(root,'data/pilot.sqlit
       if(p==='/api/auth/providers'&&req.method==='GET')return json(res,200,await auth.providers());
       if(p==='/api/auth/recover'&&req.method==='POST'){const b=await body(req);if(typeof b.email!=='string'||!b.email.includes('@')||b.email.length>254)throw fail('INVALID_EMAIL');const r=await auth.recover(b.email);return json(res,200,{status:r.status},{'Set-Cookie':cookie('pilot_oauth',r.flowId,3600)});}
       if(p==='/api/auth/password'&&req.method==='POST'){const b=await body(req);if(typeof b.password!=='string'||b.password.length<8||b.password.length>256)throw fail('INVALID_PASSWORD');return json(res,200,await auth.password(req.headers.cookie,b.password));}
+      if(p==='/api/auth/provider'&&req.method==='POST'){const b=await body(req);if(!['google','apple','discord','sso'].includes(b.provider))throw fail('INVALID_PROVIDER');if(!(await auth.providers())[b.provider])throw fail('PROVIDER_NOT_CONFIGURED',503);const r=b.provider==='sso'?await auth.sso():await auth.oauth(b.provider);return json(res,200,{url:r.url},{'Set-Cookie':cookie('pilot_oauth',r.id,600)});}
       if(p==='/api/auth/google'&&req.method==='POST'){if(!(await auth.providers()).google)throw fail('GOOGLE_NOT_CONFIGURED',503);const r=await auth.oauth();return json(res,200,{url:r.url},{'Set-Cookie':cookie('pilot_oauth',r.id,600)});}
       if(p==='/api/auth/callback'&&req.method==='GET'){const state=req.headers.cookie?.match(/(?:^|;\s*)pilot_oauth=([a-f0-9]{64})(?:;|$)/)?.[1];let cookies=[cookie('pilot_oauth','',0)],status='cancelled';try{if(state&&url.searchParams.get('code')){const r=await auth.exchange(url.searchParams.get('code'),state);cookies.push(cookie('pilot_session',r.sid,r.expires));status=r.mode==='recovery'?'reset':'complete';}}catch{status='failed';}res.writeHead(303,{Location:`${publicBase}/?view=dashboard&auth=${status}`,'Set-Cookie':cookies});return res.end();}
       if(p==='/api/auth/logout'&&req.method==='POST'){auth.logout(req.headers.cookie);return json(res,200,{status:'signed-out'},{'Set-Cookie':`pilot_session=; HttpOnly; SameSite=Lax; Path=${publicBase||'/'}; Max-Age=0`});}

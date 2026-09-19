@@ -1,0 +1,49 @@
+/* Home refinement: direct Cleisthenes entry, verified chamber preview and non-destructive calendar details. */
+.swiss-app .dashboard-welcome{margin-bottom:22px}
+.swiss-app .dashboard-welcome h1{margin-bottom:0}
+.swiss-app .dashboard-chat{display:flex;align-items:center;gap:12px;max-width:900px;padding:10px 12px 10px 18px;border:1px solid #cfc4af;border-radius:14px;background:#faf6ee;box-shadow:0 12px 32px #5e513812}
+.swiss-app .dashboard-chat>svg{color:#a24f40;flex:0 0 auto}
+.swiss-app .dashboard-chat input{flex:1;min-width:0;border:0;background:transparent;padding:10px 4px;font-size:16px;color:#252823;outline:0}
+.swiss-app .dashboard-chat button{display:grid;place-items:center;width:44px;height:44px;border-radius:10px;background:#2c4438;color:#fffaf0}
+.swiss-app .dashboard-chat button:disabled{opacity:.42}
+.swiss-app .dashboard-shortcuts{grid-template-columns:repeat(2,1fr);margin:26px 0 36px}
+.swiss-app .proceedings-heading{align-items:flex-start;margin-bottom:18px}
+.swiss-app .proceedings-visual{display:flex;align-items:flex-start;gap:12px}
+.swiss-app .mini-chamber{width:112px;padding:6px 7px 5px;border:1px solid #d0c5b1;border-radius:8px;background:#eee7d9}
+.swiss-app .mini-chamber svg{display:block;width:100%;height:58px}
+.swiss-app .mini-chamber-architecture path{fill:#ded3bd;stroke:#b7aa90;stroke-width:2}
+.swiss-app .mini-chamber svg>path{stroke:#fffaf0;stroke-width:1}
+.swiss-app .mini-chamber span{display:block;margin-top:2px;font-size:9px;color:#606655}
+.swiss-app .mini-chamber-loading{display:block;width:112px;height:70px;border-radius:8px;background:#e8e0d2}
+.swiss-app .calendar-shell{position:relative}
+.swiss-app .calendar-toolbar{display:flex;align-items:center;justify-content:space-between;gap:14px}
+.swiss-app .calendar-toolbar h2{margin:0}
+.swiss-app .calendar-month-control{display:flex;align-items:center;border:1px solid #d9cbb4;border-radius:8px;background:#faf6ee}
+.swiss-app .calendar-month-control button{display:grid;place-items:center;min-height:40px;padding:8px 10px}
+.swiss-app .calendar-month-control .calendar-month-title{display:flex;grid-auto-flow:column;gap:7px;min-width:155px;border-left:1px solid #e0d6c4;border-right:1px solid #e0d6c4;font-size:13px}
+.swiss-app .month-picker{position:absolute;right:0;top:50px;z-index:5;width:270px;padding:14px;border:1px solid #cfc4af;border-radius:10px;background:#fffaf0;box-shadow:0 18px 50px #3f33252b}
+.swiss-app .month-picker>div:first-child{display:grid;grid-template-columns:40px 1fr 40px;align-items:center;text-align:center;margin-bottom:10px}
+.swiss-app .month-picker>div:last-child{display:grid;grid-template-columns:repeat(3,1fr);gap:5px}
+.swiss-app .month-picker button{padding:9px;border-radius:5px}
+.swiss-app .month-picker button[aria-pressed=true]{background:#252823;color:#fffaf0}
+.swiss-app .calendar-popover{position:absolute;right:8px;top:64px;z-index:4;width:min(330px,calc(100% - 16px));max-height:390px;overflow:auto;padding:22px;border:1px solid #cfc4af;border-radius:12px;background:#fffaf0;box-shadow:0 20px 55px #3f33252f}
+.swiss-app .calendar-popover-close{position:absolute;right:8px;top:8px;display:grid;place-items:center;width:36px;height:36px;border-radius:50%}
+.swiss-app .calendar-popover>small{display:block;padding-right:34px;color:#6f7466}
+.swiss-app .calendar-popover h3{font-size:23px;margin:16px 0 8px}
+.swiss-app .calendar-popover p{font-size:13px}
+.swiss-app .calendar-popover .secondary{width:100%;margin-top:14px}
+.swiss-app .calendar-event-tabs{display:flex;gap:6px;overflow:auto;margin:14px 0 8px}
+.swiss-app .calendar-event-tabs button{flex:0 0 auto;max-width:180px;padding:8px 10px;border:1px solid #d9cbb4;border-radius:7px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:11px}
+.swiss-app .calendar-event-tabs button[aria-pressed=true]{background:#e6e8dd;border-color:#87907a}
+
+@media(max-width:760px){
+ .swiss-app .dashboard-shortcuts{grid-template-columns:1fr}
+ .swiss-app .dashboard-chat{padding-left:13px}
+ .swiss-app .dashboard-chat input{font-size:14px}
+ .swiss-app .proceedings-visual{width:100%;justify-content:space-between}
+ .swiss-app .calendar-toolbar{align-items:flex-start;flex-direction:column}
+ .swiss-app .calendar-month-control{width:100%}
+ .swiss-app .calendar-month-control .calendar-month-title{flex:1}
+ .swiss-app .month-picker{left:0;right:auto;top:94px;width:min(270px,100%)}
+ .swiss-app .calendar-popover{top:108px;right:0;width:100%}
+}

@@ -1,0 +1,86 @@
+[
+  {
+    "id": "sp-programme",
+    "party": "SP/PS",
+    "language": "fr",
+    "url": "https://www.sp-ps.ch/fr/nos-positions/programme-de-parti/",
+    "title": "Programme de parti"
+  },
+  {
+    "id": "udc-formation",
+    "party": "SVP/UDC",
+    "language": "fr",
+    "url": "https://www.udc.ch/positions/themes/politique-de-la-formation/",
+    "title": "Formation, recherche et innovation"
+  },
+  {
+    "id": "plr-exterieur",
+    "party": "FDP/PLR",
+    "language": "fr",
+    "url": "https://www.plr.ch/positions/politique-exterieure",
+    "title": "Politique extérieure"
+  },
+  {
+    "id": "centre-valeurs",
+    "party": "The Centre/Le Centre",
+    "language": "fr",
+    "url": "https://le-centre.ch/le-centre/valeurs/",
+    "title": "Valeurs"
+  },
+  {
+    "id": "verts-portrait",
+    "party": "Greens/Les Verts",
+    "language": "fr",
+    "url": "https://verts.ch/portrait-et-statuts",
+    "title": "Portrait et statuts"
+  },
+  {
+    "id": "pvl-questions",
+    "party": "GLP/PVL",
+    "language": "fr",
+    "url": "https://pvl.swiss/politique/questions-frequentes/",
+    "title": "Questions fréquentes"
+  },
+  {
+    "id": "sp-programm-de",
+    "party": "SP/PS",
+    "language": "de",
+    "url": "https://www.sp-ps.ch/wofuer-wir-stehen/parteiprogramm/",
+    "title": "Parteiprogramm"
+  },
+  {
+    "id": "svp-bildung-de",
+    "party": "SVP/UDC",
+    "language": "de",
+    "url": "https://www.svp.ch/positionen/themen/bildungspolitik/",
+    "title": "Bildungspolitik"
+  },
+  {
+    "id": "fdp-europa-de",
+    "party": "FDP/PLR",
+    "language": "de",
+    "url": "https://www.fdp.ch/positionen/aussenpolitik/europa",
+    "title": "Europa"
+  },
+  {
+    "id": "mitte-werte-de",
+    "party": "The Centre/Le Centre",
+    "language": "de",
+    "url": "https://die-mitte.ch/die-mitte/werte/",
+    "title": "Werte"
+  },
+  {
+    "id": "gruene-portrait-de",
+    "party": "Greens/Les Verts",
+    "language": "de",
+    "url": "https://gruene.ch/portraet-und-statuten",
+    "title": "Portrait und Statuten"
+  },
+  {
+    "id": "glp-fragen-de",
+    "party": "GLP/PVL",
+    "language": "de",
+    "url": "https://glp.swiss/politik/haeufigste-fragen/",
+    "title": "Häufigste Fragen"
+  }
+]

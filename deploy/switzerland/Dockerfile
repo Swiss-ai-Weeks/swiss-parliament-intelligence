@@ -11,6 +11,7 @@ ENV NODE_ENV=production HOST=0.0.0.0 PORT=4318 PUBLIC_BASE_PATH=/Switzerland PUB
 WORKDIR /app
 COPY --chown=node:node package.json ./
 COPY --chown=node:node server/ ./server/
+COPY --chown=node:node deploy/switzerland/bootstrap.mjs ./bootstrap.mjs
 COPY --from=build --chown=node:node /app/frontend/dist/client/ ./frontend/dist/client/
 RUN mkdir -p data && chown node:node data
 USER node
