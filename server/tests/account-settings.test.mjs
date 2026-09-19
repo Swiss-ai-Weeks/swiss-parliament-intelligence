@@ -23,3 +23,16 @@ test('global logout invalidates every local session for the account but preserve
  let current='a';const auth=createAuth(env,async(url)=>url.includes('logout')?reply({}):reply(url.endsWith('/user')?{id:current}:{user:{id:current},access_token:token('aal1'),expires_in:3600}));
  try{const one=await auth.login('a','password'),two=await auth.login('a','password');current='b';const other=await auth.login('b','password');current='a';await auth.logoutAll('pilot_session='+one.sid);await assert.rejects(()=>auth.user('pilot_session='+one.sid),/SIGN_IN_REQUIRED/);await assert.rejects(()=>auth.user('pilot_session='+two.sid),/SIGN_IN_REQUIRED/);current='b';assert.equal((await auth.user('pilot_session='+other.sid)).id,'b');}finally{auth.close();}
 });
+
+test('portraits stay in account storage and out of authentication token metadata',async()=>{
+ const user={id:'owner',user_metadata:{given_name:'Tomas'}};let stored=[],metadata;
+ const image='data:image/png;base64,iVBORw0KGgo=';
+ const auth=createAuth(env,async(url,o)=>{
+  if(url.includes('/rest/v1/')){if(o.method==='POST')stored=[JSON.parse(o.body)];return reply(stored);}
+  if(url.endsWith('/user')){if(o.method==='PUT'){metadata=JSON.parse(o.body).data;Object.assign(user.user_metadata,metadata);}return reply(user);}
+  return reply({user,access_token:token('aal1'),expires_in:3600});
+ });
+ try{const login=await auth.login('owner','password'),cookie='pilot_session='+login.sid;
+ const changed=await auth.profile(cookie,{firstName:'Tomas',avatar:image});assert.equal(changed.avatar,image);assert.equal(metadata.pilot_avatar_custom,true);assert.equal(metadata.pilot_avatar,undefined);assert.equal(stored[0].user_id,'owner');assert.equal((await auth.user(cookie)).avatar,image);
+ }finally{auth.close();}
+});

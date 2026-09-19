@@ -1,9 +1,12 @@
 import {firstName,avatar,profileInput,requiresMfa} from './account-profile.mjs';
 import {randomBytes,createHash} from 'node:crypto';
 import {sessionVault} from './session-vault.mjs';
+import {accountStore} from './account-store.mjs';
 export function createAuth(env=process.env,fetchImpl=fetch,options={}){
  const sessions=sessionVault(options.file),configured=Boolean(env.SUPABASE_URL&&env.SUPABASE_ANON_KEY),pending=new Map();
  const publicUser=(u,token)=>({id:u.id,email:u.email,name:u.user_metadata?.display_name||u.user_metadata?.full_name||'',firstName:firstName(u.user_metadata),avatar:avatar(u.user_metadata),mfaRequired:requiresMfa(u,token)});
+ const profileItems=accountStore(env,fetchImpl);
+ async function withPortrait(s){if(!s.rawUser.user_metadata?.pilot_avatar_custom||s.user.mfaRequired)return s.user;const rows=await profileItems(s,'profile','portrait');return {...s.user,avatar:avatar({pilot_avatar:rows[0]?.payload?.avatar||''})};}
  const sidFrom=c=>c?.match(/(?:^|;\s*)pilot_session=([a-f0-9]{64})(?:;|$)/)?.[1];
  const error=(m,status=401)=>Object.assign(new Error(m),{status});
  async function call(path,body,token,method){if(!configured)throw error('AUTH_NOT_CONFIGURED',503);const r=await fetchImpl(env.SUPABASE_URL+'/auth/v1/'+path,{method:method||(body?'POST':'GET'),signal:AbortSignal.timeout(12000),headers:{apikey:env.SUPABASE_ANON_KEY,'Content-Type':'application/json',...(token?{Authorization:'Bearer '+token}:{})},...(body?{body:JSON.stringify(body)}:{})});if(!r.ok){let code;try{code=(await r.json()).error_code;}catch{}throw error(code==='email_not_confirmed'?'EMAIL_NOT_CONFIRMED':r.status===429?'AUTH_RATE_LIMITED':'AUTH_FAILED',r.status===429?429:r.status>=500?503:401);}return r.status===204?{}:r.json();}
@@ -22,11 +25,11 @@ export function createAuth(env=process.env,fetchImpl=fetch,options={}){
  async sso(){if(!env.SUPABASE_SSO_PROVIDER_ID)throw error('SSO_NOT_CONFIGURED',503);const f=flow('oauth');const r=await call('sso',{provider_id:env.SUPABASE_SSO_PROVIDER_ID,redirect_to:callback(),skip_http_redirect:true,code_challenge:f.challenge,code_challenge_method:'s256'});if(typeof r.url!=='string'||!r.url.startsWith('https://'))throw error('INVALID_SSO_URL',502);return {id:f.id,url:r.url};},
  async exchange(code,id){const state=sessions.get('oauth-'+id);sessions.delete('oauth-'+id);if(!state)throw error('AUTH_FLOW_EXPIRED');return {...save(await call('token?grant_type=pkce',{auth_code:code,code_verifier:state.verifier})),mode:state.mode};},
  async security(cookie){const s=await session(cookie,true);return {mfaRequired:s.user.mfaRequired,factors:(s.rawUser.factors||[]).map(f=>({id:f.id,type:f.factor_type,status:f.status,name:f.friendly_name})),providers:(s.rawUser.identities||[]).map(i=>i.provider)};},
- async profile(cookie,input){const s=await session(cookie);const u=await call('user',{data:profileInput(input)},s.token,'PUT');return publicUser(u,s.token);},
+ async profile(cookie,input){const s=await session(cookie),data=profileInput(input);if(Object.hasOwn(data,'pilot_avatar')){await profileItems(s,'profile','portrait','POST',{avatar:data.pilot_avatar});delete data.pilot_avatar;data.pilot_avatar_custom=true;}const u=await call('user',{data},s.token,'PUT');return withPortrait({...s,rawUser:u,user:publicUser(u,s.token)});},
  async enroll(cookie){const s=await session(cookie);return call('factors',{factor_type:'totp',friendly_name:'midnight.vote authenticator',issuer:'midnight.vote'},s.token);},
  async verifyFactor(cookie,id,code){if(!/^[a-f0-9-]{36}$/i.test(id)||!/^\d{6}$/.test(code))throw error('INVALID_CODE',400);const s=await session(cookie,true);if(!s.rawUser.factors?.some(f=>f.id===id))throw error('UNKNOWN_FACTOR',404);const c=await call('factors/'+id+'/challenge',{},s.token);const r=await call('factors/'+id+'/verify',{challenge_id:c.id,code},s.token);if(r.user.id!==s.user.id)throw error('AUTH_FAILED');return save(r,sidFrom(cookie));},
  async removeFactor(cookie,id){if(!/^[a-f0-9-]{36}$/i.test(id))throw error('INVALID_FACTOR',400);const s=await session(cookie);if(!s.rawUser.factors?.some(f=>f.id===id))throw error('UNKNOWN_FACTOR',404);await call('factors/'+id,null,s.token,'DELETE');return {status:'removed'};},
  async logoutAll(cookie){const s=await session(cookie);await call('logout?scope=global',{},s.token);sessions.deleteUser(s.user.id);return {status:'signed-out'};},
- async user(cookie=''){return (await session(cookie,true)).user;},logout(cookie=''){sessions.delete(sidFrom(cookie));},
+ async user(cookie=''){return withPortrait(await session(cookie,true));},logout(cookie=''){sessions.delete(sidFrom(cookie));},
  };
 }
