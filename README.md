@@ -1,6 +1,6 @@
 <div align="center">
 
-# midnight.vote · Switzerland
+# midnight.vote · Switzerland / Cleisthenes
 
 ### A clearer view. Your own decision.
 
