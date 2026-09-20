@@ -1,5 +1,7 @@
 # Using the Swiss pilot
 
+This guide describes the current citizen-facing experience. For exact corpus coverage and review status, see [Current status](STATUS.md). Technical contributors should start with [Architecture](ARCHITECTURE.md) and the [documentation index](README.md).
+
 - **Topics & votes:** open a public issue, read the ballot context and compare attributed arguments. The five pilot votes are historical examples.
 - **Reading / Research:** stay on the same issue; Research keeps source inspection close to your reading. All topics & votes returns to the collection.
 - **Parliament:** select a proposal or person. Read the original interventions and open their official sources. The status belongs to a parliamentary proposal, not necessarily a public ballot.

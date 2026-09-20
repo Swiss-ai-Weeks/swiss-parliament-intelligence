@@ -1,5 +1,9 @@
 # Citizen evidence and federal voting companion
 
+**Canonical product specification.** Updated 20 September 2026. For implemented-versus-planned capability, use [STATUS.md](STATUS.md); for system behavior, use [ARCHITECTURE.md](ARCHITECTURE.md). Historical design and delivery notes are preserved under [`archive/2026-09/`](archive/2026-09/).
+
+The current product is an evidence-first Swiss civic research workspace: citizens can inspect official parliamentary words, proposals, people, selected votes and recordings, then use Cleisthenes for source-scoped assistance. Private eligibility and community voting remain labelled concepts, not operational voting features. This specification governs product intent; it does not override the dated coverage and acceptance limits in the status document.
+
 Version 0.1 — 14 September 2026. Research-backed specification for the next development cycle; not a claim that the features below exist. Federal popular votes first is confirmed by Tomas. Numeric acceptance thresholds and implementation slices below are proposed engineering targets, not supplied hackathon judging rules.
 
 ## Product outcome
