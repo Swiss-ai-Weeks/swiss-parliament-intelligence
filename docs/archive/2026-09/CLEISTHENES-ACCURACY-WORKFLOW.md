@@ -1,5 +1,7 @@
 # Cleisthenes: evidence and answer workflow
 
+> Historical validation checkpoint. Preserved for measured evidence; use [architecture](../../ARCHITECTURE.md), [status](../../STATUS.md) and the [session pipeline](../../SESSION-PIPELINE.md) for current behavior.
+
 Implemented 18 September 2026. Policy version: `civic-evidence-v2`.
 
 ```mermaid

@@ -1,5 +1,7 @@
 # Speaker context — 18 September 2026
 
+> Historical implementation checkpoint. Preserved for provenance; use the [product specification](../../PRODUCT-SPEC.md), [architecture](../../ARCHITECTURE.md) and [status](../../STATUS.md).
+
 Citation cards now include an expandable video player. The source inspector repeats that control and offers a prominent link to our own shareable member profile. Human-readable Parliament biographies are separate from raw data provenance links.
 
 The directory import enriches all 271 known people: 269 have official parliamentary term history and 266 have declared roles. Unknown history stays unknown. First parliamentary entry is computed from that person's official National Council/Council of States history, not their current term or a namesake. Declared local/cantonal roles retain original wording and dates; they do not establish an exhaustive date when someone first entered politics.

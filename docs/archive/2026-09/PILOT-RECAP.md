@@ -1,5 +1,7 @@
 # Swiss citizen pilot — recap, 17 September 2026
 
+> Historical recap. Preserved for implementation provenance; use the [README](../../../README.md), [status](../../STATUS.md) and [product specification](../../PRODUCT-SPEC.md) for current truth.
+
 ## Working now
 
 - Responsive Midnight Vote Swiss Pilot, with the earlier team interface preserved at `/legacy`.

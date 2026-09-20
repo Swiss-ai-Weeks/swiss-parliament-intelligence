@@ -1,5 +1,7 @@
 # Civic workspace delivery — 18 September 2026
 
+> Historical delivery checkpoint. Preserved for provenance; use [current status](../../STATUS.md), [product specification](../../PRODUCT-SPEC.md) and [operations](../../OPERATIONS.md).
+
 ## Implemented scope
 
 Home, Parliament, Topics and Saved retain the Greek–Swiss visual language. The in-app wordmark opens Home; About opens the landing page. Dossier research state and conversation state survive this navigation. Existing dossier links, Research links and `/Switzerland/` remain supported.

@@ -1,5 +1,7 @@
 # Cleisthenes UX review — analysis only
 
+> Historical analysis. Preserved as design evidence; use the [product specification](../../PRODUCT-SPEC.md) for current decisions.
+
 18 September 2026. No chatbot code was changed for this review.
 
 ## Evidence and scope
@@ -16,7 +18,7 @@ Observed flow:
 
 The current app already has recent chats, new chat, expand and close controls. Do not add duplicate history features. This run did not produce a successful answer, so citation interaction quality, answer formatting and expanded-answer behaviour require a separate successful-path test. Earlier user screenshots show citations and recordings, but they are not proof of today's live behaviour.
 
-Local evidence: [welcome](../artifacts/ux-audit-2026-09-18/cleisthenes-start.png), [failed answer](../artifacts/ux-audit-2026-09-18/cleisthenes-unavailable.png), [Perplexity reference](../artifacts/ux-audit-2026-09-18/perplexity-answer.png), [Craft reference](../artifacts/ux-audit-2026-09-18/craft-composer.png). These links resolve in the workspace; screenshots are excluded from the public repository.
+Operator-local evidence was recorded as `cleisthenes-start.png`, `cleisthenes-unavailable.png`, `perplexity-answer.png` and `craft-composer.png` under the ignored `artifacts/ux-audit-2026-09-18/` directory. The screenshots are excluded from the public repository, so this archive does not present them as portable links.
 
 ## What to retain
 

@@ -1,5 +1,7 @@
 # Real recording, hosting diagnosis and public backups
 
+> Historical delivery checkpoint. Preserved for provenance; use [operations](../../OPERATIONS.md), [status](../../STATUS.md) and the [session pipeline](../../SESSION-PIPELINE.md).
+
 18 September 2026. Branch: feat/swiss-citizen-pilot, Tomas's fork only.
 
 The landing research example now plays official recording 408554, Thomas Rechsteiner on the electronic health record (25.082), 14 September 2026. The bounded passage is 227.84–253.36 seconds, aligned with NVIDIA Canary, pending human timing review. The German excerpt remains original; English is labelled an editorial translation. Explore opens the same proposal.

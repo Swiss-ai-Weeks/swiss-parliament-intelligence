@@ -1,5 +1,7 @@
 # Swiss release and H100 processing — 18 September 2026
 
+> Historical release checkpoint. Counts and operating instructions are superseded; use [status](../../STATUS.md), [operations](../../OPERATIONS.md) and the [session pipeline](../../SESSION-PIPELINE.md).
+
 ## Release state
 
 - `/switzerland` redirects to `/Switzerland/`, serving the Swiss application assets instead of the general site's fallback. Both responses were checked on the public domain.

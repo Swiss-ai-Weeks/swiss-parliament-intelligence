@@ -1,5 +1,7 @@
 # Swiss citizen pilot: source-linked AI, debate reading and official profiles
 
+> Historical pull-request draft. Preserved for delivery provenance; use the [README](../../../README.md) and [current status](../../STATUS.md).
+
 This PR adds the Midnight Vote Swiss Pilot while retaining the previous interface at `/legacy`. Citizens can understand five historical ballots, inspect original parliamentary passages, ask Cleisthenes source-linked questions, explore public representatives and save/export evidence.
 
 The reader journey uses Parliament / Topics & votes / Saved, with Reading and Research modes inside a topic. Debate search now returns matching text even when no video has been aligned: the reported `president` query returns 20 readable passages instead of an empty video result. Scoped overview prompts retrieve available passages directly, and empty answers explain their limitation instead of showing only a coverage disclaimer. Experimental image search is behind advanced controls.

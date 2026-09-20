@@ -1,5 +1,7 @@
 # Greek–Swiss pilot integration
 
+> Historical design and release checkpoint. Durable decisions are retained in the [product specification](../../PRODUCT-SPEC.md); current deployment guidance is in [operations](../../OPERATIONS.md).
+
 Date: 18 September 2026. Status: implemented locally; production release pending routing and runtime setup.
 
 ## Design source

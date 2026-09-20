@@ -1,5 +1,7 @@
 # Swiss civic companion: voice and visual direction
 
+> Historical roadmap and design source. Durable product direction is consolidated in the [product specification](../../PRODUCT-SPEC.md); current implementation is in [status](../../STATUS.md).
+
 17 September 2026 — roadmap amendment following Tomas's ElevenLabs and Aristotle direction. This document plans the next implementation; voice, canton coverage and the visual redesign are not yet shipped. Existing source verification, historical labels and acceptance gates remain in force.
 
 ## Product proposition

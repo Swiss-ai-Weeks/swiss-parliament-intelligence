@@ -47,4 +47,4 @@ The current comparison endpoint refuses unreviewed speaker roles. It can return 
 
 ## Delivery order through September 23
 
-Keep the existing evidence journey as the acceptance baseline. Extend ingestion and evaluate real answers first; align a genuine parliamentary clip next; add one reviewed comparison case and a verifiable current event after that. Voice should reuse this evidence API. Broad canton coverage, full historical scoring and a complete Swiss redesign must not displace source accuracy or the recorded demo. The voice and Swiss-brand direction remains in [its accepted plan](../VOICE-AND-SWISS-BRAND-PLAN.md).
+Keep the existing evidence journey as the acceptance baseline. Extend ingestion and evaluate real answers first; align a genuine parliamentary clip next; add one reviewed comparison case and a verifiable current event after that. Voice should reuse this evidence API. Broad canton coverage, full historical scoring and a complete Swiss redesign must not displace source accuracy or the recorded demo. The voice and Swiss-brand direction remains in [its accepted historical plan](../archive/2026-09/VOICE-AND-SWISS-BRAND-PLAN.md).

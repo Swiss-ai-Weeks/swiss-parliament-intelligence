@@ -1,5 +1,7 @@
 # UX refinement — 17 September 2026
 
+> Historical UX checkpoint. Preserved as design provenance; use the [product specification](../../PRODUCT-SPEC.md) and [user guide](../../USER-GUIDE.md).
+
 Evidence: the four user-provided screenshots and live browser checks of the dossier and parliamentary flows. Appllama MCP research inspected Craft: Notes, Documents, AI / New Chat (1487937127/oth_1b9u5): contextual source chip, prompt suggestions and rounded composer. Appllama's separately named usage/design skills were not found in the installed skill folders; its available MCP documentation and screen reference were used. Product Design audit guidance informed the flow checks. No third-party component package was required: reusable React controls and the existing Phosphor icons fit the current design system.
 
 1. **Parliament tools:** inconsistent native forms and bare disclosures now share rounded panels, padded controls, clear focus states and segmented spoken/visual choices. They remain progressively disclosed. English-only visual query guidance is explicit.

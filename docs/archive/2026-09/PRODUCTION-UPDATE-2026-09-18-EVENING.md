@@ -1,5 +1,7 @@
 # Swiss production update — 18 September, evening
 
+> Historical production checkpoint. Counts and release state are superseded; use [status](../../STATUS.md) and [operations](../../OPERATIONS.md).
+
 Deployed to https://midnight.vote/Switzerland/ after explicit user approval. The landing Get started actions now open the account dialog, with email/guest access and accurately disabled unconfigured social/SSO providers. Provider activation is deferred until the user returns. Cleisthenes uses the `civic-evidence-v2` answer workflow, source attribution checks and explicit unsupported-answer behavior.
 
 Only Swiss static assets/index and the isolated `swiss-civic-pilot` compose project were updated. Existing protected environment values, public-data bootstrap, account volume and separate Midnight stack were preserved. No schema migration or public evidence replacement was performed. The new party index and machine timing candidates remain staging material.
