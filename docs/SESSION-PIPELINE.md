@@ -1,60 +1,170 @@
-# Full-session ingestion — 17 September 2026
+# Session, recording and GPU pipeline
 
-First completed text batch: summer 2026, official session 5214 (1–19 June).
+This is the canonical operating guide for importing Swiss Parliament sessions and processing their public recordings. It is organized by stage rather than by the chronology of the hackathon.
 
-## Accepted milestone
+Read [Architecture and data provenance](ARCHITECTURE.md) for component boundaries and [Current status](STATUS.md) for dated per-session counts.
 
-30 sittings, 3,727 Transcript records, 855 subject mappings, 10,180 indexed speech paragraphs, 242 speakers. The 2,172 displayed speech records contain 1,559 German, 579 French and 34 Italian interventions. Procedural/non-displayed text is excluded from personal speech attribution. The original language is retained despite requesting French API metadata.
+## Pipeline states
 
-`node scripts/ingest-session.mjs --session=5214` discovers the session and paginates all its transcript records, links subjects to proposals and imports proposal metadata. URL-keyed response snapshots with hashes allow interrupted queries to resume. Speech indexing commits transactionally. The current checkpoint is `data/parliament/session-5214/progress.json`. Existing cached snapshots are a frozen import, not a freshness check; use a separately versioned import directory when implementing scheduled refresh. Multi-proposal subjects retain all IDs, but current scoped search uses the primary business ID.
+```mermaid
+flowchart LR
+    A[Official session discovery] --> B[Checksummed text snapshot]
+    B --> C[SQLite records and FTS5]
+    B --> D[Recording queue]
+    D --> E[Official-page verification]
+    E --> F[Hashed MP4]
+    F --> G[Canary ASR receipt]
+    G --> H[Machine alignment candidate]
+    F --> I[Cosmos VSS chunks]
+    C --> J[E5 text chunks]
+    H --> K[Review and bounded publication]
+    I --> L[Experimental visual search]
+```
 
-This completes published text-query coverage, NOT all session media or individual votes. Individual roll calls remain a separate ingestion stage. Media queue: `data/parliament/session-5214/media-jobs.json`. Session coverage in the UI distinguishes text, download, ASR, alignment and VSS.
+Each state is independent. In particular, `queued`, `downloaded`, `ASR complete`, `machine aligned`, `VSS complete` and `human reviewed` are not interchangeable.
 
-## Real GPU batch
+## 1. Import official session text
 
-`node scripts/prepare-session-media.mjs --session=5214` selects one pending 45–360 second recording per DE/FR/IT, verifies the download template on its official Parliament page, downloads the original clip and records its hash. Samples: 374406 (Roland Rino Büchel), 374407 (Benjamin Roduit), 374574 (Giorgio Fonio).
+Run:
 
-On the existing NVIDIA host, run `CUDA_VISIBLE_DEVICES=1 devenv/bin/python session-asr-batch.py gpu-batch.json` from `/home/nvidia/swiss-parliament-intelligence`, with the script, manifest and selected MP4 files copied there. It reuses existing `asr_test.py` helpers and loads Parakeet once. Successful JSON outputs are resumable; future cache invalidation must bind the GPU output to model configuration and media hash before processing revised files.
+```bash
+node scripts/ingest-session.mjs --session=5215
+```
 
-Copy each `session-output/<id>.json` to the local session directory as `<id>-asr.json`, then run `node scripts/import-session-asr.mjs --session=5214`. Original words and timing are retained separately from authoritative Bulletin text. Unique five-token prefix/suffix matches and an ordered-text check reject ambiguous or out-of-range matches.
+`scripts/ingest-session.mjs` queries the Swiss Parliament OData `Session`, `Meeting`, `Transcript`, `SubjectBusiness` and `Business` entities. Responses are stored under `data/parliament/session-<id>/responses/` with their URL, retrieval time and SHA-256 hash so interrupted pagination can resume safely.
 
-All three clips transcribed. Two Italian paragraph alignments passed; DE/FR matched zero under the strict rule. Inspection found unwanted English code-switching in German/French ASR, so these are explicitly awaiting improved ASR/alignment, not accepted timestamps. No independent human timing review has been performed. French and Italian audio extraction + ASR took approximately 4.0 and 4.75 seconds after model loading.
+The importer:
 
-## Answer checks and speed
+- keeps original speech language even though metadata is requested in French;
+- indexes only `DisplaySpeaker === true` records with actual text;
+- splits official Bulletin HTML into attributed paragraphs;
+- retains all linked business IDs while exposing one primary ID for current scoped search;
+- writes normalized records and revisions transactionally to `data/parliament.sqlite`;
+- updates the FTS5 `speech_search` index;
+- produces `progress.json` and `media-jobs.json`.
 
-`node --env-file=.env scripts/evaluate-session.mjs` checks three English questions over DE/FR/IT sources and one unsupported question. Reports and previous attempts are retained under `artifacts/session-5214-evaluation*.json`. Automated passes check status, speaker/language scope and citation mechanics, not comprehensive semantic correctness.
+Reusing cached responses reproduces a frozen snapshot. It does not refresh an ongoing session. Use a separately versioned import/reconciliation process before treating a rerun as fresh published coverage.
 
-The first run exposed incorrect motion-author attribution and a misattributed government proposal. Source quotes now attach server-side instead of being regenerated by the model, preserving exact wording while reducing output tokens. A separate model check rejects unsupported claims; a conservative motion-attribution veto also uses surrounding transcript context. This is not a guarantee of entailment. Latest supported smoke timings: about 4.6–5.7 seconds, compared with 20–32 seconds initially. Hardware load/warmup may affect this comparison.
+## 2. Resolve and download official media
 
-## Not yet accepted / next work
+For a bounded pilot recording:
 
-1. Improve French/German ASR or implement proper forced alignment against official text; review timestamps manually before scaling 2,172 media jobs.
-2. VSS video embeddings now work (see validated results below). Wire the retained vectors into search and evaluate whether visual retrieval helps citizens; these embeddings are not verified speech transcripts or political summaries.
-3. Benchmark multilingual embeddings and reranking against the current query-expansion + lexical retrieval, using a larger adjudicated question set.
-4. Import the session’s roll calls and individual decisions; add multi-proposal scoped search, refresh invalidation, retry/backoff, storage limits and a durable worker lock before scheduled unattended ingestion.
+```bash
+node scripts/prepare-session-media.mjs --session=5214 --transcript=374406
+```
 
-No unrestricted web research, full-archive video analysis, stance-change scoring, or automated political messaging was added.
+Without `--transcript`, the helper selects bounded DE/FR/IT samples. It fetches the official Bulletin page, extracts `OnDemandDownloadUrl`, requires HTTPS on `par-pcache.simplex.tv`, checks content type and size, writes `data/media/parliament-<id>.mp4`, and stores the media hash back in the session manifest.
 
-## VSS and dedicated translation — 17 September, second processing milestone
+The full worker in the next stage also downloads missing queue media with disk-reserve and per-recording limits. Never construct or accept an arbitrary client-supplied media URL.
 
-Root cause of zero chunks: base VSS profile omitted `rtvi_embed_base_url` and explicitly skipped embedding generation. Deployed `nvcr.io/nvidia/vss-core/vss-rt-embed:3.2.1` with Cosmos-Embed1-448p on GPU 1 using `scripts/pilot-rtvi-compose.yml`; both TensorRT encoders compiled successfully. `scripts/connect-vss-embed.py` backs up and connects the existing base-profile configuration. It restarts only vss-agent, not the chat model. Service is loopback-bound at host port 8017.
+## 3. Run Canary ASR
 
-| Complete recording | Language | Duration | VSS chunks | Completion time after upload |
-|---|---|---|---|---|
-| 374406 | DE | 132.05 s | 27 | 3.87 s |
-| 374407 | FR | 207.05 s | 42 | 5.30 s |
-| 374574 | IT | 228.02 s | 46 | 3.89 s |
+The current resumable full-session worker is:
 
-`scripts/process-vss-video.py <transcript-id>` runs on the GPU host against already-copied official MP4s and saves receipts. Upload receipts are resumable and media-hash checked. `scripts/preserve-vss-embeddings.py` captures full vectors separately because VSS completion only returns counts. All 115 vectors/chunks and receipts are now copied to `data/parliament/session-5214/*-embeddings.json` and `*-vss.json`; manifest jobs count as complete only after receipt/vector count and media-hash checks. The three-record preservation helper is a bounded pilot batch, not a general unattended worker. Storage timestamps in the upload helper are an ingestion anchor, not authenticated sitting times; preserved embedding offsets are relative to each clip. Kafka is disabled: there is no persistent VSS search index yet. The public app still retrieves official text with its existing multilingual retrieval system.
+```bash
+CUDA_VISIBLE_DEVICES=1 python scripts/process-public-sessions.py data/public-session-queue.json
+```
 
-Riva-Translate-4B-Instruct-v2 now runs alongside Cosmos on GPU 1. Chat remains on GPU 0. Model revision: `040d958b128018ff0bed2542a7b51005e9ea563c`. The translation service is loopback-only on 30082, reached locally through SSH port 4320. Use the existing Python environment with torch, transformers, huggingface_hub and langdetect; run `CUDA_VISIBLE_DEVICES=1 devenv/bin/python translation-server.py` from the GPU workspace. It writes/reuses a revision pin and does not log passage contents. Set local `TRANSLATION_BASE_URL=http://127.0.0.1:4320` and restart the API.
+Run it in the prepared NVIDIA environment from `/home/nvidia/swiss-parliament-intelligence`. It:
 
-The app exposes `POST /api/parliament/translate` for existing evidence IDs, plus a translation button below each original passage. It preserves the original and source link, marks output as machine translation, caches by source hash/language/target, and keeps provider failures visible. Non-English pairs explicitly pivot through English. No Romansh inference is attempted. Full passages avoid the chat summarizer's two-sentence output constraint.
+- keeps a SQLite job ledger so completed work can resume;
+- verifies official source scope and downloads missing media;
+- hashes every recording;
+- uses `ffprobe` for duration and `ffmpeg` for bounded mono 16 kHz audio;
+- transcribes 300-second windows with `nvidia/canary-1b-v2`;
+- shifts word timings back to the original recording timeline;
+- writes complete JSON receipts under `session-output/`;
+- records failures explicitly rather than silently skipping them.
 
-Live tests: three translations into English accepted; IT→FR, DE→FR and FR→IT accepted in about 3–8 seconds. One additional IT→FR passage invented a resolution number and is rejected by the new number-preservation gate. Before/after failure reports remain in `artifacts/riva-translation-*.json`; cross-language results in `artifacts/riva-cross-language-evaluation.json`. Number and language checks are conservative and not full semantic review. Equivalent numeric formatting can cause false rejections. Terminology and fluency still require Swiss-language review. This does not fix the earlier ASR code-switching or unreviewed alignment.
+`scripts/canary-session-batch.py` is the earlier explicit-manifest pilot helper. `scripts/session-asr-batch.py` and the retained Parakeet receipts document the earlier bounded experiment; Parakeet is not the current bulk worker.
 
-Validation: 26 backend tests, 2 frontend API tests and 4 Sites tests passed; production build passed. Browser verified a complete current-session DE-to-EN translation with original/citation visible. Live API reports VSS=3 and returns HTTP 502 for the known hallucinated-reference translation.
+## 4. Import and validate ASR receipts
 
-## Video search and Canary expansion
-See PILOT-RECAP.md for the next milestone: six recordings, 269 VSS chunks and 17 machine-aligned candidates. Run scripts/canary-session-batch.py on the GPU host with an explicit batch manifest, then copy the *-canary.json receipts locally and run node scripts/import-canary-alignment.mjs. Copy VSS receipts/vectors and run node scripts/import-vss-receipts.mjs. Both importers validate media hashes. Start a private SSH tunnel from local 4321 to remote 8017 and set VSS_EMBED_BASE_URL=http://127.0.0.1:4321. POST /api/parliament/video-search supports spoken and visual modes. The visual index is built from verified local receipts, never arbitrary client paths. Restart the API after importing alignments. Tests and live evaluation reports are in server/tests and artifacts.
-NVIDIA Canary model and timestamp usage: https://huggingface.co/nvidia/canary-1b-v2 . The current batch uses NVIDIA's auxiliary timestamp alignment through NeMo; it is not human-reviewed timing.
+After copying a public-only receipt checkpoint back to the application host, run:
+
+```bash
+node scripts/import-public-processing.mjs data/gpu-processing/session-output
+```
+
+The importer accepts a receipt only when its transcript ID exists in `data/public-session-queue.json` and its official page, session, language, model, duration and media hash satisfy the expected contract. Accepted receipts go to `data/public-processing.sqlite`.
+
+This consolidated database is newer and broader than the small per-session pilot manifests. Do not add those two counters together. See [Status](STATUS.md#why-some-counts-differ-from-old-notes).
+
+## 5. Align machine words to official text
+
+Run:
+
+```bash
+node scripts/stage-public-alignments.mjs
+```
+
+The aligner compares Canary word sequences with official Bulletin paragraphs and writes `data/alignment-review/candidates.json`. It uses ordered anchors, overlap thresholds, source identity and timing bounds. Candidates remain machine-generated even when the match score is high.
+
+Only reviewed, explicitly published alignments belong in the application alignment file. Until a human review workflow records acceptance, label playback as machine-aligned and keep a full-intervention or official-source fallback.
+
+## 6. Generate and preserve VSS embeddings
+
+VSS is a separate experimental visual path:
+
+1. `scripts/pilot-rtvi-compose.yml` runs `vss-rt-embed:3.2.1` with `cosmos-embed1-448p`.
+2. `scripts/connect-vss-embed.py` connects the existing VSS agent to the loopback embedding service.
+3. `scripts/process-vss-video.py <transcript-id>` uploads an already verified official MP4 and records the processing receipt.
+4. `scripts/preserve-vss-embeddings.py` saves the full vectors because the completion response exposes counts only.
+5. `node scripts/import-vss-receipts.mjs` validates receipt count, model and media hash against the session manifest.
+6. `server/video-search.mjs` embeds a text query through the private VSS endpoint and ranks retained chunks.
+
+Kafka is disabled in this pilot; there is no external persistent VSS index. The retained visual index is built from verified local receipts. Scores are similarity values, not confidence or evidence that words were spoken.
+
+## 7. Generate public text embeddings
+
+Prepare public-only input:
+
+```bash
+node scripts/export-public-embedding-input.mjs
+```
+
+On the GPU host:
+
+```bash
+CUDA_VISIBLE_DEVICES=1 python scripts/embed-public-corpus.py data/public-embedding-input.jsonl data/public-embeddings.sqlite
+```
+
+Validate after copying the vector database back:
+
+```bash
+node scripts/validate-public-embeddings.mjs
+```
+
+The batch uses `intfloat/multilingual-e5-large`, pinned to revision `3d7cfbdacd47fdda877c5cd8a79fbcc4f2a574f3`, with normalized 1,024-dimensional vectors. Validation checks model/revision, source hashes, finite normalized vectors, chunk boundaries and complete imported-passage coverage.
+
+The validated E5 database is not yet wired into production retrieval. The application continues to use FTS5 plus multilingual query expansion until vector retrieval and reranking pass an adjudicated comparison.
+
+## 8. Translation and generated answers
+
+Translation is not ASR. `scripts/translation-server.py` runs `nvidia/Riva-Translate-4B-Instruct-v2` behind the private `TRANSLATION_BASE_URL`. `POST /api/parliament/translate` accepts an existing evidence ID, preserves the original/source link, caches by source hash and target language, and rejects several language/number failures.
+
+Generated answers are also downstream of retrieval, not part of media ingestion. `POST /api/parliament/ask` enters through `server/index.mjs`; `server/parliament-ai.mjs` selects evidence; `server/research.mjs` sends the `/chat/completions` request to Nemotron.
+
+## 9. Validate and publish
+
+Before publishing a new snapshot:
+
+```bash
+npm run docs:status
+npm run docs:check
+npm test
+npm run test:api --prefix frontend
+npm run test:sites --prefix frontend
+npm run build --prefix frontend
+```
+
+Also verify:
+
+- imported counts and source hashes match the intended snapshot;
+- a refreshed ongoing session is labelled with its actual retrieval date;
+- unavailable media and worker failures remain visible;
+- no private account/session/feedback data enters a public package;
+- machine timings and visual matches carry their review-state disclosures;
+- production can still serve original text if GPU services are unavailable.
+
+Publication packages are prepared and validated through the scripts documented in [Operations](OPERATIONS.md). A successful batch measurement is not a latency guarantee or a claim of complete archive coverage.

@@ -1,43 +1,43 @@
-# Product research and specification
+# Developer documentation
 
-**Design integration, 18 September:** [Greek–Swiss landing, reading UI and production boundary](GREEK-SWISS-INTEGRATION.md) records the Lovable source, implemented behavior, checks and isolated `/Switzerland/` release plan.
+This index separates current implementation truth from product direction, operating instructions, research and historical delivery notes.
 
-**Cleisthenes is implemented:** persistent compact/expanded chat, current-session batch ingestion, multilingual query expansion, bounded answer caching and two genuine parliamentary video alignments. See the latest section of [the runbook](PILOT-RUNBOOK.md). Stance-change work is paused; voice remains pending.
+## Start here
 
-**Parliament update, 17 September:** [Working data explorer and competitor extension](research/PARLIAMENT-INTELLIGENCE-UPDATE.md): official proposals, attributed speeches, individual votes, coverage limits, stance-comparison gates and the next ingestion stages.
+1. [Project README](../README.md) — product purpose, user journey and a two-minute technical overview.
+2. [Architecture and data provenance](ARCHITECTURE.md) — data sources, request paths, AI responsibilities and trust boundaries.
+3. [Current implementation and corpus status](STATUS.md) — dated coverage, validation and known gaps.
+4. [Session, recording and GPU pipeline](SESSION-PIPELINE.md) — repeatable ingestion and processing stages.
+5. [Operations and deployment](OPERATIONS.md) — local runtime, private GPU services, release, backup and recovery.
 
-**Latest direction, 17 September:** [Voice and Swiss branding roadmap amendment](VOICE-AND-SWISS-BRAND-PLAN.md) incorporates the ElevenLabs promotion, Aristotle reference, unified voice/chat journey and a bounded single-canton pilot. [Pilot runbook](PILOT-RUNBOOK.md) describes the implementation that actually exists. The 14 September research below remains background; newer approved scope takes precedence.
+## Product and user experience
 
-Updated 14 September 2026. This package responds to Tomas's revised direction: meet the parliamentary-video challenge, make the citizen journey simple, and investigate Midnight participation and business opportunities before expanding implementation.
+- [Product specification](PRODUCT-SPEC.md) — current scope, journeys, non-goals and acceptance principles.
+- [User guide](USER-GUIDE.md) — citizen-facing navigation and evidence interpretation.
+- [Demo and user test](DEMO-AND-USER-TEST.md) — rehearsal flow and manual acceptance tasks.
+- [Authentication provider checklist](AUTH-PROVIDERS-CHECKLIST.md) — external configuration and live acceptance still requiring operator access.
 
-**Product recommendation:** a citizen companion for understanding federal popular votes, following the parliamentary evidence, and optionally participating in a clearly non-binding consultation. The reusable asset is the evidence pipeline; the proposed differentiator is the connection between understanding, verifiable sources, and participation.
+## Engineering and operations
 
-## Read in this order
+- [Contribution and branch policy](../CONTRIBUTING.md)
+- [Architecture and data provenance](ARCHITECTURE.md)
+- [Session pipeline](SESSION-PIPELINE.md)
+- [Operations](OPERATIONS.md)
+- [Status](STATUS.md)
+- [Environment template](../.env.example)
 
-1. [Product specification](PRODUCT-SPEC.md): journeys, scope, acceptance criteria and delivery slices.
-2. [Competitive landscape](research/COMPETITIVE-LANDSCAPE.md): current alternatives, positioning and business hypotheses.
-3. [Swiss voting and NFC](research/SWISS-VOTING-AND-NFC.md): present voting procedures, identity distinctions and possible progression to official integration.
+Use `npm run docs:check` after editing or moving documentation. Operators with the ignored public-processing artifacts can reproduce the status table with `npm run docs:status`.
 
-## Decisions and status
+## Research
 
-| Item | Status |
-|---|---|
-| Federal popular votes first; local ballots later | Explicitly confirmed by Tomas |
-| Citizen-friendly, responsive web experience; desktop evidence inspection | User direction |
-| Public parliamentary information; optional verified participation | User direction |
-| Platform participation stays non-binding | User direction |
-| Passport provider, branding, exact navigation and commercial buyer | Open |
-| Private ballot protocol and production NFC support | Require technical validation; not delivered by this research |
+The [`research/`](research/) directory contains product, market and public-system research. Research informs the product but is not proof that a capability is implemented.
 
-The repository currently contains an interactive frontend and API seam. Its fixtures, simulated playback controls and saved demo preferences are not proof of a working parliamentary ingestion pipeline or election system. This update adds research and specifications, not those capabilities. Existing journalist-first and desktop-first descriptions document the earlier prototype; the citizen priority above guides the next specification cycle.
+- [Competitive landscape](research/COMPETITIVE-LANDSCAPE.md)
+- [Parliament intelligence update](research/PARLIAMENT-INTELLIGENCE-UPDATE.md)
+- [Swiss voting and NFC](research/SWISS-VOTING-AND-NFC.md)
 
-Start with one real recording → timestamped evidence → cited answer → playable source. In parallel, test a ballot-companion storyboard with prospective users. Expand the implementation only as each slice's acceptance evidence becomes available. The earlier three-product exploration sprint is an opportunity backlog, not three equal development commitments competing with the challenge.
+## Historical record
 
-## Reader-first follow-up
-See [User guide](USER-GUIDE.md) and [Topics, debates and people roadmap](TOPICS-AND-READER-ROADMAP.md) for the latest interface, observed Parlacta dashboard and current limitations.
+Date-stamped implementation notes, benchmarks, design explorations and release checkpoints are preserved under [`archive/2026-09/`](archive/2026-09/). They describe what was known at a particular checkpoint and may be superseded by the canonical documents above.
 
-Latest increment: [Content and debate reader specification](CONTENT-READER-SPEC.md) — original-text browsing, expanded session snapshots, bounded GPU batches and acceptance gates (18 September 2026).
-
-[Conversation and source inspection](CHAT-SOURCE-EXPERIENCE.md): compact suggestions, device chat history, source panels and official portrait identity correction.
-
-- [Swiss production release and H100 processing, 18 September](SWISS-RELEASE-2026-09-18.md) — verified release state, data receipts and operational limits.
+Do not use an archived progress count as current status. Do not remove archived material merely because it has been consolidated; it remains useful provenance for decisions and measured experiments.

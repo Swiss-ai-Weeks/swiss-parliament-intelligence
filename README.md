@@ -4,9 +4,9 @@
 
 ### A clearer view. Your own decision.
 
-A civic research workspace that connects questions about Swiss public life to **original parliamentary words, identifiable speakers and verifiable sources**.
+An evidence-first civic research workspace for understanding Swiss public life through original parliamentary words, identifiable speakers, recorded proceedings and verifiable sources.
 
-[Swiss landing](https://midnight.vote/Switzerland/) · [Explore the experience](#the-experience) · [Architecture](#how-it-works) · [Run locally](#run-locally) · [Delivery status](#built-today-and-product-vision) · [Documentation](#documentation)
+[Open the Swiss pilot](https://midnight.vote/Switzerland/) · [Technical architecture](docs/ARCHITECTURE.md) · [Data pipeline](docs/SESSION-PIPELINE.md) · [Current status](docs/STATUS.md) · [Run locally](#run-locally)
 
 ![Swiss civic landing with Alpine landscape and Cleisthenes](docs/images/landing.png)
 
@@ -14,131 +14,101 @@ A civic research workspace that connects questions about Swiss public life to **
 
 </div>
 
-## Why this exists
+## What the product does
 
-Public decisions deserve more than a headline. Parliamentary records are rich, multilingual and spread across long debates, proposals, individual votes and recordings. Finding the relevant statement—and checking what it actually meant—takes time.
+Swiss parliamentary records are authoritative but fragmented across debates, proposals, votes, profiles and long recordings. Midnight Vote brings those records into one research flow:
 
-Midnight Vote brings that evidence into one place. Start with a question, inspect an attributed passage, return to its surrounding debate, and watch the corresponding recording where timing has been established. **Cleisthenes**, the contextual civic companion, helps explain the material while keeping the sources close.
+1. Ask a question or open a proposal, person or passage.
+2. Retrieve relevant material from the imported official corpus.
+3. Read a short, source-scoped explanation from **Cleisthenes**.
+4. Inspect the original wording, speaker, date and official link.
+5. Play a bounded recording only where machine timing has been established; otherwise open the full official intervention.
 
-The aim is informed judgment: citizens forming their own views, with enough detail for journalists, students and researchers to inspect the evidence themselves.
-
-## The experience
+Citizens are the primary audience. Journalists, students and researchers can use the same source inspectors, filters and dated coverage notes for deeper verification. The pilot does not cast official votes and does not infer a user's political affiliation.
 
 ![Live Swiss civic dashboard with proceedings and calendar](docs/images/live-dashboard.png)
 
-| Workspace | What you can do |
+## What is available
+
+| Workspace | Current capability |
 | --- | --- |
-| **Home** | Browse dated proceedings, a calendar, explicit follows, recent research and public-source updates. |
-| **Parliament** | Explore separately verified National Council and Council of States seat maps; inspect representatives, proposals, original passages and recorded votes. |
-| **Topics & votes** | Search historical example dossiers, compare attributed arguments and open an Overview / Debate / Timeline / Sources workspace. |
-| **Cleisthenes** | Ask source-scoped questions, inspect citations, translate passages and continue researching without losing context. |
-| **Saved & settings** | Save research with an account; control reading preferences and optional personalisation. Anonymous conversations stay in the browser. |
+| **Home** | Dated proceedings, official session calendar, explicit follows, recent research and source updates. |
+| **Parliament** | Verified 2D National Council and Council of States seating snapshots, representative profiles, proposals, speeches and imported roll calls. |
+| **Topics & votes** | Searchable example dossiers with Overview / Debate / Timeline / Sources views. |
+| **Cleisthenes** | Contextual questions, multilingual retrieval, cited explanations, passage translation and source inspection. |
+| **Accounts** | Passwordless/password entry, persistent server sessions, per-user saved material and optional MFA. Anonymous research stays in the browser. |
 
 ![Official-seat chamber explorer in the Swiss pilot](docs/images/parliament.png)
 
-### From a question to the original record
+Implementation is not the same as acceptance. See [the current status](docs/STATUS.md) for exact imported coverage, processing counts and remaining review gates.
 
-1. Search a topic or ask Cleisthenes within a proposal, person or passage.
-2. Open the cited words, with speaker, date and official source.
-3. Read the original language or a clearly labelled translation.
-4. Play a bounded clip when alignment exists; otherwise open the full official intervention or transcript.
-5. Save the source or use it in a cited brief.
-
-The landing demonstrates a **real processed recording**: Thomas Rechsteiner discussing the electronic health record on 14 September 2026, at **3:47–4:13**. The quotation comes from the official Bulletin. NVIDIA Canary supplied machine timing; human timing review remains pending.
-
-![Real parliamentary recording with original words and translation controls](docs/images/real-passage.png)
-
-## Built today and product vision
-
-Implementation is not the same as production acceptance. This table makes the distinction explicit.
-
-| Capability | Current state | Next acceptance step |
-| --- | --- | --- |
-| Original parliamentary text and provenance | Imported, searchable and source-linked | Continue incremental updates and coverage audits |
-| Chamber explorer | Dated 2D snapshots: **200 National Council + 46 Council of States seats**; party and group remain distinct | Revalidate every new seating snapshot before publication |
-| Representative profiles | Official identity, canton, party/group, recorded terms, declared background and imported votes | Broaden biography and historical vote coverage |
-| Contextual AI answers | Implemented with original citations and scoped retrieval | Independent multilingual and semantic evaluation |
-| Translation | Original text retained; provider-dependent machine output labelled | Language review and production service acceptance |
-| Video | Real recordings, selected timed passages, full-intervention fallback | Full-session ASR and human timing review |
-| Text embeddings | **16,471 passages / 16,488 chunks** persisted and validated on H100 | Wire the new text index into evaluated semantic retrieval; it does not yet replace lexical retrieval |
-| Accounts | Separate email/OAuth flows, persistent encrypted sessions, per-user storage | Real email and Google provider acceptance in production |
-| Backups | Encrypted public-corpus backup and isolated restore tested | Off-device storage, independent key custody and daily scheduling |
-| Feedback | UI and spam-protected email adapter implemented | Connect and verify the production sender |
-| Private eligibility and community votes | Clearly labelled interactive concepts | Future protocol integration and independent security review |
-
-**No official vote is cast by this pilot.** Passport signatures, biometric confirmation, private eligibility proofs and community voting are not operational features. Missing records are not abstentions; visual similarity is not evidence of what someone said.
-
-The Swiss workspace is live at [midnight.vote/Switzerland](https://midnight.vote/Switzerland/). The landing, dashboard, both chamber maps, public API, source video, real cited AI answer and translation were verified on the public domain. Google sign-in is currently disabled in the provider configuration; email delivery and account lifecycle still need production acceptance.
-
-## Data and compute snapshot
-
-Snapshot: **18 September 2026**. These counts describe the imported collection, not the entire history of Swiss Parliament.
-
-| Imported text scope | Passages | Text embedding chunks |
-| --- | ---: | ---: |
-| Session 5213 | 2,469 | 2,471 |
-| Session 5214 | 10,180 | 10,190 |
-| Session 5215, published material as imported | 3,575 | 3,580 |
-| Additional imported records | 247 | 247 |
-| **Total** | **16,471** | **16,488** |
-
-The full text embedding run completed on an **NVIDIA H100 NVL** in 214 seconds after model loading. It uses `intfloat/multilingual-e5-large`, pinned by the recorded model revision, with 1,024-dimensional normalized vectors. Long passages use overlapping token windows. Validation checks source hashes, finite vectors, normalization, text boundaries and complete imported-passage coverage. This is a batch measurement, not a latency guarantee.
-
-A resumable **3,346-recording queue** covers the three imported sessions, prioritising the current session. It verifies official recording URLs, preserves media hashes, transcribes bounded audio windows with NVIDIA Canary and records success/failure in SQLite. At the 16:14 UTC checkpoint, 251 queue entries were complete; 250 new full ASR receipts were validated into `data/public-processing.sqlite` (one existing queue receipt and older receipts remain separate). Six official media URLs returned 404 and are recorded as unavailable. The H100 continues independently. Queued does not mean completed; media, ASR, text embeddings, visual embeddings and alignment are tracked separately.
-
-The previously processed Cosmos visual embeddings remain distinct from the new multilingual text embeddings. Private conversations, account data and feedback are excluded from the public processing corpus.
-
-## How it works
+## How it actually works
 
 ```mermaid
 flowchart LR
-    A[Swiss Parliament official records] --> B[Resumable import + source hashes]
-    B --> C[(Public parliamentary SQLite)]
-    A --> D[Verified official recordings]
-    D --> E[H100: Canary ASR]
-    E --> F[Word alignment + review state]
-    C --> G[H100: multilingual text embeddings]
-    G --> H[(Versioned vector SQLite)]
-    D --> I[Cosmos visual embeddings]
-    C --> J[Scoped retrieval]
-    F --> J
-    J --> K[Nemotron: cited explanation]
-    K --> L[React civic workspace]
-    C --> L
-    F --> L
-    H -. evaluated retrieval integration pending .-> J
+    O[Swiss Parliament OData and official pages] --> I[Checksummed import]
+    I --> P[(Public parliamentary SQLite)]
+    O --> M[Verified official recordings]
+    M --> A[Canary ASR]
+    A --> L[Machine timing candidates]
+    M --> V[Cosmos VSS embeddings]
+    P --> R[FTS5 retrieval]
+    R --> Q[Nemotron multilingual query expansion]
+    Q --> G[Nemotron source-isolated answer]
+    L --> G
+    G --> C[Server-attached exact citations]
+    C --> U[React civic workspace]
+    P --> E[Multilingual E5 batch index]
+    E -. evaluated integration pending .-> R
 ```
 
-```mermaid
-flowchart TB
-    UI[Browser: Swiss civic workspace] --> API[Node API / backend for frontend]
-    API --> PUB[(Public corpus + processing receipts)]
-    API --> GPU[Private NVIDIA model connection]
-    API --> AUTH[Supabase Auth]
-    API --> PRIVATE[(Per-user research, follows and conversations)]
-    PUB --> BACKUP[Encrypted public backups + restore checks]
-    PRIVATE -. never included .-> EXCLUDED[Public embedding pipeline]
-```
+The application does not send a video directly to the language model. Text, video and generation are separate paths:
 
-**Frontend:** React 19, Vite, TypeScript/JavaScript, custom SVG chambers and the Greek–Swiss visual system.
-**Backend:** Node.js 24, built-in SQLite, explicit HTTP API and server-managed sessions.
-**AI:** Nemotron for explanations; Canary/Parakeet for recorded ASR work; Cosmos for experimental visual retrieval; multilingual E5 for the new text index.
-**Accounts:** Supabase Auth and per-user access controls.
-**Operations:** isolated deployment, source checksums, resumable processing and encrypted public-data restoration.
+- **Official text** is imported from Swiss Parliament OData into SQLite with source URLs, timestamps, hashes and retained revisions.
+- **Retrieval** currently uses SQLite FTS5. Nemotron generates French, German and Italian search terms, but the ranking remains lexical. The E5 vector database has been persisted and validated; it is not yet the production retriever.
+- **Generation** receives at most a few selected source records. Each model call handles one source at a time, and the server attaches the exact quotation afterward. A second model check can withhold unsupported claims.
+- **Video** is discovered from an official Parliament page, downloaded only from the Parliament-linked Simplex host, hashed, transcribed separately and aligned back to official Bulletin text.
+- **Visual search** uses Cosmos embeddings through VSS. It is experimental image similarity and never evidence of what a speaker said.
+- **Private account data** is stored separately and is excluded from the public processing and embedding corpus.
 
-## Evidence and privacy principles
+For the complete request path, trust boundaries and data-source catalog, read [Architecture and data provenance](docs/ARCHITECTURE.md).
 
-- **Original wording stays visible.** Official text, ASR output, translation and generated explanation are separate records.
-- **Attribution is explicit.** A speaker's current party does not rewrite historical membership or turn a reported position into their own.
-- **Timing is earned.** A video URL alone does not establish an exact quotation timestamp.
-- **Coverage is disclosed.** Partial imports, unavailable recordings and stale sources remain visible.
-- **Personalisation is chosen.** Follows and optional canton preferences never imply political affiliation.
-- **Public and private data stay separate.** Public evidence can be processed and indexed; personal chats and account records are not a training or RAG shortcut.
-- **Failures stay honest.** Unavailable providers and unverified claims are not silently replaced with fabricated answers.
+## AI and processing technologies
+
+| Technology | Used for | Not used for |
+| --- | --- | --- |
+| **NVIDIA Nemotron Nano 9B v2** | Multilingual query expansion, cited explanations, claim review, guarded comparison and editable correspondence drafts. | Ingesting video, choosing official truth or replacing citations. |
+| **NVIDIA Canary 1B v2** | Current bulk parliamentary-recording ASR and word-timed machine alignment candidates. | Authoritative transcript text or human timing approval. |
+| **NVIDIA Parakeet** | Earlier bounded ASR experiments retained for provenance. | The current full-session worker. |
+| **Riva Translate 4B Instruct v2** | Server-side passage translation with number/language checks. | Main ASR or generative answers. |
+| **Cosmos Embed1-448p / VSS** | Experimental video-chunk and text-query embeddings for visual similarity. | Verification of spoken content or political interpretation. |
+| **multilingual-e5-large** | 1,024-dimensional normalized text embeddings in a validated batch SQLite index. | Current production retrieval; integration remains pending evaluation. |
+| **SQLite FTS5** | Current deterministic candidate retrieval before generation. | Semantic vector ranking. |
+
+The production deployment reaches the GPU services through a private SSH tunnel. Browser clients never receive model credentials.
+
+## Where the work happens
+
+| Question | Entry point |
+| --- | --- |
+| Where is a complete session imported? | [`scripts/ingest-session.mjs`](scripts/ingest-session.mjs) |
+| How is an official video found and downloaded? | [`scripts/prepare-session-media.mjs`](scripts/prepare-session-media.mjs) |
+| What performs the resumable bulk ASR work? | [`scripts/process-public-sessions.py`](scripts/process-public-sessions.py) |
+| Which API endpoint accepts an AI question? | [`server/index.mjs`](server/index.mjs) (`POST /api/parliament/ask`) |
+| Where are retrieval and evidence scope chosen? | [`server/parliament-ai.mjs`](server/parliament-ai.mjs) |
+| Which file sends `/chat/completions` to Nemotron? | [`server/research.mjs`](server/research.mjs) |
+| Where is experimental VSS search implemented? | [`server/video-search.mjs`](server/video-search.mjs) |
+| How are production model services connected? | [`deploy/switzerland/compose.hostinger.yaml`](deploy/switzerland/compose.hostinger.yaml) |
+
+## Data snapshot
+
+The local validated snapshot contains 16,471 official-text passages, 16,488 E5 chunks and a 3,346-recording processing queue across sessions 5213–5215. The consolidated processing database contains 969 validated Canary receipts and 1,460 machine timing candidates across 502 recordings. These are dated local artifacts, not a live remote-worker counter or a claim of human review.
+
+See [Current implementation and corpus status](docs/STATUS.md) for the per-session matrix and the distinction between pilot manifests, consolidated receipts, VSS coverage and reviewed publication state.
 
 ## Run locally
 
-Requirements: **Node.js 24** and npm. A GPU is optional for browsing; model-backed features require configured services. Public datasets and credentials are intentionally not committed to Git.
+Requirements: Node.js 22.13 or newer and npm. A GPU is optional for browsing and deterministic source access; live model-backed features require configured private services. Public databases, media and credentials are intentionally not committed.
 
 ```bash
 npm ci --prefix frontend
@@ -146,73 +116,56 @@ npm run build --prefix frontend
 npm start
 ```
 
-Open **http://127.0.0.1:4318/**. The historical example dossiers are seeded locally. To populate the parliamentary corpus, use the documented import scripts; a fresh clone does not include the operator's imported database or media.
+Open `http://127.0.0.1:4318/`. The repository includes seeded example dossiers, while the operator's imported corpus remains under ignored `data/` artifacts.
 
-Optional: copy `.env.example` to `.env` and configure server-side providers. Never put private keys or server credentials in `VITE_*` variables. For frontend development, run `npm run dev --prefix frontend` alongside the API.
+Optional server-side configuration is documented in [`.env.example`](.env.example). Never put private provider keys in `VITE_*` variables.
+
+To import one official session snapshot:
 
 ```bash
-# Import one complete published text snapshot; processing is a separate stage.
 node scripts/ingest-session.mjs --session=5215
-
-# Prepare public-only input for the H100 batch.
-node scripts/export-public-embedding-input.mjs
-
-# On the GPU host with its ML environment:
-CUDA_VISIBLE_DEVICES=1 python scripts/embed-public-corpus.py data/public-embedding-input.jsonl data/public-embeddings.sqlite
-
-# Validate copied vectors against the local official corpus.
-node scripts/validate-public-embeddings.mjs
 ```
 
-GPU dependencies live in the processing environment, not the frontend install. See the pipeline documentation before running ASR or VSS services.
+Read [the session pipeline](docs/SESSION-PIPELINE.md) before running media, ASR, alignment, VSS or embedding stages.
 
 ## Validate a change
 
 ```bash
+npm run docs:check
 npm test
 npm run test:api --prefix frontend
 npm run test:sites --prefix frontend
 npm run build --prefix frontend
 ```
 
-Tests cover source attribution, ownership, session handling, citation boundaries, chamber validation, timezones, search, media paths, feedback failures and backup restoration. Mocked provider tests do not prove real email delivery or live account configuration.
+Operators with the ignored processing artifacts can reproduce the coverage table with:
+
+```bash
+npm run docs:status
+```
 
 ## Documentation
 
-| Guide | Purpose |
-| --- | --- |
-| [Documentation index](docs/README.md) | Product and engineering reference map |
-| [Civic workspace delivery](docs/CIVIC-WORKSPACE-DELIVERY.md) | Accepted scope, completed work and remaining gates |
-| [Media pipeline](docs/SESSION-PIPELINE.md) | Recording verification, ASR, alignment and visual processing |
-| [September release and compute](docs/SWISS-RELEASE-2026-09-18.md) | Live mount, isolated backend, H100 receipts and approval gates |
-| [Deployment and integration](docs/GREEK-SWISS-INTEGRATION.md) | Swiss mount, hosting isolation and release boundaries |
-| [Landing, routing and feedback](docs/LANDING-ROUTING-FEEDBACK.md) | Real example, feedback setup and public-data backups |
-| [Speaker context](docs/SPEAKER-CONTEXT-UPDATE.md) | Biographies, citation inspectors and recording fallback |
-| [Operational runbook](docs/PILOT-RUNBOOK.md) | Historical implementation log; later delivery notes supersede older limitations |
-| [Environment template](.env.example) | Server-side configuration names, without secrets |
+- [Developer documentation index](docs/README.md)
+- [Product specification](docs/PRODUCT-SPEC.md)
+- [Architecture and data provenance](docs/ARCHITECTURE.md)
+- [Current implementation and corpus status](docs/STATUS.md)
+- [Session, recording and GPU pipeline](docs/SESSION-PIPELINE.md)
+- [Operations and deployment](docs/OPERATIONS.md)
+- [Contribution and branch policy](CONTRIBUTING.md)
+- [Historical implementation record](docs/archive/2026-09/README.md)
 
-## Repository map
+## Evidence and privacy rules
 
-```text
-frontend/src/pilot/       Citizen-facing workspace and landing
-frontend/src/services/    API client boundary
-server/                  HTTP API, retrieval, accounts and public catalog
-server/chamber-snapshots/ Verified, versioned seating layouts
-server/tests/            Backend and data-integrity checks
-scripts/                 Import, H100 processing, validation and backup tools
-deploy/switzerland/      Isolated Swiss deployment and routing files
-docs/                    Product, architecture, operations and screenshots
-data/                    Ignored local databases, media and credentials
-```
+- Official text, ASR output, translation and generated explanation remain separate records.
+- A current party membership never rewrites historical membership or turns a reported position into a personal position.
+- Missing votes are not abstentions, and a recording URL is not an exact quotation timestamp.
+- Queued, downloaded, transcribed, aligned, visually embedded and human-reviewed are separate states.
+- Public evidence may be processed and indexed; private chats, accounts and feedback are not included.
+- Provider failures and unsupported questions remain visible rather than being replaced with fabricated answers.
 
-## Contributing and release discipline
+## Repository and release discipline
 
-This fork develops the Swiss pilot on **`feat/swiss-citizen-pilot`**. Submit focused changes against the fork's pilot branch; do not push directly to the upstream project's main branch. Keep source provenance, accessibility and honest coverage labels intact. Include relevant tests and disclose provider-dependent acceptance that has not been exercised.
+The active development branch is `feat/swiss-citizen-pilot` in Tomas Garro's fork. Until final submission, changes go there only; neither `fork/main` nor the organization repository is updated without explicit approval. See [CONTRIBUTING.md](CONTRIBUTING.md).
 
-Report problems through the in-app feedback entry or **contact@midnight.vote**. Never include passwords, identity documents or private conversations in a public issue.
-
-## Sources and acknowledgements
-
-Built on the original **Swiss Parliament Intelligence** hackathon project, with public records and imagery from Swiss Parliamentary Services. Parliamentary media remains subject to its [source usage conditions](https://www.parlament.ch/de/services/Seiten/Nutzungsbedingungen.aspx); credit **© ParlCH** and any named photographer. This non-commercial civic pilot has no government affiliation.
-
-Model weights, fonts and third-party assets retain their own licences. The repository does not assign a new blanket licence to those materials. The screenshots above show the implemented interface, not a design mockup.
+This non-commercial civic pilot is independent and has no government affiliation. Parliamentary material comes from Swiss Parliamentary Services and remains subject to its [source usage conditions](https://www.parlament.ch/de/services/Seiten/Nutzungsbedingungen.aspx); credit **© ParlCH** and any named photographer. Model weights, fonts and third-party assets retain their own licences.

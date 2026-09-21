@@ -83,6 +83,12 @@ export function createServer({store=createStore(path.join(root,'data/pilot.sqlit
         const result=p.endsWith('signup')?await auth.signup(b.email,b.password,b.name):await auth.login(b.email,b.password);
         return result.sid?signed(res,result):json(res,200,{status:result.status},{'Set-Cookie':cookie('pilot_oauth',result.flowId,3600)});
       }
+      if(p==='/api/me/security'&&req.method==='GET')return json(res,200,await auth.security(req.headers.cookie));
+      if(p==='/api/me/profile'&&req.method==='POST')return json(res,200,await auth.profile(req.headers.cookie,await body(req,140000)));
+      if(p==='/api/auth/mfa/enroll'&&req.method==='POST')return json(res,200,await auth.enroll(req.headers.cookie));
+      if(p==='/api/auth/mfa/verify'&&req.method==='POST'){const b=await body(req);return signed(res,await auth.verifyFactor(req.headers.cookie,b.id,b.code));}
+      if(p==='/api/auth/mfa/remove'&&req.method==='POST'){const b=await body(req);return json(res,200,await auth.removeFactor(req.headers.cookie,b.id));}
+      if(p==='/api/auth/logout-all'&&req.method==='POST'){const r=await auth.logoutAll(req.headers.cookie);return json(res,200,r,{'Set-Cookie':cookie('pilot_session','',0)});}
       if(p==='/api/auth/providers'&&req.method==='GET')return json(res,200,await auth.providers());
       if(p==='/api/auth/magic'&&req.method==='POST'){const b=await body(req);if(typeof b.email!=='string'||!b.email.includes('@')||b.email.length>254)throw fail('INVALID_EMAIL');if(b.name!==undefined&&(typeof b.name!=='string'||b.name.length>100))throw fail('INVALID_NAME');const r=await auth.magic(b.email.trim(),b.name?.trim());return json(res,200,{status:r.status},{'Set-Cookie':cookie('pilot_oauth',r.flowId,3600)});}
       if(p==='/api/auth/recover'&&req.method==='POST'){const b=await body(req);if(typeof b.email!=='string'||!b.email.includes('@')||b.email.length>254)throw fail('INVALID_EMAIL');const r=await auth.recover(b.email);return json(res,200,{status:r.status},{'Set-Cookie':cookie('pilot_oauth',r.flowId,3600)});}
