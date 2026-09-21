@@ -1,4 +1,6 @@
-# Sign-in activation: what I need from you
+# Authentication provider activation
+
+This is the current operator checklist for external authentication configuration and live acceptance. Implementation status belongs in [STATUS.md](STATUS.md), deployment boundaries in [OPERATIONS.md](OPERATIONS.md), and historical account-delivery notes in [`archive/2026-09/`](archive/2026-09/).
 
 Status on 19 September 2026: Google is enabled and a production sign-in reached the correct account. Google remains in Testing with the owner's email explicitly allowed; public consent branding/release is pending. Passwordless email is deployed, Titan SMTP is configured, and a production magic-link request succeeded. Inbox delivery was confirmed by the owner, but the first link returned otp_expired. The revised confirmation flow has been sent for a fresh end-to-end test. Discord is not enabled: the prepared new application awaits the owner's acceptance of Discord's developer agreement. Apple remains disabled without an Apple Developer membership. Organization SSO was removed from the account UI: the user meant passwordless email, not enterprise SAML.
 

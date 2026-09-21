@@ -1,5 +1,7 @@
 # Contextual debate research
 
+> Historical implementation note. Preserved for provenance; use the [current product specification](../../PRODUCT-SPEC.md) and [architecture](../../ARCHITECTURE.md).
+
 Implemented 18 September 2026.
 
 - Text search requires all non-stopword terms in query order within a local span (80 characters between matched words). Normalization handles accents and terminal plurals. Words of at least five characters allow one insertion/deletion/substitution; approximate matches disclose the observed word. Short identifiers such as ADN are not fuzzed. Results return original-text highlight offsets and source/person/proposal identity. At most 20 results.

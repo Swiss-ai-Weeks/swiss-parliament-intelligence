@@ -1,5 +1,7 @@
 # Party retrieval: first comparative benchmark
 
+> Historical benchmark. Preserved as measured evidence; use [architecture](../../ARCHITECTURE.md) and [status](../../STATUS.md) for the current retrieval contract.
+
 Twelve official national-party pages now cover six parties in French and German. Sources and canonical URLs are in `config/party-sources.json`. The coding agent reviewed their extracted text and recorded hash-bound decisions in `config/party-source-reviews.json`: remove navigation, sharing controls and unrelated consultation listings; decode HTML entities; retain publisher attribution. This is **agent extraction review**, not independent human fact-checking or language approval. The pages remain party self-descriptions, not neutral findings or evidence of an individual politician's beliefs. Undated pages retain an unknown publication date. In particular, FDP Europe's historical descriptions must not be presented as today's EU relationship.
 
 The importer rejected the first SP extraction because it selected a short membership help panel. The canonical programme-history page was used instead. The GLP redirect was inspected and replaced by its canonical national `glp.swiss` URL. The importer still refuses automatic redirects.

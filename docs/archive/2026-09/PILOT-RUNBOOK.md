@@ -1,5 +1,7 @@
 # Midnight Vote — Swiss Pilot
 
+> Historical runbook. Preserved for exact experiment and delivery evidence; use the canonical [operations guide](../../OPERATIONS.md), [session pipeline](../../SESSION-PIPELINE.md) and [status](../../STATUS.md).
+
 Implemented 17 September 2026. The default UI is the citizen pilot; `/legacy` retains the earlier application. Existing hosting files remain intact. The API and SQLite database require a persistent single-instance Node host: publishing only the static frontend does not deploy the backend.
 
 ## Local operation
@@ -83,7 +85,7 @@ Real NVIDIA output is preserved in `artifacts/parliament-live-spike.json` and `a
 
 The offline bundle includes the public parliamentary database and these processing artifacts. Its archived chat replay still covers the original dossier evaluation only: unrecorded parliamentary questions refuse in replay mode. Raw paragraph search and imported vote histories remain available without a GPU. The ZIP must be regenerated after rebuilding the bundle.
 
-See [competitive findings and next ingestion stages](research/PARLIAMENT-INTELLIGENCE-UPDATE.md). Remaining gates: genuine parliamentary video alignment, broader/resumable ingestion, semantic retrieval evaluation, one manually adjudicated cross-year pair, current ballot/calendar sources, user testing, voice and design work.
+See [competitive findings and next ingestion stages](../../research/PARLIAMENT-INTELLIGENCE-UPDATE.md). Remaining gates: genuine parliamentary video alignment, broader/resumable ingestion, semantic retrieval evaluation, one manually adjudicated cross-year pair, current ballot/calendar sources, user testing, voice and design work.
 
 ### Cleisthenes, ingestion and compute — 17 September
 

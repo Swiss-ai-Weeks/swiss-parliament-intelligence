@@ -1,5 +1,7 @@
 # Conversation and source inspection — 18 September 2026
 
+> Historical checkpoint. Preserved for implementation provenance; use [current status](../../STATUS.md), [product specification](../../PRODUCT-SPEC.md) and [architecture](../../ARCHITECTURE.md) for current guidance.
+
 ## User outcome
 
 Start with a compact topic suggestion, continue an earlier conversation, and inspect the original evidence behind an answer without losing the conversation.

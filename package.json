@@ -14,6 +14,8 @@
     "probe:nvidia": "node --env-file-if-exists=.env scripts/probe-nvidia.mjs",
     "sync:parliament": "node scripts/sync-parliament.mjs",
     "sync:session": "node scripts/sync-current-session.mjs",
-    "align:parliament": "node scripts/align-parliament-video.mjs"
+    "align:parliament": "node scripts/align-parliament-video.mjs",
+    "docs:status": "node scripts/session-status.mjs",
+    "docs:check": "node scripts/check-docs.mjs"
   }
 }

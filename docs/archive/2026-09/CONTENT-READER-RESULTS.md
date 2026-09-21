@@ -1,5 +1,7 @@
 # Content and reader acceptance evidence — 18 September 2026
 
+> Historical acceptance checkpoint. Preserved for measured evidence; use [current status](../../STATUS.md) and the [product specification](../../PRODUCT-SPEC.md).
+
 Implements [CONTENT-READER-SPEC.md](CONTENT-READER-SPEC.md) on `feat/swiss-citizen-pilot`. Local starting commit matches the user-linked fork: `cbc963d`.
 
 ## Imported content

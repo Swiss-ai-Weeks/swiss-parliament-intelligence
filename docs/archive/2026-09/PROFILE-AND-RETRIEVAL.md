@@ -1,5 +1,7 @@
 # Profiles and source-aware questions — 17 September 2026
 
+> Historical implementation note. Preserved for provenance; use [architecture](../../ARCHITECTURE.md), [status](../../STATUS.md) and the [product specification](../../PRODUCT-SPEC.md).
+
 ## Delivered
 
 - Cleisthenes routes membership/background/contact questions to official structured member records, party-background questions to separately reviewed party material, and speech questions to multilingual Bulletin retrieval. Follow-ups retain resolved person/topic context; the previous question is no longer concatenated into the new query.

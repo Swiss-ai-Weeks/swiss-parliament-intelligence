@@ -1,5 +1,7 @@
 # Content and debate reader — increment 18 September 2026
 
+> Historical increment specification. Preserved for decision provenance; use the [current product specification](../../PRODUCT-SPEC.md) and [architecture](../../ARCHITECTURE.md).
+
 Status: implemented locally; acceptance evidence below. This document defines this increment, not completion of the wider roadmap.
 
 ## Reader outcome

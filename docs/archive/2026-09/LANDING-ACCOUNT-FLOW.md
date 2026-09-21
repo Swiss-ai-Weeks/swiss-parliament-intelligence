@@ -1,5 +1,7 @@
 # Landing account flow
 
+> Historical implementation note. Preserved for UX provenance; use the [product specification](../../PRODUCT-SPEC.md), [user guide](../../USER-GUIDE.md) and [authentication checklist](../../AUTH-PROVIDERS-CHECKLIST.md).
+
 18 September 2026.
 
 Header, hero and closing Get started actions open a native modal account dialog. Existing signed-in users continue to the civic dashboard. The landscape, mascot, scroll narrative and interactive demos remain intact. An explicit guest path keeps public reading open.

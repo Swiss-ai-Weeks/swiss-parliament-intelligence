@@ -1,5 +1,7 @@
 # Landing interactive previews
 
+> Historical implementation note. Preserved for UX provenance; use the [product specification](../../PRODUCT-SPEC.md) and [demo guide](../../DEMO-AND-USER-TEST.md).
+
 18 September 2026. Supersedes the static feature cards described in GREEK-SWISS-INTEGRATION.md.
 
 The approved three-chapter landing now demonstrates the intended journey using local, interactive simulations styled like the pilot. Real app entry buttons remain available.

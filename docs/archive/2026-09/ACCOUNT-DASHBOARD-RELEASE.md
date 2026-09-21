@@ -1,5 +1,7 @@
 # Account dashboard release — 19 September 2026
 
+> Historical checkpoint. Preserved for implementation provenance; use [current status](../../STATUS.md), [product specification](../../PRODUCT-SPEC.md) and [operations](../../OPERATIONS.md) for current guidance.
+
 Implemented preferred first names, profile portrait upload/removal, Saved research in Home, a success seal, and five account settings sections. Reading controls remain available anonymously. Account export, password recovery, TOTP enrollment/challenge/removal and global pilot logout use server-backed operations.
 
 Security: enrolled TOTP requires AAL2 for protected account operations. A restrictive Supabase policy enforces equivalent assurance for direct civic_user_items access. Enrollment is not active until a valid code is verified. No backup recovery codes are implemented. Account removal is a support request with ownership verification.

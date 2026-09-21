@@ -1,5 +1,7 @@
 # Topics, debates and people — next product increment
 
+> Historical roadmap. Durable direction is consolidated in the [product specification](../../PRODUCT-SPEC.md); implemented coverage is in [status](../../STATUS.md).
+
 ## Direction
 Rename Dossiers to **Topics & votes** (FR: Thèmes et votations). A topic explains a public question; a parliamentary proposal is a dated legal/procedural record inside that topic. Keep those concepts separate from popular ballots. Historical results must never look like upcoming votes.
 

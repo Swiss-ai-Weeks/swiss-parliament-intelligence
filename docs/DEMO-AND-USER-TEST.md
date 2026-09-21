@@ -1,5 +1,7 @@
 # Rehearsal and acceptance sessions
 
+Use this as the current manual demo and user-test guide. Confirm the dated capability claims in [STATUS.md](STATUS.md) before every rehearsal; use [OPERATIONS.md](OPERATIONS.md) for service checks. Recorded responses, machine timing and simulated participation must remain visibly labelled.
+
 ## Three-minute pilot demonstration
 
 1. **Recognize an issue (20 seconds).** Open the e-ID dossier. “This is a historical vote from September 2025. We begin with the question people actually voted on, not a chatbot blank page.”

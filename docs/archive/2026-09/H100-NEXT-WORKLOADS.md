@@ -1,5 +1,7 @@
 # H100s: next workloads
 
+> Historical workload plan. Preserved for decision provenance; use [status](../../STATUS.md), the [session pipeline](../../SESSION-PIPELINE.md) and [operations](../../OPERATIONS.md).
+
 18 September 2026. This is a proposed allocation, not a deployment claim.
 
 Execution has started: see [the verified progress update](H100-EXECUTION-2026-09-18.md) for the repaired request path, current worker progress and first party embedding batch. The snapshot below predates that inspection.
