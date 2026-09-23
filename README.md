@@ -65,7 +65,7 @@ AI finds, reads, translates and explains; deterministic code decides what counts
 
 ## Built on NVIDIA
 
-- **Live inference:** Nemotron Nano 9B v2 as an NVIDIA NIM on H100 GPUs (NVIDIA LaunchPad); automatic fallback to NVIDIA's hosted API catalog when the GPU allocation ends.
+- **Live inference:** Nemotron Nano 9B v2 as an NVIDIA NIM on H100 GPUs (NVIDIA LaunchPad); automatic fallback to NVIDIA's hosted API catalog (Nemotron 3 Super 120B) when the GPU allocation ends, verified end to end on the demo questions.
 - **Batch processing on H100:** Canary speech recognition (11,092 recordings so far, still running) and the E5 semantic index (1,140,943 passages in under 10 minutes, ~1,900 passages per second).
 - **After the hackathon:** semantic search runs on an ordinary CPU (int8 index, ~1 s per search over the full archive); answers stay on NVIDIA models through the API catalog.
 

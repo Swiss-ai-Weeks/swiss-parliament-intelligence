@@ -46,7 +46,7 @@ sessions…", "Checking 6 statements against their sources…").
 | Speech recognition | Canary 1B v2 on H100 | 11,092 recordings so far (~350/hour, still running) |
 | Semantic index | multilingual-e5-large on H100 | 1,140,943 passages in 597 s (~1,900/s) |
 | Translation | Riva Translate | On demand, cached |
-| After the GPU allocation | NVIDIA API catalog (hosted Nemotron) | Automatic fallback, same prompts |
+| After the GPU allocation | NVIDIA API catalog: Nemotron 3 Super 120B, then Nemotron 3 Nano Omni 30B if overloaded | Automatic fallback, same prompts; 25–48 s per researched answer (measured 23 Sep) |
 
 ## Honest limits
 
