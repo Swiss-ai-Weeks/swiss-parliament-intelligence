@@ -4,6 +4,35 @@ This is the canonical operating guide for importing Swiss Parliament sessions an
 
 Read [Architecture and data provenance](ARCHITECTURE.md) for component boundaries and [Current status](STATUS.md) for dated per-session counts.
 
+## Archive-wide text import
+
+Declare and reconcile the official session boundary before running individual workers:
+
+```powershell
+npm run archive:discover -- --from-year=1990 --to-year=2026
+npm run archive:import:text -- --dry-run --limit=5
+npm run archive:import:text -- --limit=5
+```
+
+`archive:discover` writes ignored local artifacts at `data/parliament/archive-manifest.json` and `data/parliament/archive-text-queue.json`. The manifest reports text, media, ASR, embedding and alignment stages separately. `archive:import:text` invokes the existing checksum-backed session importer sequentially, writes `data/parliament/archive-import-run.json` and continues past a failed session. Omit `--limit` only when the operator intends to process the complete declared queue; historical media remains a separate GPU and human-review programme.
+
+After importing sessions, consolidate their recording work and export every public passage awaiting E5 processing:
+
+```powershell
+npm run processing:backlog
+npm run embeddings:export
+```
+
+The processing command merges all `session-*/media-jobs.json` files into the provenance allowlist consumed by the receipt importer. It reconciles already imported Canary receipts from `public-processing.sqlite`, rejects source/session conflicts, preserves prior worker metadata when the session record does not replace it, and writes both a hashed aggregate manifest and `public-session-pending.json` for the H100 worker. The embedding export contains public parliamentary passages only; no conversation, account or profile-preference data is included.
+
+Prepare a self-verifying public-only H100 handoff after both backlogs are current:
+
+```powershell
+npm run gpu:handoff
+```
+
+The ignored `artifacts/gpu-handoff/` directory contains the pending Canary queue, complete public E5 input, pinned worker scripts, SHA-256 manifest, a Python verifier and exact worker commands. It intentionally contains no `.env`, provider credentials, account database, conversations, feedback or private profile preferences. Upload and start it only through the existing restricted GPU transport.
+
 ## Pipeline states
 
 ```mermaid
@@ -86,6 +115,10 @@ After copying a public-only receipt checkpoint back to the application host, run
 node scripts/import-public-processing.mjs data/gpu-processing/session-output
 ```
 
+For growing batches, snapshot completed atomic receipts into one compressed archive on the GPU host, record its SHA-256, transfer that single file, verify the local hash, and only then extract and import it. This avoids repeatedly transferring hundreds of individual JSON files through the LaunchPad gateway while preserving an immutable checkpoint boundary. The archive must contain only `*-canary.json` receipts; do not include credentials, media, account data or a live SQLite file.
+
+Current measured state: 121 of 185 declared sessions are text-complete, yielding 1,041,964 public passages and 205,797 recording jobs. The local ledger knows 5,618 jobs complete and 200,179 pending. The `receipts-20260922-194100.tar.gz` checkpoint had SHA-256 `a8ac7b3b9265b9f9df32179dda01ce6cccec4500d35f637921dfc19f3d5f4095`; 2,280 receipts passed validation and six empty/no-speech receipts were rejected. Across the consolidated 5,607 validated receipts, staging produced 7,988 machine alignment candidates for 2,919 recordings. These candidates are not human-reviewed quotations.
+
 The importer accepts a receipt only when its transcript ID exists in `data/public-session-queue.json` and its official page, session, language, model, duration and media hash satisfy the expected contract. Accepted receipts go to `data/public-processing.sqlite`.
 
 This consolidated database is newer and broader than the small per-session pilot manifests. Do not add those two counters together. See [Status](STATUS.md#why-some-counts-differ-from-old-notes).
@@ -122,6 +155,8 @@ Prepare public-only input:
 ```bash
 node scripts/export-public-embedding-input.mjs
 ```
+
+The exporter iterates SQLite rows and streams ordered JSONL through backpressure into a temporary file, then atomically renames it after completion. It must not assemble the full corpus as one JavaScript string: the archive exceeds V8's maximum string length well before the declared session range is complete.
 
 On the GPU host:
 

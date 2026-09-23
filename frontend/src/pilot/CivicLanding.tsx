@@ -3,6 +3,7 @@ import {ArrowDown,ArrowRight,Check,CaretDown as ChevronDown,ArrowSquareOut as Ex
 import './landing.css';
 import LandingAccount from './LandingAccount.jsx';
 import {ResearchDemo,PrivacyDemo,ParticipateDemo} from './LandingDemos.jsx';
+import {askCleisthenes} from './navigation.js';
 const asset=name=>import.meta.env.BASE_URL+'brand/'+name;
 const alpineLandscape=asset('alpine-landscape.png'),porticoForeground=asset('portico.png'),cleisthenesBust=asset('cleisthenes-bust.png'),midnightMark=asset('midnight-mark.svg'),genevaFooter={url:asset('geneva-footer.png')};
 function Button({asChild,variant,size,className='',children,...props}){const cls='civic-button '+(variant||'civic')+' '+className;return asChild?React.cloneElement(children,{...props,className:cls}):<button type="button" {...props} className={cls}>{children}</button>;}
@@ -178,11 +179,11 @@ export default function CivicLanding({onNavigate,user,onUser,language='en',reduc
       </div>
       <LandingAccount open={accountOpen} onClose={()=>setAccountOpen(false)} onUser={u=>{onUser(u);setAccountOpen(false);onNavigate(null,"dashboard");}} onGuest={()=>{setAccountOpen(false);onNavigate(null,"dashboard");}}/>
       <header className={`site-header nav-${navState}`}>
-        <a href="#top" className="brand" aria-label="midnight.vote, Switzerland">
-          <img src={midnightMark} alt="" />
+        <a href="#top" className="brand" aria-label="Cleisthenes, Swiss civic companion">
+          <img src={cleisthenesBust} alt="" className="brand-bust" />
           <span>
-            <strong>midnight.vote</strong>
-            <small>Switzerland</small>
+            <strong>Cleisthenes</strong>
+            <small>Swiss civic companion</small>
           </span>
         </a>
         <nav aria-label="Main navigation">
@@ -298,7 +299,7 @@ export default function CivicLanding({onNavigate,user,onUser,language='en',reduc
               <h3>{active.title}</h3>
               <p>{active.copy}</p>
             </div>
-            <div key={active.id} className="active-demo">{active.id==='understand'?<ResearchDemo reduceMotion={reduceMotion} onExplore={()=>{onNavigate(null,'parliament');const u=new URL(location.href);u.searchParams.set('business','20250082');history.replaceState({},'',u);}}/>:active.id==='privacy'?<PrivacyDemo reduceMotion={reduceMotion}/>:<ParticipateDemo reduceMotion={reduceMotion} onExplore={()=>onNavigate(null,'explore')}/>}</div>
+            <div key={active.id} className="active-demo">{active.id==='understand'?<ResearchDemo reduceMotion={reduceMotion} onExplore={()=>{onNavigate(null,'dashboard');setTimeout(()=>askCleisthenes({kind:'business',id:'20250026',title:'« Pas de Suisse à 10 millions ! (initiative pour la durabilité) »'},{prompt:"What are the arguments for and against the initiative 'No to a Switzerland of 10 million'?",autoSend:true}),350);}}/>:active.id==='privacy'?<PrivacyDemo reduceMotion={reduceMotion}/>:<ParticipateDemo reduceMotion={reduceMotion} onExplore={()=>onNavigate(null,'explore')}/>}</div>
           </article>
         </div>
       </section>
@@ -318,9 +319,9 @@ export default function CivicLanding({onNavigate,user,onUser,language='en',reduc
           <img src={genevaFooter.url} alt="" />
         </div>
         <div className="footer-bottom">
-          <a href="#top" className="brand footer-brand" aria-label="midnight.vote home">
-            <img src={midnightMark} alt="" />
-            <strong>midnight.vote</strong>
+          <a href="#top" className="brand footer-brand" aria-label="Cleisthenes home">
+            <img src={cleisthenesBust} alt="" className="brand-bust" />
+            <strong>Cleisthenes</strong>
           </a>
           <nav className="footer-links" aria-label="Feature navigation">
             <div className="footer-feature-links">

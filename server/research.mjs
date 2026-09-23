@@ -59,13 +59,26 @@ export async function research(dossier,{question='',action='explain',language='e
   }
   // Isolate generation by source so a fluent synthesis cannot silently cite just
   // one passage for facts that came from several unrelated records.
-  // Keep each inference isolated to one source, but overlap two requests.
-  const groups=[];
-  for(let i=0;i<evidence.length;i+=2)groups.push(...await Promise.all(evidence.slice(i,i+2).map(entry=>infer([entry]))));
+  // Keep each inference isolated to one source; up to six run concurrently.
+  // One malformed reply must not sink the other sources: failed sources are skipped and counted, and the
+  // answer only falls back to sources-only when every source failed.
+  const groups=[];let failedSources=0;
+  for(let i=0;i<evidence.length;i+=6)for(const result of await Promise.allSettled(evidence.slice(i,i+6).map(entry=>infer([entry])))){if(result.status==='fulfilled')groups.push(result.value);else failedSources++;}
+  if(failedSources===evidence.length){
+    return {
+      status:'sources-only',
+      mode:'source-fallback',
+      claims:[],
+      language,
+      sourceIds:evidence.map(entry=>entry.id),
+      notice:'AI generation is temporarily unavailable; showing the retrieved official sources instead.',
+      policyVersion:ANSWER_POLICY_VERSION,
+    };
+  }
   const generatedClaims=groups.flat();
   const claims=generatedClaims.filter(c=>!unsupportedCollectiveClaim(c.text,evidence.find(e=>e.id===c.evidenceId)));
   const withheldClaims=generatedClaims.length-claims.length;
-  return {status:claims.length?'ok':'insufficient-evidence',mode:'live-inference',model:env.INFERENCE_MODEL,claims,language,withheldClaims,policyVersion:ANSWER_POLICY_VERSION};
+  return {status:claims.length?'ok':'insufficient-evidence',mode:'live-inference',model:env.INFERENCE_MODEL,claims,language,withheldClaims,...(failedSources?{failedSources}:{}),policyVersion:ANSWER_POLICY_VERSION};
 }
 export function markdownBrief(dossier,items,language='en') {
   const title=dossier.shortTitle[language]||dossier.shortTitle.en;

@@ -48,7 +48,9 @@ for index,job in enumerate(jobs):
             texts.append(result.text)
             words.extend({'word':w['word'],'start':float(w['start'])+offset,'end':float(w['end'])+offset} for w in result.timestamp['word'])
             wav.unlink()
-        payload={'model':'nvidia/canary-1b-v2','mediaSha256':sha,'language':job['language'],'duration_seconds':duration,'text':' '.join(texts),'segments':[{'text':' '.join(texts),'words':words}],'processingSeconds':round(time.time()-start,2),'sessionId':session,'officialPage':job['officialPage']}
+        transcript=' '.join(texts).strip()
+        if not transcript or not words:raise ValueError('NO_SPEECH')
+        payload={'model':'nvidia/canary-1b-v2','mediaSha256':sha,'language':job['language'],'duration_seconds':duration,'text':transcript,'segments':[{'text':transcript,'words':words}],'processingSeconds':round(time.time()-start,2),'sessionId':session,'officialPage':job['officialPage']}
         temp_receipt=receipt.with_suffix('.tmp')
         temp_receipt.write_text(json.dumps(payload,ensure_ascii=False))
         temp_receipt.replace(receipt)

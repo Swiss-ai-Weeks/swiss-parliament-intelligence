@@ -14,8 +14,20 @@
     "probe:nvidia": "node --env-file-if-exists=.env scripts/probe-nvidia.mjs",
     "sync:parliament": "node scripts/sync-parliament.mjs",
     "sync:session": "node scripts/sync-current-session.mjs",
+    "archive:discover": "node scripts/discover-parliament-archive.mjs",
+    "archive:import:text": "node scripts/import-parliament-archive.mjs",
+    "profiles:backlog": "node scripts/reconcile-profile-backlog.mjs",
+    "profiles:enrich": "node scripts/enrich-profile-backlog.mjs",
+    "processing:backlog": "node scripts/reconcile-processing-backlog.mjs",
+    "processing:align": "node scripts/stage-public-alignments.mjs",
+    "embeddings:export": "node scripts/export-public-embedding-input.mjs",
+    "gpu:handoff": "node scripts/prepare-gpu-handoff.mjs && node scripts/verify-gpu-handoff.mjs",
+    "evaluate:typesafe": "node --env-file-if-exists=.env scripts/evaluate-typesafe.mjs",
     "align:parliament": "node scripts/align-parliament-video.mjs",
     "docs:status": "node scripts/session-status.mjs",
     "docs:check": "node scripts/check-docs.mjs"
+  },
+  "dependencies": {
+    "@huggingface/transformers": "^4.3.0"
   }
 }

@@ -4,14 +4,19 @@ This index separates current implementation truth from product direction, operat
 
 ## Start here
 
-1. [Project README](../README.md) — product purpose, user journey and a two-minute technical overview.
-2. [Architecture and data provenance](ARCHITECTURE.md) — data sources, request paths, AI responsibilities and trust boundaries.
-3. [Current implementation and corpus status](STATUS.md) — dated coverage, validation and known gaps.
-4. [Session, recording and GPU pipeline](SESSION-PIPELINE.md) — repeatable ingestion and processing stages.
-5. [Operations and deployment](OPERATIONS.md) — local runtime, private GPU services, release, backup and recovery.
+1. [Project README](../README.md) — product purpose, user journey, the two videos and a two-minute technical overview.
+2. [How Cleisthenes works](HOW-CLEISTHENES-WORKS.md) — one-page walkthrough: where each piece runs, one question step by step, embeddings, the two H100s, how we built it and what is live.
+3. [How AI is used in Cleisthenes](AI-IN-CLEISTHENES.md) — every AI component: technology → feature → outcome, and what each is never allowed to do.
+4. [Architecture and data provenance](ARCHITECTURE.md) — data sources, request paths, AI responsibilities and trust boundaries.
+5. [Current implementation and corpus status](STATUS.md) — dated coverage, validation and known gaps.
+6. [Session, recording and GPU pipeline](SESSION-PIPELINE.md) — repeatable ingestion and processing stages.
+7. [Operations and deployment](OPERATIONS.md) — local runtime, private GPU services, release, backup and recovery.
 
 ## Product and user experience
 
+- [Cleisthenes product proposal](CLEISTHENES-PROPOSAL.md) — proposed product hierarchy, positioning, UX programme, data-completeness contract and submission plan.
+- [Cleisthenes research answer experience](CLEISTHENES-ANSWER-EXPERIENCE.md) — coherent long-form answers, research-process summaries, single-language output and typed evidence actions.
+- [Submission sprint and product roadmap](SPRINT-2026-09-22-SUBMISSION.md) — two-day priorities, model responsibilities, acceptance criteria and the production horizon.
 - [Product specification](PRODUCT-SPEC.md) — current scope, journeys, non-goals and acceptance principles.
 - [User guide](USER-GUIDE.md) — citizen-facing navigation and evidence interpretation.
 - [Demo and user test](DEMO-AND-USER-TEST.md) — rehearsal flow and manual acceptance tasks.

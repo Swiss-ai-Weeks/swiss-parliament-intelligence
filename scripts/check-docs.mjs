@@ -40,7 +40,7 @@ for(const source of markdown){
 
 const missing=missingStatusArtifacts();
 if(missing.length){console.log(`SKIP status comparison: ${missing.join(', ')}`);}else{
-  const report=collectSessionStatus(),expected={passages:16471,recordingJobs:3346,e5Chunks:16488,canaryReceipts:969,timingCandidates:1460,timingRecordings:502,vssRecordings:9,vssChunks:400,humanReviewedTimings:0};
+  const report=collectSessionStatus(),expected={passages:16224,recordingJobs:3346,e5Chunks:16241,canaryReceipts:3327,timingCandidates:4899,timingRecordings:1738,vssRecordings:9,vssChunks:400,humanReviewedTimings:0};
   for(const [key,value] of Object.entries(expected))if(report.total[key]!==value)failures.push(`Status mismatch for ${key}: expected ${value}, found ${report.total[key]}`);
   const status=readFileSync(join(root,'docs/STATUS.md'),'utf8'),marker=status.match(/<!-- session-status: (\{.+\}) -->/);
   if(!marker)failures.push('docs/STATUS.md is missing its session-status marker');

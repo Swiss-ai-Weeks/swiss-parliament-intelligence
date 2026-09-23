@@ -6,3 +6,4 @@ deploy/switzerland/pilot.env
 deploy/switzerland/public-data/
 !*.env.example
 artifacts/
+/node_modules/

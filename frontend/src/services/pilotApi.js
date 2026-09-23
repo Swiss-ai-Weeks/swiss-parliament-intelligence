@@ -12,7 +12,18 @@ export function createPilotApi({baseUrl=publicBase+'api',fetchImpl=fetch}={}) {
     if(!res.ok)throw Object.assign(new Error(data.error||'REQUEST_FAILED'),{status:res.status});
     return prefixMedia(data);
   }
+  // Streams research stages as newline-delimited JSON and resolves with the answer. Proxies that
+  // buffer the body still work: every event then arrives at once, just without live progress.
+  async function streamAnswer(payload,onStage){
+    const res=await fetchImpl(baseUrl+'/parliament/ask/stream',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+    if(!res.ok||!res.body)throw Object.assign(new Error('STREAM_UNAVAILABLE'),{status:res.status});
+    const reader=res.body.getReader(),decoder=new TextDecoder();let buffer='',answer=null;
+    const handle=line=>{if(!line.trim())return;const event=JSON.parse(line);if(event.type==='stage')onStage?.(event);else if(event.type==='answer')answer=event.answer;else if(event.type==='error')throw Object.assign(new Error(event.code),{status:502});};
+    for(;;){const {value,done}=await reader.read();if(done)break;buffer+=decoder.decode(value,{stream:true});let i;while((i=buffer.indexOf('\n'))>=0){handle(buffer.slice(0,i));buffer=buffer.slice(i+1);}}
+    handle(buffer);if(!answer)throw new Error('STREAM_INCOMPLETE');return prefixMedia(answer);
+  }
   return {
+    parliamentAskStream:async(payload,onStage)=>{try{return await streamAnswer(payload,onStage);}catch(error){if(error.status===502)throw error;return request('/parliament/ask','POST',payload);}},
     security:()=>request('/me/security'),profile:p=>request('/me/profile','POST',p),enrollMfa:()=>request('/auth/mfa/enroll','POST',{}),verifyMfa:p=>request('/auth/mfa/verify','POST',p),removeMfa:id=>request('/auth/mfa/remove','POST',{id}),logoutAll:()=>request('/auth/logout-all','POST',{}),
     feedbackChallenge:()=>request('/feedback/challenge'),feedback:p=>request('/feedback','POST',p),
     discoverySearch:p=>request('/discovery/search','POST',p),
@@ -26,7 +37,7 @@ export function createPilotApi({baseUrl=publicBase+'api',fetchImpl=fetch}={}) {
     videoSearch:payload=>request('/parliament/video-search','POST',payload),
     translatePassage:payload=>request('/parliament/translate','POST',payload),
     refreshProfile:personId=>request('/parliament/profile-refresh','POST',{personId}),draftMessage:payload=>request('/parliament/draft','POST',payload),
-    parliament:()=>request('/parliament'),parliamentBusiness:id=>request('/parliament/business/'+encodeURIComponent(id)),parliamentPerson:id=>request('/parliament/person/'+encodeURIComponent(id)),parliamentSearch:q=>request('/parliament/search?q='+encodeURIComponent(q)),parliamentAsk:payload=>request('/parliament/ask','POST',payload),compareStatements:payload=>request('/parliament/compare','POST',payload),
+    parliament:()=>request('/parliament'),archiveCoverage:()=>request('/parliament/archive-coverage'),profileCoverage:()=>request('/parliament/profile-coverage'),processingBacklog:()=>request('/parliament/processing-backlog'),parliamentBusiness:id=>request('/parliament/business/'+encodeURIComponent(id)),proposals:params=>request('/parliament/proposals?'+new URLSearchParams(Object.entries(params).filter(([,v])=>v!==undefined&&v!==''))),parliamentPerson:id=>request('/parliament/person/'+encodeURIComponent(id)),parliamentSearch:q=>request('/parliament/search?q='+encodeURIComponent(q)),parliamentAsk:payload=>request('/parliament/ask','POST',payload),compareStatements:payload=>request('/parliament/compare','POST',payload),
     health:()=>request('/health'),dossiers:()=>request('/dossiers'),dossier:id=>request('/dossiers/'+encodeURIComponent(id)),
     ask:payload=>request('/ask','POST',payload),brief:payload=>request('/brief','POST',payload),
     me:()=>request('/me'),login:payload=>request('/auth/login','POST',payload),signup:payload=>request('/auth/signup','POST',payload),logout:()=>request('/auth/logout','POST',{}),

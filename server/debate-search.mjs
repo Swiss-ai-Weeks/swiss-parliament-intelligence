@@ -12,7 +12,8 @@ export function searchDebateText(store,query,{personId,businessId,limit=20}={}){
  const terms=[...new Set((fold(query).match(/[\p{L}\p{N}]+/gu)||[]).filter(x=>!stop.has(x)).map(stem))].slice(0,15);
  if(!terms.length)return [];
  const found=[];
- for(const s of store.speeches()){
+ // FTS narrows ~1M passages to lexical candidates before the phrase and typo checks below.
+ for(const s of store.searchCandidates?store.searchCandidates(query,{personId,businessId,limit:400}):store.speeches()){
   if(personId&&s.personId!==personId||businessId&&s.businessId!==businessId&&!s.businessIds?.includes(businessId))continue;
   const words=[...s.text.matchAll(/[\p{L}\p{N}]+/gu)].map(m=>({word:stem(fold(m[0])),start:m.index,end:m.index+m[0].length,text:m[0]}));
   const groups=terms.map(term=>{const exact=words.filter(w=>w.word===term);return exact.length?exact:words.filter(w=>near(term,w.word));});

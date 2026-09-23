@@ -1,7 +1,7 @@
 const en={
  replay:'Recorded NVIDIA response · not live',
  watchOfficial:'Watch the official explanation',federalExplainer:'Federal Council explainer · 2025',publisherCaption:'Official publisher caption',videoCoverage:'Official e-ID explainers in DE, FR, IT and RM. These are historical public-information videos, not parliamentary debate footage.',
-  pilot:'SWISS PILOT',explore:'Explore',research:'Research view',saved:'Saved',signin:'Sign in',signout:'Sign out',language:'Language',
+  pilot:'SWISS CIVIC COMPANION',explore:'Explore',research:'Research view',saved:'Saved',signin:'Sign in',signout:'Sign out',language:'Language',
   eyebrow:'PUBLIC QUESTIONS. YOUR OWN PERSPECTIVE.',headline:'Make sense of\nwhat we vote on.',intro:'Understand the issues. Hear the arguments. Go back to the source. A quieter way to find your own perspective on Swiss democracy.',
   collection:'Topics & votes',collectionSub:'Five decisions. The context behind each one.',all:'All topics',search:'Find an issue',featured:'START HERE',read:'Understand this vote',historical:'Historical vote',accepted:'Accepted',rejected:'Rejected',minutes:'min read',
   backed:'Connected to official sources',independent:'Independent pilot · Not an official government service',noVote:'This app explains votes. It does not cast them.',
@@ -20,7 +20,7 @@ const en={
 const fr={...en,
  replay:'Réponse NVIDIA enregistrée · pas en direct',
  watchOfficial:'Voir l’explication officielle',federalExplainer:'Explication du Conseil fédéral · 2025',publisherCaption:'Sous-titre officiel de l’éditeur',videoCoverage:'Vidéos officielles sur l’e-ID en DE, FR, IT et RM. Il s’agit de vidéos explicatives historiques, et non de débats parlementaires.',
-  pilot:'PILOTE SUISSE',explore:'Explorer',research:'Vue recherche',saved:'Enregistrés',signin:'Se connecter',signout:'Se déconnecter',language:'Langue',
+  pilot:'COMPAGNON CIVIQUE SUISSE',explore:'Explorer',research:'Vue recherche',saved:'Enregistrés',signin:'Se connecter',signout:'Se déconnecter',language:'Langue',
   eyebrow:'DES QUESTIONS PUBLIQUES. VOTRE PROPRE REGARD.',headline:'Comprendre\nce que l’on vote.',intro:'Comprendre les enjeux. Comparer les arguments. Revenir aux sources. Une approche sereine pour vous forger votre propre opinion sur la démocratie suisse.',
   collection:'Thèmes et votations',collectionSub:'Cinq décisions. Le contexte de chacune.',all:'Tous les thèmes',search:'Rechercher un sujet',featured:'POUR COMMENCER',read:'Comprendre cette votation',historical:'Votation passée',accepted:'Accepté',rejected:'Rejeté',minutes:'min de lecture',
   backed:'Relié aux sources officielles',independent:'Pilote indépendant · Aucun service gouvernemental officiel',noVote:'Cette application explique les votations. Elle ne permet pas de voter.',

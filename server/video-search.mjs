@@ -7,7 +7,7 @@ export function cosine(a,b){
  let dot=0,aa=0,bb=0;for(let i=0;i<a.length;i++){dot+=a[i]*b[i];aa+=a[i]*a[i];bb+=b[i]*b[i];}if(!aa||!bb)throw Error('ZERO_EMBEDDING');return dot/Math.sqrt(aa*bb);
 }
 export function loadVideoIndex(root,store){
- const chunks=[],speechMap=new Map();for(const s of store.speeches())if(!speechMap.has(s.transcriptId))speechMap.set(s.transcriptId,s);
+ const chunks=[],speechMap={get:id=>store.speechesWhere?store.speechesWhere({transcriptId:id},{limit:1})[0]:store.speeches().find(s=>s.transcriptId===id)};
  if(!existsSync(root))return chunks;
  for(const name of readdirSync(root).filter(n=>/^session-\d+$/.test(n))){
   const dir=join(root,name),manifest=join(dir,'media-jobs.json');if(!existsSync(manifest))continue;

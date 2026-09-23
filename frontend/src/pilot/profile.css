@@ -1,1 +1,38 @@
 .profile-identity{display:flex;gap:24px;align-items:center;margin:24px 0}.profile-identity img{width:104px;height:128px;object-fit:cover;border-radius:18px;background:#eeeee7}.profile-identity p{margin:5px 0!important}.profile-tabs{display:flex;gap:8px;border-bottom:1px solid #deddd5;padding-bottom:14px;margin:24px 0}.profile-tabs button{border:0;background:transparent;padding:10px 14px;border-radius:24px;color:inherit;cursor:pointer}.profile-tabs button[aria-pressed=true]{background:#edece4;color:#913c34}.profile-facts{display:grid;grid-template-columns:1fr 1fr;gap:20px}.profile-facts small,.profile-note,.profile-refresh small,.profile-party>small{color:#73776c;font-size:12px;line-height:1.65}.profile-facts p{margin:5px 0!important}.profile-facts a,.profile-party a,.profile-contact-source{font-size:12px}.profile-party{background:#f5f4ee;border-radius:18px;padding:22px;margin-top:24px}.profile-party h3{margin-top:0}.profile-topics{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0}.profile-topics span{background:white;border:1px solid #e5e1d6;border-radius:20px;padding:7px 12px;font-size:12px}.profile-refresh{border-top:1px solid #e5e1d6;margin-top:24px;padding-top:16px;display:flex;flex-wrap:wrap;align-items:center;gap:12px;justify-content:space-between}.profile-refresh button,.profile-pages button{background:transparent;border:1px solid #d9d9cd;border-radius:9px;padding:8px 12px;cursor:pointer;color:inherit}.politician-profile button:disabled{opacity:.5;cursor:default}.profile-vote-filters{display:flex;gap:10px}.politician-profile input,.politician-profile textarea,.politician-profile select{border:1px solid #d9d9cd;border-radius:10px;padding:12px;font:inherit;background:#fff;width:100%;box-sizing:border-box}.profile-vote-filters select{width:130px}.profile-vote{padding:12px 0;border-bottom:1px solid #e5e1d6}.profile-vote summary{display:flex;justify-content:space-between;gap:14px;font-size:14px;cursor:pointer}.profile-vote summary small{display:block;color:#777;font-size:11px;margin-bottom:6px}.profile-vote summary strong{color:#913c34;white-space:nowrap;font-size:12px}.profile-pages{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:18px;font-size:13px}.politician-profile form label,.profile-draft label{display:block;font-size:13px;margin:16px 0 8px}.politician-profile form button{margin-top:12px}.profile-draft{margin-top:24px}.profile-contact-source{margin-left:10px}.profile-draft textarea{line-height:1.65}@media(max-width:600px){.profile-facts{grid-template-columns:1fr}.profile-identity{gap:16px}.profile-identity img{width:80px;height:104px}.profile-tabs{gap:3px}.profile-tabs button{padding:8px;font-size:12px}.profile-vote-filters{flex-wrap:wrap}.profile-refresh{align-items:flex-start}.profile-pages{flex-wrap:wrap}}
+
+/* Votes: honest coverage, readable decisions, one-click context */
+.vote-coverage { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; padding: 12px 14px; margin: 6px 0 14px; border-radius: 12px; border: 1px solid #e3c9a8; background: #fbf3e6; font-size: 13px; }
+.vote-coverage.complete { border-color: #c9cfbd; background: #f1f3ec; }
+.vote-coverage strong { font-weight: 600; }
+.vote-coverage span { color: #5f6157; }
+.vote-load { margin-left: auto; padding: 7px 14px; border-radius: 999px; border: 0; background: #a24f40; color: #fffdf8; font: inherit; font-size: 12.5px; cursor: pointer; }
+.vote-load:hover { background: #7e3a2f; }
+.vote-decision-filters { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0 12px; }
+.vote-decision-filters button { padding: 5px 11px; border-radius: 999px; border: 1px solid #d9cbb4; background: #fffdf8; font: inherit; font-size: 12.5px; cursor: pointer; }
+.vote-decision-filters button small { color: #8a8579; margin-left: 3px; }
+.vote-decision-filters button[aria-pressed="true"] { background: #252823; color: #f3eddf; border-color: #252823; }
+.vote-decision-filters button[aria-pressed="true"] small { color: #cfc6b4; }
+.vote-list { list-style: none; margin: 0; padding: 0; border-top: 1px solid #e7dfd2; }
+.vote-list li { border-bottom: 1px solid #e7dfd2; }
+.vote-list .profile-vote { border: 0; margin: 0; background: transparent; }
+.vote-list .profile-vote summary { display: grid; grid-template-columns: 92px 1fr auto; gap: 14px; align-items: center; padding: 11px 4px; cursor: pointer; list-style: none; }
+.vote-list .profile-vote summary::-webkit-details-marker { display: none; }
+.vote-list time { font-size: 12px; color: #6f7166; font-variant-numeric: tabular-nums; }
+.vote-title { font-size: 14px; line-height: 1.4; color: #252823; }
+.vote-title small { display: block; font-size: 11px; color: #a24f40; letter-spacing: .03em; }
+.vote-badge { padding: 3px 10px; border-radius: 999px; font-size: 12px; font-weight: 600; white-space: nowrap; }
+.vote-badge.yes { background: #e3eadb; color: #3f5a2e; }
+.vote-badge.no { background: #f5dfd9; color: #8a3326; }
+.vote-badge.abstain { background: #efe8d6; color: #6f5a24; }
+.vote-badge.absent, .vote-badge.excused, .vote-badge.present, .vote-badge.president, .vote-badge.other { background: #ecebe6; color: #62655b; font-weight: 500; }
+.vote-detail { padding: 0 4px 14px 106px; font-size: 13px; color: #45473f; }
+.vote-detail p { margin: 0 0 8px; }
+.vote-detail dl { display: grid; grid-template-columns: max-content 1fr; gap: 4px 14px; margin: 0 0 10px; }
+.vote-detail dt { color: #7a7c71; }
+.vote-detail dd { margin: 0; }
+.vote-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.vote-actions button { padding: 6px 12px; border-radius: 999px; border: 1px solid #d9cbb4; background: #fffdf8; font: inherit; font-size: 12.5px; cursor: pointer; }
+.vote-actions button.vote-ask { background: #a24f40; border-color: #a24f40; color: #fffdf8; }
+.vote-actions button.vote-ask:hover { background: #7e3a2f; }
+.vote-actions a { font-size: 12.5px; color: #45473f; }
+@media (max-width: 640px) { .vote-list .profile-vote summary { grid-template-columns: 1fr auto; } .vote-list time { grid-column: 1 / -1; } .vote-detail { padding-left: 4px; } }
