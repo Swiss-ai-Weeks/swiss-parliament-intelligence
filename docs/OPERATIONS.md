@@ -59,11 +59,27 @@ Production uses `deploy/switzerland/compose.hostinger.yaml`. The Swiss applicati
 Release preparation follows these boundaries:
 
 1. Build and test the application.
-2. Prepare the code archive with `scripts/prepare-swiss-code-release.mjs`.
-3. Prepare the sanitized public-data package with `scripts/prepare-swiss-release.mjs`.
+2. Build the frontend with `VITE_PUBLIC_PATH=/Switzerland/`, then run `scripts/prepare-swiss-release.mjs` (code, public data and semantic index archives). For a code-only update that leaves both data volumes untouched, `scripts/prepare-swiss-code-release.mjs` is enough.
+3. Rehearse locally: `docker compose -f deploy/switzerland/compose.hostinger.yaml` with archives served from the host.
 4. Verify archive hashes and excluded paths before upload.
 5. Upload through the resumable release helper.
 6. Start or update only the scoped Swiss service and verify `/Switzerland/api/health` plus representative API/browser paths.
+
+### What the VPS fetches (23 September 2026 layout)
+
+`scripts/prepare-swiss-release.mjs` emits three checksummed archives, staged under `Switzerland/bootstrap/<sha256>.tgz` for upload, and a `release.json` with their URLs and hashes:
+
+| Archive | Contents | Compose variables |
+|---|---|---|
+| `backend.tgz` | `server/`, `config/`, `bootstrap.mjs`, `package.json`, `package-lock.json` | `APP_ARCHIVE_URL`, `APP_ARCHIVE_SHA256` |
+| `public-data.tgz` | corpus database without import revision history, seed database with saved sources emptied, manifests, alignment receipts | `PUBLIC_DATA_URL`, `PUBLIC_DATA_SHA256` |
+| `semantic-index.tgz` | int8 E5 index and the pinned ONNX query model | `SEMANTIC_INDEX_URL`, `SEMANTIC_INDEX_SHA256` |
+
+The container launcher streams the backend archive into the `swiss-releases` volume, verifies it, runs `npm ci --omit=dev` once per release and starts `bootstrap.mjs`. The bootstrap streams each data archive to disk while hashing it, applies it once per checksum and never replaces `sessions.sqlite` or an existing `pilot.sqlite`. Nothing is held in memory, so a multi-gigabyte corpus fits a small container. Remove the archives from hosting once the VPS reports `bootstrap corpus: applied`.
+
+Memory: 1.5 GB (`SWISS_MEM_LIMIT`, default) is enough with `HYBRID_RETRIEVAL=off`. Semantic search loads the 1.2 GB index and the query model, so set `HYBRID_RETRIEVAL=on` only with `SWISS_MEM_LIMIT` of at least 3g. Disk: allow about 3× the corpus archive during the first bootstrap (archive, staging copy, previous files).
+
+Model keys (`NVIDIA_API_KEY`, `OPENAI_API_KEY`, `TYPESAFE_API_KEY`) are set in the protected hosting environment, never in the compose file or the archives. With `NVIDIA_API_KEY` set, answers continue on NVIDIA's hosted catalog when the LaunchPad tunnel is gone; `INFERENCE_PROVIDER=nvidia-catalog` forces that route.
 
 The public package may contain public parliamentary records, processing receipts, selected official media and source code. It must not contain `.env` files, private keys, session stores, account exports, feedback, service-role credentials or backup keys.
 

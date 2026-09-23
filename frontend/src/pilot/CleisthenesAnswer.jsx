@@ -74,7 +74,7 @@ export function ResearchSummary({summary,t,open=false}){
 // Who a profile answer is about, with the way into our full profile and complete vote history.
 export function ProfileCard({profile,t}){
  return <div className="answer-profile">
-  {profile.portraitUrl?<img src={profile.portraitUrl} alt=""/>:<span className="answer-profile-initials" aria-hidden="true">{String(profile.name||'?').split(/s+/).map(x=>x[0]).slice(0,2).join('')}</span>}
+  {profile.portraitUrl?<img src={profile.portraitUrl} alt=""/>:<span className="answer-profile-initials" aria-hidden="true">{String(profile.name||'?').split(/\s+/).map(x=>x[0]).slice(0,2).join('')}</span>}
   <div><strong>{profile.name}</strong><small>{[profile.party,profile.canton,profile.council].filter(Boolean).join(' · ')}</small>
    <div className="answer-profile-actions"><button type="button" className="cta" onClick={()=>openProfile(profile.id)}>{t('Open full profile','Ouvrir le profil complet')} <ArrowUpRight size={13}/></button>
     <button type="button" onClick={()=>openProfile(profile.id,'votes')}>{profile.voteHistoryComplete?t(`All recorded votes · ${profile.voteCount.toLocaleString()}`,`Tous les votes · ${profile.voteCount.toLocaleString()}`):t(`Recorded votes · ${profile.voteCount} (partial)`,`Votes enregistrés · ${profile.voteCount} (partiel)`)}</button></div></div>
@@ -97,7 +97,7 @@ function EvidenceMoments({answer,citations,active,setActive,onOpen,language,t,da
  return <figure className="answer-evidence">
   <figcaption><span className="answer-evidence-kind">{current.video?<><Play size={13} weight="fill"/>{t('Evidence moment · parliamentary video','Moment clé · vidéo parlementaire')}</>:<><Quotes size={13} weight="fill"/>{t('Evidence moment · official quotation','Moment clé · citation officielle')}</>}</span>
    <button type="button" className="answer-evidence-open" onClick={()=>onOpen(current)}>{t('Open evidence','Ouvrir la preuve')} <ArrowUpRight size={13}/></button></figcaption>
-  {citations.length>1&&<div className="evidence-tabs" role="tablist" aria-label={t('Evidence moments','Moments clés')}>{citations.map((c,i)=><button key={c.id} type="button" role="tab" aria-selected={c.id===current.id} onClick={()=>setActive(c.id)}><span>{i+1}</span>{String(c.speaker||'').split(/s+/)[0]}</button>)}</div>}
+  {citations.length>1&&<div className="evidence-tabs" role="tablist" aria-label={t('Evidence moments','Moments clés')}>{citations.map((c,i)=><button key={c.id} type="button" role="tab" aria-selected={c.id===current.id} onClick={()=>setActive(c.id)}><span>{i+1}</span>{String(c.speaker||'').split(/\s+/)[0]}</button>)}</div>}
   <blockquote lang={quote===current.quote?current.originalLanguage:target}>“{excerpt(quote,300)}”</blockquote>
   <p className="answer-evidence-meta"><strong>{current.speaker}</strong> · {day(current.date)}{current.role?` · ${current.role}`:''}
    {needsTranslation&&<>{' · '}{translated&&!showOriginal?t(`Machine translation · ${String(current.originalLanguage).toUpperCase()} → ${target.toUpperCase()}`,`Traduction automatique · ${String(current.originalLanguage).toUpperCase()} → ${target.toUpperCase()}`):t(`Original ${String(current.originalLanguage).toUpperCase()}`,`Original ${String(current.originalLanguage).toUpperCase()}`)}
