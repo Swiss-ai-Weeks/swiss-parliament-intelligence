@@ -25,11 +25,16 @@ export function LiveResearch({stages,t}){
   return()=>clearTimeout(timer);
  },[shown,reported.length]);
  const current=reported[Math.max(0,shown-1)]||'understanding',index=Math.max(1,reported.indexOf(current)+1);
- const event=stages.find(x=>x.stage===current)||{};
- return <div className="research-live" role="status" aria-live="polite">
-  <div className="research-live-meta"><span>{t(`Step ${index} of ${total}`,`Étape ${index} sur ${total}`)}</span>
-   <span className="research-live-bar" aria-hidden="true">{Array.from({length:total},(_,i)=><i key={i} data-done={i<index-1?'':undefined} data-active={i===index-1?'':undefined}/>)}</span></div>
-  <p key={current} className="research-live-line">{stageLabel(current,event,t)}</p>
+ const event=stages.find(x=>x.stage===current)||{},done=reported.slice(0,Math.max(0,shown-1));
+ const [open,setOpen]=useState(false);
+ // Quiet, left-aligned status like a person thinking aloud: one live line; earlier steps behind a caret.
+ return <div className="research-think" role="status" aria-live="polite">
+  <button type="button" className="research-think-line" aria-expanded={open} onClick={()=>setOpen(v=>!v)} disabled={!done.length}>
+   <CaretRight size={12} className="research-think-caret" aria-hidden="true"/>
+   <span key={current} className="research-think-text">{stageLabel(current,event,t)}</span>
+   <small>{t(`${index}/${total}`,`${index}/${total}`)}</small>
+  </button>
+  {open&&done.length>0&&<ol className="research-think-steps">{done.map(s=><li key={s}>{stageLabel(s,stages.find(x=>x.stage===s)||{},t)}</li>)}</ol>}
  </div>;
 }
 
@@ -37,7 +42,7 @@ export function LiveResearch({stages,t}){
 export function ResearchTrail({trace,t}){
  const total=trace.at(-1)?.ms||0,steps=trace.filter(x=>STAGE_ORDER.includes(x.stage)||x.stage==='web');
  if(!steps.length)return null;
- return <details className="research-trail"><summary><CaretRight size={12} className="research-trail-caret"/>{t(`${steps.length} research steps · ${(total/1000).toFixed(1)} s`,`${steps.length} étapes de recherche · ${(total/1000).toFixed(1)} s`)}</summary>
+ return <details className="research-trail"><summary><CaretRight size={12} className="research-trail-caret"/>{t(`Researched for ${(total/1000).toFixed(1)} s · ${steps.length} steps`,`Recherche en ${(total/1000).toFixed(1)} s · ${steps.length} étapes`)}</summary>
   <ol>{steps.map(x=><li key={x.stage}><span>{stageLabel(x.stage,x,t)}</span><small>{(x.ms/1000).toFixed(1)} s</small></li>)}</ol>
  </details>;
 }

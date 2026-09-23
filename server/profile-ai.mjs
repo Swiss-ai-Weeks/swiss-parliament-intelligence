@@ -24,7 +24,7 @@ export async function answerProfile(store,input,env,fetchImpl=fetch){
  const empty=reason=>({status:'insufficient-evidence',claims:[],passages:[],context,retrieval:{method:'source-type-routing',sourceType:intent},coverage:reason});
  if(!p)return empty('Choose a politician or name them in full so the source can be identified.');
  let passages=[];
- function passage(id,text,url,kind,speaker=p.name){return {id,evidenceId:id,text,language:'fr',officialUrl:url,sourceKind:kind,speaker,date:p.retrievedAt,personId:kind==='party-self-description'?undefined:p.id};}
+ function passage(id,text,url,kind,speaker=p.name){return {id,evidenceId:id,text,language:'fr',officialUrl:url,sourceKind:kind,speaker,date:p.retrievedAt,personId:kind==='party-self-description'?undefined:p.id,portraitUrl:kind==='party-self-description'||!p.portraitIdentityVerified?undefined:p.portraitUrl};}
  // Who the answer is about, so the interface can show the portrait and link the full profile page.
  const profile={id:p.id,name:p.name,portraitUrl:p.portraitIdentityVerified?p.portraitUrl:null,party:p.party||null,group:p.group||null,canton:p.canton||null,council:p.council||null,active:Boolean(p.active),voteCount:p.votes?.length||0,voteHistoryComplete:p.voteHistory?.status==='complete-service-query'};
  if(intent==='membership'||intent==='profile'){
@@ -33,6 +33,15 @@ export async function answerProfile(store,input,env,fetchImpl=fetch){
   if(p.sourceUrl)passages.push(passage('profile-'+p.id,text,p.sourceUrl,'official-structured-record'));
   if(intent==='profile'){
    for(const [i,o]of(p.occupations||[]).entries())passages.push(passage('occupation-'+p.id+'-'+i,`${p.name} — Profession déclarée : ${o.title}; employeur : ${o.employer||'non renseigné'}; fonction : ${o.role||'non renseignée'}; début : ${o.start?.slice(0,10)||'non renseigné'}; fin : ${o.end?.slice(0,10)||'non renseignée'}.`,o.sourceUrl,'official-structured-record'));
+   // Richer official background: terms, committees, recorded-vote counts and speaking activity.
+   const terms=(p.membershipHistory||[]).filter(m=>m.start).sort((a,b)=>a.start.localeCompare(b.start));
+   if(terms.length)passages.push(passage('terms-'+p.id,`${p.name} — Mandats parlementaires officiels : ${terms.map(m=>`${m.council} (${m.canton||p.canton}) du ${m.start.slice(0,10)} au ${m.end?.slice(0,10)||'aujourd’hui'}`).join(' ; ')}.`,terms[0].sourceUrl||p.sourceUrl,'official-structured-record'));
+   if(p.committees?.length)passages.push(passage('committees-'+p.id,`${p.name} — Commissions actuelles : ${p.committees.map(c=>`${c.name}${c.role?` (${c.role})`:''}`).join(' ; ')}.`,p.committees[0].sourceUrl||p.sourceUrl,'official-structured-record'));
+   if(p.voteHistory?.status==='complete-service-query'&&p.decisionCounts){const d=p.decisionCounts,n=k=>Object.entries(d).filter(([key])=>k.test(key)).reduce((s,[,v])=>s+v,0);
+    passages.push(passage('votes-'+p.id,`${p.name} — Votes nominatifs enregistrés au Conseil national (service officiel des votes) : ${p.votes.length} scrutins ; oui : ${n(/^ja$/i)} ; non : ${n(/^nein$/i)} ; abstentions : ${n(/enthaltung/i)} ; n’a pas participé ou excusé : ${n(/teilgenommen|entschuldigt/i)}. Ces nombres ne décrivent pas une position politique.`,p.sourceUrl,'official-structured-record'));}
+   if(p.speeches?.length){const byBusiness=new Map();for(const s of p.speeches)if(s.businessId)byBusiness.set(s.businessId,(byBusiness.get(s.businessId)||0)+1);
+    const top=[...byBusiness].sort((a,b)=>b[1]-a[1]).slice(0,4).map(([id,count])=>`${store.get?.('business',id)?.title||id} (${count} interventions)`);
+    passages.push(passage('speaking-'+p.id,`${p.name} — Interventions consignées au Bulletin officiel : ${p.speeches.length}. Objets sur lesquels il ou elle est le plus intervenu(e) : ${top.join(' ; ')}.`,p.sourceUrl,'official-structured-record'));}
    if(/contact|email|e-mail/.test(q))passages=(p.contacts||[]).map((c,i)=>passage('contact-'+p.id+'-'+i,`${p.name} — Contact professionnel publié : ${c.value}`,c.sourceUrl,'official-structured-record'));
    if(/committee|commission/.test(q))passages=(p.committees||[]).map((c,i)=>passage('committee-'+p.id+'-'+i,`${p.name} — ${c.name} : ${c.role}`,c.sourceUrl,'official-structured-record'));
   }
@@ -48,7 +57,7 @@ export async function answerProfile(store,input,env,fetchImpl=fetch){
   return {...empty('Use the profile’s voting history to filter dated roll calls and inspect what yes and no meant. No aggregate stance is inferred.'),status:'open-vote-history',profileId:p.id,voteCount:p.votes.length,profile};
  }
  if(!passages.length)return empty('This type of official profile evidence has not been imported yet. Load the profile’s official records.');
- const evidence=passages.slice(0,3).map(s=>({id:s.id,text:s.text,language:s.language,kind:'document',sourceKind:s.sourceKind,speaker:s.speaker,date:s.date,attribution:s.sourceKind==='party-self-description'?'Reviewed editorial summary of the party’s own description; attribute to the party, not the individual.':`Official structured record for ${p.name}, normalized into text.`,source:{url:s.officialUrl}}));
+ const evidence=passages.slice(0,intent==='profile'?7:3).map(s=>({id:s.id,text:s.text,language:s.language,kind:'document',sourceKind:s.sourceKind,speaker:s.speaker,date:s.date,attribution:s.sourceKind==='party-self-description'?'Reviewed editorial summary of the party’s own description; attribute to the party, not the individual.':`Official structured record for ${p.name}, normalized into text.`,source:{url:s.officialUrl}}));
  const started=performance.now();const answer=await research({id:'profile-'+p.id,title:{en:'Official profile and attributed party background'},evidence},{question:input.question,language:input.language||'en'},env,fetchImpl,evidence);
  if(answer.mode==='live-inference'){
   const reviewed=await reviewClaims(answer.claims,env,fetchImpl,{question:input.question,evidence});answer.claims=reviewed.claims;answer.withheldClaims=(answer.withheldClaims||0)+reviewed.withheld;if(!answer.claims.length)answer.status='insufficient-evidence';

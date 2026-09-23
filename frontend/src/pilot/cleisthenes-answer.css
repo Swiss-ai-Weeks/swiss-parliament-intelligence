@@ -222,3 +222,16 @@
 .answer-upcoming { padding: 12px 14px; border-radius: 14px; background: #fbf9f4; border: 1px solid #e7e1d6; font-size: 13.5px; line-height: 1.55; }
 .answer-upcoming p { margin: 0 0 8px; }
 .answer-upcoming a { font-size: 12.5px; color: #a24f40; }
+
+/* Thinking, Codex-style: no box, a grey live line, earlier steps behind a caret */
+.research-think { margin: 2px 0 10px; }
+.research-think-line { display: inline-flex !important; align-items: center; gap: 7px; justify-content: flex-start !important; max-width: 100%; padding: 2px 0; border: 0; background: none; font: inherit; font-size: 13px; color: #8a8579; cursor: pointer; text-align: left; }
+.research-think-line:disabled { cursor: default; }
+.research-think-line small { font-size: 11px; color: #b3ad9f; font-variant-numeric: tabular-nums; }
+.research-think-caret { transition: transform .2s ease; flex: none; }
+.research-think-line[aria-expanded="true"] .research-think-caret { transform: rotate(90deg); }
+.research-think-text { color: transparent; background: linear-gradient(90deg,#8a8579 0%,#8a8579 40%,#d8d1c2 50%,#8a8579 60%,#8a8579 100%); background-size: 250% 100%; -webkit-background-clip: text; background-clip: text; animation: research-shimmer 1.8s linear infinite, research-in .35s ease both; }
+@media (prefers-reduced-motion: reduce) { .research-think-text { animation: none; color: #8a8579; background: none; } }
+.research-think-steps { list-style: none; margin: 4px 0 0 5px; padding: 0 0 0 12px; border-left: 1px solid #e0d9cb; display: grid; gap: 3px; font-size: 12.5px; color: #9a9486; }
+.research-think-steps li::before { content: "✓ "; color: #87907a; }
+.research-trail > summary { color: #8a8579; font-size: 12.5px; }
