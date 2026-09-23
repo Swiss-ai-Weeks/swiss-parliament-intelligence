@@ -41,3 +41,15 @@ test('a checksum mismatch changes nothing',async()=>{
  assert.equal(await applyArchive({name:'semantic-index',url:'',sha256:'',dataDir}),'not-configured');
  rmSync(dataDir,{recursive:true,force:true});
 });
+
+test('a dropped download resumes with a Range request',async()=>{
+ const dataDir=mkdtempSync(join(tmpdir(),'swiss-data-'));
+ const pkg=packageOf({'parliament.sqlite':'resumed corpus '+'x'.repeat(4000)});const half=Math.floor(pkg.bytes.length/2);const ranges=[];
+ const fetchImpl=async(url,options)=>{const range=options?.headers?.Range;ranges.push(range||'none');
+  if(!range)return new Response(new ReadableStream({sent:false,async pull(c){if(this.sent){await new Promise(done=>setTimeout(done,50));return c.error(new TypeError('other side closed'));}this.sent=true;c.enqueue(pkg.bytes.subarray(0,half));}}));
+  const from=Number(range.match(/bytes=(\d+)-/)[1]);return new Response(pkg.bytes.subarray(from),{status:206});};
+ assert.equal(await applyArchive({name:'corpus',url:'https://example.test/c.tgz',sha256:pkg.sha256,dataDir,fetchImpl,retry:{backoffMs:1}}),'applied');
+ assert.deepEqual(ranges,['none','bytes='+half+'-']);  // written bytes are kept; only the rest is fetched
+ assert.match(readFileSync(join(dataDir,'parliament.sqlite'),'utf8'),/^resumed corpus/);
+ rmSync(dataDir,{recursive:true,force:true});
+});
