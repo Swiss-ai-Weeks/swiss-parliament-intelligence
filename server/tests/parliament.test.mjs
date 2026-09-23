@@ -43,3 +43,18 @@ test('voting advice and predictions are refused before retrieval, with a neutral
  for(const q of ['Comment dois-je voter sur la neutralité ?','Wie soll ich abstimmen?','Who will win the vote?'])assert.equal((await answerParliament(store,{question:q,language:'en'},env,fetchImpl)).status,'refused');
  assert.equal(calls,0);
 });
+
+test('a follow-up that finds nothing in its passage widens once to the whole debate and says so',async()=>{
+ const focus={id:'900-1',text:'Merci, Madame la présidente, je serai bref sur ce point de procédure.',language:'fr',speaker:'Chair',sha256:'a',businessId:'b1',transcriptId:'900',officialUrl:'https://example.test/1'};
+ const other={id:'901-1',text:'La protection des données doit rester au centre de cette réforme, car elle touche chaque citoyen.',language:'fr',speaker:'Member',sha256:'b',businessId:'b1',transcriptId:'901',officialUrl:'https://example.test/2'};
+ const store={speeches:()=>[focus,other],get:(kind,id)=>kind==='speech'?[focus,other].find(s=>s.id===id):kind==='business'?{id:'b1',title:'Réforme des données'}:null,search:()=>[other]};
+ let reviews=0;
+ const fetchImpl=async(_u,o)=>{const p=JSON.parse(o.body),name=p.response_format?.json_schema?.name;
+  const content=name==='claim_support_review'?(reviews++===0?{'0':false}:Object.fromEntries(Object.keys(p.response_format.json_schema.schema.properties).map(k=>[k,true])))
+   :name==='search_terms'?{fr:'données',de:'Daten',it:'dati'}
+   :name==='cleisthenes_answer'?{lead:{text:'Member says that the protection of data must stay at the centre of the reform.',units:['u1']},sections:[],followUps:[]}
+   :{claims:[{text:(JSON.parse(p.messages[1].content).evidence[0].speaker)+' says data protection is central to the reform.',evidenceId:JSON.parse(p.messages[1].content).evidence[0].id}]};
+  return {ok:true,json:async()=>({choices:[{message:{content:JSON.stringify(content)}}]})};};
+ const answer=await answerParliament(store,{question:'What was said about data protection?',language:'en',passageId:'900-1'},{INFERENCE_BASE_URL:'https://example.test/v1',INFERENCE_MODEL:'fixture'},fetchImpl);
+ assert.equal(answer.status,'ok');assert.equal(answer.researchSummary.broadened.to,'debate');assert.equal(answer.researchSummary.broadened.businessId,'b1');
+});

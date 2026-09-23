@@ -26,5 +26,8 @@
     "align:parliament": "node scripts/align-parliament-video.mjs",
     "docs:status": "node scripts/session-status.mjs",
     "docs:check": "node scripts/check-docs.mjs"
+  },
+  "dependencies": {
+    "@huggingface/transformers": "^4.3.0"
   }
 }

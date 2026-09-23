@@ -20,7 +20,13 @@ import {translatePassage} from './translation.mjs';
 import {searchVideo} from './video-search.mjs';
 import {readArchiveCoverage} from './archive-coverage.mjs';
 import {probeInference,lastInferenceProbe} from './ai-readiness.mjs';
+import {createModelFetch} from './model-endpoint.mjs';
+import {resolveQuestion} from './conversation.mjs';
 import {findRecordedAnswer,replayRecorded,infrastructureFailure} from './demo-replay.mjs';
+import {webResearch,webResearchConfigured,webResearchIntent} from './web-research.mjs';
+import {searchProposals} from './proposal-search.mjs';
+import {semanticIndexAvailable,semanticSearch} from './semantic-search.mjs';
+import {embedQuery} from './query-embedding.mjs';
 import {buildProfileCoverage} from './profile-coverage.mjs';
 import {readProcessingBacklog} from './processing-backlog.mjs';
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
@@ -47,13 +53,30 @@ function answerCoverage(){
   coverageCache={at:Date.now(),value};return value;
 }
 const scopeTitle=b=>typeof b.scopeTitle==='string'&&b.scopeTitle.trim()?b.scopeTitle.trim().slice(0,200):undefined;
-export function createServer({store=createStore(path.join(root,'data/pilot.sqlite')),env=process.env,fetchImpl=fetch,authFile=':memory:'}={}) {
+export function createServer({store=createStore(path.join(root,'data/pilot.sqlite')),env=process.env,fetchImpl:networkFetch=fetch,authFile=':memory:'}={}) {
+  // Model calls fall back to NVIDIA's hosted API catalog when the LaunchPad GPU endpoint is unreachable.
+  const fetchImpl=createModelFetch(env,networkFetch);
   const feedback=feedbackService(env,fetchImpl);
   // Live first; a prepared demo question falls back to its labelled recording only on infrastructure failure.
+  // Router: the parliamentary record answers first and stays the authority; web research is added beside it,
+  // clearly labelled, for news and upcoming events or when the record holds nothing on the question.
+  async function withWebResearch(b,answer,onProgress){
+    if(!webResearchConfigured(env)||answer.status==='refused'||answer.mode==='recorded-replay')return answer;
+    if(!(b.webResearch===true||webResearchIntent(b.question)||['insufficient-evidence','upcoming'].includes(answer.status)))return answer;
+    try{onProgress?.({stage:'web'});}catch{}
+    try{const web=await webResearch({question:b.question,language:b.language||'en',context:scopeTitle(b)?'Scope: '+scopeTitle(b):undefined,env,fetchImpl});return web.status==='ok'?{...answer,web}:{...answer,webStatus:web.status};}
+    catch{return {...answer,webStatus:'unavailable'};}
+  }
+  // Hybrid retrieval is opt-in until evaluated: question embedded on this CPU, int8 E5 index searched here.
+  const semanticRetrieval=()=>env.HYBRID_RETRIEVAL==='on'&&semanticIndexAvailable(root,env)?(text,opts)=>embedQuery(text).then(vector=>semanticSearch(root,vector,{...opts,env})):undefined;
   async function answerWithFallback(b,onProgress){
+    // Conversation memory: resolve "he", "that initiative" … against the thread before any research.
+    const resolution=await resolveQuestion(b.question,b.thread,{language:b.language||'en',env,fetchImpl});
+    if(resolution.resolved){try{onProgress?.({stage:'understanding',resolvedQuestion:resolution.question});}catch{}b={...b,question:resolution.question,originalQuestion:b.question,...(!b.personId&&!b.businessId&&!b.passageId&&resolution.person&&!resolution.proposal?{context:{...(b.context||{}),personId:resolution.person.id}}:{})};}
+    const withResolution=answer=>resolution.resolved?{...answer,resolvedQuestion:resolution.question,originalQuestion:b.originalQuestion}:answer;
     const recorded=findRecordedAnswer(root,b.question,b.language||'en');
     if(recorded&&lastInferenceProbe()?.state==='unreachable'&&(await probeInference(env,fetchImpl)).state==='unreachable')return replayRecorded(recorded);
-    try{const answer=await answerParliament(par(),b,env,fetchImpl,{coverage:answerCoverage(),scopeTitle:scopeTitle(b),onProgress});return recorded&&infrastructureFailure(answer)?replayRecorded(recorded):answer;}
+    try{const answer=await answerParliament(par(),b,env,fetchImpl,{coverage:answerCoverage(),scopeTitle:scopeTitle(b),onProgress,semantic:semanticRetrieval()});return withResolution(recorded&&infrastructureFailure(answer)?replayRecorded(recorded):await withWebResearch(b,answer,onProgress));}
     catch(error){if(recorded)return replayRecorded(recorded);throw error;}
   }
   const publicBase=(env.PUBLIC_BASE_PATH||'').replace(/\/$/,'');
@@ -86,6 +109,7 @@ export function createServer({store=createStore(path.join(root,'data/pilot.sqlit
       if(p==='/api/dossiers'&&req.method==='GET')return json(res,200,store.listDossiers());
       if(p.startsWith('/api/chambers/')&&req.method==='GET')return json(res,200,readChamber(p.slice(14),url.searchParams.get('version')||undefined));
       if(p==='/api/parliament'&&req.method==='GET')return json(res,200,parliamentOverview(par()));
+      if(p==='/api/parliament/proposals'&&req.method==='GET'){const q=(url.searchParams.get('q')||'').slice(0,200),date=v=>/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(v||'')?v:undefined;return json(res,200,await searchProposals(par(),{q,stage:['proceedings','concluded','unclassified'].includes(url.searchParams.get('stage'))?url.searchParams.get('stage'):undefined,from:date(url.searchParams.get('from')),to:date(url.searchParams.get('to')),page:Math.min(200,Number(url.searchParams.get('page'))||0)},env,fetchImpl));}
       if(p==='/api/parliament/archive-coverage'&&req.method==='GET')return json(res,200,readArchiveCoverage(root));
       if(p==='/api/parliament/profile-coverage'&&req.method==='GET')return json(res,200,buildProfileCoverage(par()));
       if(p==='/api/parliament/processing-backlog'&&req.method==='GET')return json(res,200,readProcessingBacklog(root));
@@ -99,7 +123,7 @@ export function createServer({store=createStore(path.join(root,'data/pilot.sqlit
       if(p==='/api/parliament/search'&&req.method==='GET')return json(res,200,par().search((url.searchParams.get('q')||'').slice(0,500),{businessId:url.searchParams.get('business'),personId:url.searchParams.get('person'),limit:20}));
       if(p==='/api/parliament/video-search'&&req.method==='POST'){const b=await body(req);if(typeof b.query!=='string'||!b.query.trim()||b.query.length>500||!['spoken','visual'].includes(b.mode))throw fail('INVALID_REQUEST');for(const k of ['personId','businessId'])if(b[k]!==undefined&&(typeof b[k]!=='string'||!/^\d+$/.test(b[k])))throw fail('INVALID_SCOPE');try{return json(res,200,await searchVideo({root:path.join(root,'data/parliament'),store:par(),query:b.query,mode:b.mode,personId:b.personId,businessId:b.businessId,env,fetchImpl}));}catch{throw fail('VIDEO_SEARCH_UNAVAILABLE',502);}}
       if(p==='/api/parliament/translate'&&req.method==='POST'){const b=await body(req);if(typeof b.evidenceId!=='string'||!languages.includes(b.language))throw fail('INVALID_REQUEST');const passage=par().get('speech',b.evidenceId);if(!passage)throw fail('NOT_FOUND',404);try{return json(res,200,await translatePassage(passage,b.language,env,fetchImpl));}catch(e){throw fail(e.status===429?'TRANSLATOR_BUSY':'TRANSLATION_UNAVAILABLE',e.status===429?429:502);}}
-      if(p==='/api/health/ai'&&req.method==='GET')return json(res,200,await probeInference(env,fetchImpl));
+      if(p==='/api/health/ai'&&req.method==='GET')return json(res,200,{...await probeInference(env,networkFetch),route:fetchImpl.route?.()});
       if(p==='/api/parliament/ask'&&req.method==='POST'){const b=await body(req);if(typeof b.question!=='string'||!b.question.trim()||b.question.length>500||!languages.includes(b.language||'en'))throw fail('INVALID_REQUEST');try{return json(res,200,await answerWithFallback(b));}catch{throw fail('MODEL_UNAVAILABLE_OR_INVALID_OUTPUT',502);}}
       // Same answer, streamed as newline-delimited JSON: research stages first, then the answer.
       if(p==='/api/parliament/ask/stream'&&req.method==='POST'){

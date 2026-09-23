@@ -1,0 +1,3 @@
+// Official Bulletin role codes (mirror of server/answer-synthesis.mjs ROLES).
+const ROLES={Mit:['Member of the council','Membre du conseil'],BR:['Federal Councillor','Conseiller fédéral'],BPR:['President of the Swiss Confederation','Président de la Confédération'],VPBR:['Vice-President of the Federal Council','Vice-président du Conseil fédéral'],P:['President of the chamber','Président du conseil'],'1VP':['First Vice-President of the chamber','Premier vice-président du conseil'],'2VP':['Second Vice-President of the chamber','Second vice-président du conseil'],BK:['Federal Chancellor','Chancelier de la Confédération']};
+export function speakerRole(code,language='en'){const role=ROLES[String(code||'').replace(/-[MF]$/,'')];return role?role[language==='fr'?1:0]:code||'';}

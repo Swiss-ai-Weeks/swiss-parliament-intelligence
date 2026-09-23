@@ -60,29 +60,61 @@ export function rankWithinProposal(pool,texts){
 }
 // Rank fused candidates, then prefer distinct speakers and parliamentary groups so a comparison
 // can surface more than one side; a validated video moment is a small tie-breaker, not a filter.
-export function selectPassages(scored,limit=4){
+export function selectPassages(scored,limit=4,{distinctBusiness=false}={}){
  const all=[...scored.values()].map(x=>({...x,score:x.score+(x.passage.video?0.02:0)})).sort((a,b)=>b.score-a.score).map(x=>x.passage);
  // Very short procedural lines rarely answer anything; use them only when nothing longer matched.
  const substantive=all.filter(s=>s.text?.length>=80),ranked=substantive.length?substantive:all;
  const chosen=[],speakers=new Set(),groups=new Set();
- for(const s of ranked){if(chosen.length===limit)break;if(speakers.has(s.speaker)||(s.group&&groups.has(s.group)))continue;chosen.push(s);speakers.add(s.speaker);if(s.group)groups.add(s.group);}
+ const debates=new Set();
+ // A session summary should span several debates, not four speakers on the same one.
+ if(distinctBusiness)for(const s of ranked){if(chosen.length===limit)break;if(!s.businessId||debates.has(s.businessId)||speakers.has(s.speaker))continue;chosen.push(s);debates.add(s.businessId);speakers.add(s.speaker);if(s.group)groups.add(s.group);}
+ for(const s of ranked){if(chosen.length===limit)break;if(chosen.includes(s)||speakers.has(s.speaker)||(s.group&&groups.has(s.group)))continue;chosen.push(s);speakers.add(s.speaker);if(s.group)groups.add(s.group);}
  for(const s of ranked){if(chosen.length===limit)break;if(!chosen.includes(s)&&!speakers.has(s.speaker)){chosen.push(s);speakers.add(s.speaker);}}
  return chosen;
 }
+// A follow-up asked inside a narrow scope (one passage or one person) should not dead-end: when that scope
+// holds no supporting evidence, widen once to the passage's whole debate, then to the full record, and say so.
 export async function answerParliament(store,input,env,fetchImpl=fetch,options={}){
+ const first=await answerParliamentOnce(store,input,env,fetchImpl,options);
+ if(first.status!=='insufficient-evidence'||!(input.passageId||input.personId)||input.noBroaden)return first;
+ const focus=input.passageId?store.get?.('speech',input.passageId):null,businessId=input.businessId||focus?.businessId;
+ const steps=[...(businessId&&(input.passageId||input.personId)?[{businessId,label:'debate'}]:[]),{label:'record'}];
+ for(const step of steps){
+  const wider={...input,passageId:undefined,personId:undefined,context:undefined,businessId:step.businessId,noBroaden:true};
+  const answer=await answerParliamentOnce(store,wider,env,fetchImpl,options);
+  if(answer.status==='ok'){const business=step.businessId&&store.get?.('business',step.businessId);answer.researchSummary={...answer.researchSummary,broadened:{to:step.label,businessId:step.businessId||null,title:business?.title||null}};return answer;}
+ }
+ return first;
+}
+async function answerParliamentOnce(store,input,env,fetchImpl=fetch,options={}){
  const filters=input.filters||{},language=input.language||'en';
  // Visible research stages for the streaming endpoint; never model reasoning.
  const progress=(stage,detail={})=>{try{options.onProgress?.({stage,...detail});}catch{}};progress('understanding');
  if(votingAdviceRequest(input.question))return {status:'refused',reason:'voting-advice',claims:[],passages:[],language,suggestedFollowUps:neutralAlternative(input.question,language),policyVersion:ANSWER_POLICY_VERSION};
- const inScope=s=>(!filters.session||s.sessionId===filters.session)&&(!filters.date||s.date?.slice(0,10)===filters.date)&&(!filters.from||s.date?.slice(0,10)>=filters.from)&&(!filters.to||s.date?.slice(0,10)<=filters.to)&&(!filters.language||s.language===filters.language);
+ const inScope=s=>(!filters.session||s.sessionId===filters.session)&&(!filters.date||s.date?.slice(0,10)===filters.date)&&(!filters.from||s.date?.slice(0,10)>=filters.from)&&(!filters.to||s.date?.slice(0,10)<=filters.to)&&(!filters.language||s.language===filters.language)&&(!filters.chamber||!s.council||(filters.chamber==='nr'?/national/i:/etats|stände|stati/i).test(s.council));
  if(filters.type==='popular-vote'||filters.category&&filters.category!=='parliament')return {status:'insufficient-evidence',claims:[],passages:[],coverage:'Open a matching topic dossier to ask within these ballot filters.'};
- const profileAnswer=Object.values(filters).some(Boolean)?null:await answerProfile(store,input,env,fetchImpl);if(profileAnswer)return profileAnswer;
+ const profileAnswer=Object.values(filters).some(Boolean)?null:await answerProfile(store,input,env,fetchImpl);
+ if(profileAnswer){
+  // Profile answers get the same verified synthesis and typed citations as debate answers.
+  if(profileAnswer.status==='ok'&&profileAnswer.mode==='live-inference'&&profileAnswer.claims?.length){
+   progress('writing',{claims:profileAnswer.claims.length});
+   try{const synthesis=await synthesizeAnswer({question:input.question,language,claims:profileAnswer.claims,passages:profileAnswer.passages,store,env,fetchImpl});
+    if(synthesis.status==='ok')Object.assign(profileAnswer,{answer:synthesis.answer,citations:synthesis.citations,suggestedFollowUps:synthesis.suggestedFollowUps,synthesis:{status:'ok'}});}catch{profileAnswer.synthesis={status:'unavailable'};}
+  }
+  profileAnswer.researchSummary=researchSummary({scopeTitle:profileAnswer.profile?.name,retrieval:{method:'official-profile'},candidates:profileAnswer.passages?.length||0,passages:profileAnswer.passages||[],citations:profileAnswer.citations||[],withheld:profileAnswer.withheldClaims||0,coverage:null});
+  progress('done');return profileAnswer;
+ }
  const focus=input.passageId?store.get?.('speech',input.passageId):null;
  if(input.passageId&&(!focus||!inScope(focus)||(input.personId&&focus.personId!==input.personId)||(input.businessId&&focus.businessId!==input.businessId&&!focus.businessIds?.includes(input.businessId))))return {status:'insufficient-evidence',claims:[],passages:[]};
+ // A question that names one speaker in full ("What did Walder Nicolas say…") reads that speaker's passages.
+ if(!input.personId&&!input.passageId){const words=new Set(fold(input.question).split(/[^\p{L}\p{N}]+/u)),named=(store.people?.()||[]).filter(p=>{const parts=fold(p.name).split(/\s+/).filter(x=>x.length>1);return parts.length>1&&parts.every(x=>words.has(x));});if(named.length===1)input={...input,personId:String(named[0].id),namedSpeaker:named[0].name};}
  const started=performance.now(),scope={businessId:input.businessId,personId:input.personId,limit:20};
  // Only an explicit person or proposal scope needs its full passage collection; the corpus holds ~1M speeches.
  const inCollection=s=>(!input.businessId||s.businessId===input.businessId)&&(!input.personId||s.personId===input.personId)&&inScope(s)&&(!filters.stage||store.get?.('business',s.businessId)?.statusGroup===filters.stage);
- const collection=store.speechesWhere?(input.businessId||input.personId?store.speechesWhere({businessId:input.businessId,personId:input.personId}).filter(inCollection):null):store.speeches?.().filter(inCollection);
+ // A session or sitting scope (from the agenda) reads what was said in that period; an upcoming one says so.
+ const period=!input.businessId&&!input.personId&&(filters.session||filters.date||filters.from)?sessionPeriod(store,filters):null;
+ if(period?.upcoming){progress('done');return {status:'upcoming',upcoming:{from:period.from,to:period.to,title:options.scopeTitle||period.title||null},claims:[],passages:[],language,policyVersion:ANSWER_POLICY_VERSION};}
+ const collection=period&&store.speechesBetween?store.speechesBetween(period.from,period.toExclusive).filter(inCollection):store.speechesWhere?(input.businessId||input.personId?store.speechesWhere({businessId:input.businessId,personId:input.personId}).filter(inCollection):null):store.speeches?.().filter(inCollection);
  const sameIntervention=s=>store.speechesWhere?store.speechesWhere({transcriptId:s.transcriptId}):(collection||[]).filter(p=>p.transcriptId===s.transcriptId);
  const key=JSON.stringify([ANSWER_POLICY_VERSION,input.question,input.language,input.businessId,input.personId,input.passageId,filters,env.INFERENCE_MODEL,env.DEMO_REPLAY_FILE,collection?.map(s=>s.sha256)]);
  const prior=answerCache.get(key);if(prior&&Date.now()-prior.at<600000)return {...prior.answer,cacheHit:true,latencyMs:Math.round(performance.now()-started)};
@@ -101,10 +133,24 @@ export async function answerParliament(store,input,env,fetchImpl=fetch,options={
   if(proposal&&store.speechesWhere){
    retrieval={...retrieval,method:'resolved-proposal',proposal:{id:proposal.id,number:proposal.number,title:proposal.title}};
    score=rankWithinProposal(store.speechesWhere({businessId:proposal.id}).filter(usable),[input.question,...q.queries]);
+  }else if(collection?.length&&store.speechesWhere){
+   // Inside a proposal, speaker or session scope every passage is on topic: rank the scope for substance.
+   const business=input.businessId&&store.get?.('business',input.businessId);
+   if(business)retrieval={...retrieval,method:'resolved-proposal',proposal:{id:business.id,number:business.number,title:business.title}};
+   if(period)retrieval={...retrieval,method:'session-period',period:{from:period.from,to:period.to,title:options.scopeTitle||period.title||null}};
+   score=rankWithinProposal(collection,[input.question,...q.queries]);
   }else{
    score=new Map();for(const list of [passages,...q.queries.map(t=>store.search(topicSearchText(t),scope).filter(usable))])for(const [i,s]of list.entries()){if(s.text.length>=7000)continue;const prior=score.get(s.id);score.set(s.id,{passage:s,score:(prior?.score||0)+1/(10+i)});}
   }
-  candidates=score.size;const selected=selectPassages(score,6);if(selected.length)passages=selected;
+  // Hybrid retrieval (flagged): E5 semantic ranks join the same reciprocal-rank fusion, over the whole
+  // archive or only the current scope's passages.
+  if(options.semantic){try{
+   const pool=proposal||collection?.length?[...score.values()].map(x=>x.passage.id):null;
+   const hits=await options.semantic(input.question,{k:30,passageIds:pool});
+   for(const [i,h] of hits.entries()){const s=score.get(h.passageId)?.passage||store.get?.('speech',h.passageId);if(!s||!usable(s)||s.text.length>=7000)continue;const prior=score.get(s.id);score.set(s.id,{passage:s,score:(prior?.score||0)+(options.semanticWeight??2)/(10+i)});}
+   retrieval={...retrieval,semantic:{model:'multilingual-e5-large',hits:hits.length}};
+  }catch{retrieval={...retrieval,semantic:{status:'unavailable'}};}}
+  candidates=score.size;const selected=selectPassages(score,6,{distinctBusiness:Boolean(period)});if(selected.length)passages=selected;
  }catch{retrieval.warning='Query translation unavailable; using original-language search.';}}
  passages=passages.slice(0,6);const evidence=passages.map(speechEvidence);progress('reading',{passages:passages.length,candidates});const d={id:'parliament-'+(input.businessId||'collection'),title:{en:'Imported Swiss parliamentary speeches'},evidence};
  const answer=await research(d,{question:input.question,language:input.language||'en'},env,fetchImpl,evidence);
@@ -157,4 +203,13 @@ export function neutralAlternative(question,language='en'){
  const topic=String(question).replace(/[?!.\s]+$/u,'').match(/\b(?:on|about|regarding|sur|concernant|über|zur|zum|zu|su|sulla|sul)\s+(.{3,160})$/iu)?.[1];
  if(!topic)return [];
  return [{en:`What are the arguments for and against ${topic}?`,fr:`Quels sont les arguments pour et contre ${topic} ?`,de:`Welche Argumente gibt es für und gegen ${topic}?`,it:`Quali sono gli argomenti a favore e contro ${topic}?`}[language]||`What are the arguments for and against ${topic}?`];
+}
+
+// Resolve an agenda scope to dates: a sitting day, an explicit range, or the session record's own dates.
+export function sessionPeriod(store,filters,today=new Date().toISOString().slice(0,10)){
+ let from=filters.date||filters.from,to=filters.date||filters.to,title=null;
+ if(filters.session&&!from){const session=store.get?.('session',String(filters.session));if(!session?.start)return null;from=session.start.slice(0,10);to=session.end?.slice(0,10)||from;title=session.title;}
+ if(!from)return null;to=to||from;
+ const next=new Date(to+'T00:00:00Z');next.setUTCDate(next.getUTCDate()+1);
+ return {from,to,toExclusive:next.toISOString().slice(0,10),title,upcoming:from>today};
 }

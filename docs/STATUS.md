@@ -1,5 +1,23 @@
 # Current implementation and corpus status
 
+## Update — 23 September 2026
+
+These counts supersede the archive-wide figures in the sections below; the validated-baseline snapshot contract that follows is unchanged.
+
+| Measure | Value |
+| --- | ---: |
+| Declared sessions (1990–2026) | 185 |
+| Sessions with official text | 134 (1999–2026; the official service has no digital transcripts for the 51 older sessions) |
+| Official text passages | 1,140,943 |
+| E5 semantic index | 1,140,943 passages / 1,141,140 vectors (H100, 597 s; int8 serving index verified by SHA-256) |
+| Recording jobs | 221,752 |
+| Validated Canary transcripts | 11,092 |
+| Published machine-aligned video moments | 14,556 (none human-reviewed) |
+| Profiles | 790 people; 254 of 254 current members with complete official profiles and vote histories |
+| Hybrid retrieval evaluation | 40/48 on-topic passages vs 35/48 lexical on 8 topic questions |
+| TypeSafe Jev shadow evaluation | 7/8 relations correct (jev-1.13.0, 604 ms) |
+
+
 ## Snapshot contract
 
 Snapshot date: **22 September 2026**. Counts below were reproduced from the local validated public corpus and processing artifacts after the completed H100 batch was imported. They are not a live H100 worker counter and do not describe the entire history of Swiss Parliament.
