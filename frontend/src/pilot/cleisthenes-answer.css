@@ -235,3 +235,6 @@
 .research-think-steps { list-style: none; margin: 4px 0 0 5px; padding: 0 0 0 12px; border-left: 1px solid #e0d9cb; display: grid; gap: 3px; font-size: 12.5px; color: #9a9486; }
 .research-think-steps li::before { content: "✓ "; color: #87907a; }
 .research-trail > summary { color: #8a8579; font-size: 12.5px; }
+
+.answer-understood { margin: 0 0 8px !important; font-size: 12px; color: #8a8579; }
+.answer-understood em { font-style: normal; color: #5f6157; }

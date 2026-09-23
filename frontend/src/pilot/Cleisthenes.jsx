@@ -40,14 +40,14 @@ export default function Cleisthenes({language,expanded,onExpand,onCollapse,conte
  useEffect(()=>{if(!input.current)return;input.current.style.height='auto';input.current.style.height=Math.min(input.current.scrollHeight,120)+'px';},[question]);
  function start(scopeOverride=context){if(!ready)return;const next=newConversation(scopeOverride||null);setChats(c=>[next,...c].slice(0,20));setActiveId(next.id);setQuestion('');setSource(null);setHistoryOpen(false);setAction('explain');setOpen(true);requestAnimationFrame(()=>input.current?.focus());}
  async function remove(id){if(user){const owner=user.id;try{await (writes.current.get(id)||Promise.resolve());if(ownerRef.current!==owner)return;await api.deleteItem('conversation',id,owner);synced.current.delete(id);}catch{setSyncNote('Could not delete the account conversation.');return;}}setChats(c=>{const rest=c.filter(row=>row.id!==id);return rest.length?rest:[newConversation()];});if(chat.id===id){setActiveId(chats.find(c=>c.id!==id)?.id||null);setQuestion('');}}
- async function send(e,prompt,requestedAction=action,scopeOverride){
+ async function send(e,prompt,requestedAction=action,scopeOverride,contextOverride){
   e?.preventDefault();const q=(prompt||question).trim();if(!q||sending.current||!ready)return;const sendingOwner=ownerRef.current;
   const id=chat.id,selectedScope=scopeOverride===undefined?scope:scopeOverride;
   const previous=messages.filter(m=>m.role==='assistant').at(-1);
-  const conversation=previous?.scopeId===(selectedScope?.id||null)?previous?.answer?.context:undefined;
-  const t0=Date.now(),trace=[];sending.current=true;setPending(id);setStages([]);setQuestion('');setHistoryOpen(false);setChats(c=>appendMessage(c,id,{role:'user',text:q}));
+  const conversation=contextOverride!==undefined?contextOverride:previous?.scopeId===(selectedScope?.id||null)?previous?.answer?.context:undefined;
+  const t0=Date.now(),trace=[];const thread=threadFrom(messages);sending.current=true;setPending(id);setStages([]);setQuestion('');setHistoryOpen(false);setChats(c=>appendMessage(c,id,{role:'user',text:q}));
   try{
-   const answer=selectedScope?.kind==='search'?await api.discoverySearch({question:q,filters:selectedScope.filters,language}):selectedScope?.kind==='dossier'?await api.ask({dossierId:selectedScope.id,question:q,language,action:requestedAction}):await api.parliamentAskStream({question:q,language,context:conversation,scopeTitle:selectedScope?.title,...(selectedScope?{...(selectedScope.kind==='person'?{personId:selectedScope.id}:selectedScope.kind==='business'?{businessId:selectedScope.id}:{}),...(selectedScope.filters?{filters:selectedScope.filters}:{}),...(selectedScope.passageId?{passageId:selectedScope.passageId}:{})}:{})},event=>{const e={...event,ms:Date.now()-t0};if(e.stage!=='done')trace.push(e);else trace.push({stage:'done',ms:e.ms});setStages(list=>[...list.filter(x=>x.stage!==e.stage),e]);});
+   const answer=selectedScope?.kind==='search'?await api.discoverySearch({question:q,filters:selectedScope.filters,language}):selectedScope?.kind==='dossier'?await api.ask({dossierId:selectedScope.id,question:q,language,action:requestedAction}):await api.parliamentAskStream({question:q,language,context:conversation,thread,scopeTitle:selectedScope?.title,...(selectedScope?{...(selectedScope.kind==='person'?{personId:selectedScope.id}:selectedScope.kind==='business'?{businessId:selectedScope.id}:{}),...(selectedScope.filters?{filters:selectedScope.filters}:{}),...(selectedScope.passageId?{passageId:selectedScope.passageId}:{})}:{})},event=>{const e={...event,ms:Date.now()-t0};if(e.stage!=='done')trace.push(e);else trace.push({stage:'done',ms:e.ms});setStages(list=>[...list.filter(x=>x.stage!==e.stage),e]);});
    if(selectedScope?.kind==='dossier'){const d=await api.dossier(selectedScope.id);answer.passages=d.evidence.map(e=>({id:e.id,evidenceId:e.id,speaker:e.attribution,text:e.text,language:e.language,sourceKind:e.sourceKind,officialUrl:e.source.url,date:d.date,...(e.kind==='video'?{video:{url:e.mediaUrl||e.videoUrl,start:e.start||0,end:e.end}}:{})}));}
    if(ownerRef.current!==sendingOwner)return;setChats(c=>appendMessage(c,id,{role:'assistant',answer,scopeId:selectedScope?.id||null,...(trace.length?{trace}:{})}).map(row=>row.id===id&&row.scope?.passageId?{...row,scope:{...row.scope,passageId:undefined}}:row));
   }catch{if(ownerRef.current!==sendingOwner)return;setChats(c=>appendMessage(c,id,{role:'assistant',retry:q,retryAction:requestedAction,retryScope:selectedScope,error:t('I couldn’t reach the model. Your question is ready to retry.','Je n’ai pas pu joindre le modèle. Vous pouvez réessayer.')}));}
@@ -57,7 +57,7 @@ export default function Cleisthenes({language,expanded,onExpand,onCollapse,conte
  useEffect(()=>{try{window.dispatchEvent(new Event('conversations-changed'));}catch{}},[chats]);
  useEffect(()=>{const job=autoSend.current;if(!job||!ready||chat?.id!==job.chatId||sending.current)return;autoSend.current=null;send(null,job.prompt);},[chat?.id,ready,openRequest]);
  // A suggested follow-up continues the answer's debate, never a single passage.
- function askFollowUp(q,answer){const proposal=answer.researchSummary?.proposal,next=proposal?{kind:'business',id:proposal.id,title:proposal.title}:scope?{...scope,passageId:undefined}:null;setChats(c=>c.map(row=>row.id===chat.id?{...row,scope:next}:row));send(null,q,undefined,next);}
+ function askFollowUp(q,answer){const proposal=answer.researchSummary?.proposal,next=answer.profile?{kind:'person',id:String(answer.profile.id),title:answer.profile.name}:proposal?{kind:'business',id:proposal.id,title:proposal.title}:scope?{...scope,passageId:undefined}:null;setChats(c=>c.map(row=>row.id===chat.id?{...row,scope:next}:row));send(null,q,undefined,next,answer.context);}
  function close(){setOpen(false);if(expanded)onCollapse();requestAnimationFrame(()=>launcher.current?.focus());}
  function followUp({prompt,scope:nextScope}){setSource(null);setChats(c=>c.map(row=>row.id===chat.id?{...row,scope:nextScope}:row));setQuestion(prompt);setHistoryOpen(false);requestAnimationFrame(()=>input.current?.focus());}
  const suggestions=scope?.kind==='dossier'?[[t('Compare arguments','Comparer les arguments'),t('What are the arguments for and against?','Quels sont les arguments pour et contre ?')],[t('Vote result','Résultat du vote'),t('What was the result of the vote?','Quel a été le résultat de la votation ?')]]:[[t('The 10-million initiative','L’initiative 10 millions'),t("What are the arguments for and against the initiative 'No to a Switzerland of 10 million'?","Quels sont les arguments pour et contre l'initiative « Pas de Suisse à 10 millions » ?")],[t('Stop blackout initiative','Initiative Stop au blackout'),t("What arguments were made in Parliament about the 'Stop blackout' initiative?","Quels arguments ont été avancés au Parlement sur l'initiative « Stop au blackout » ?")],[t('Crans-Montana victims law','Loi pour les victimes de Crans-Montana'),t('What did speakers say about the law supporting the victims of the Crans-Montana fire?','Qu’ont dit les orateurs sur la loi de soutien aux victimes de l’incendie de Crans-Montana ?')]];
@@ -84,3 +84,13 @@ export default function Cleisthenes({language,expanded,onExpand,onCollapse,conte
  </>;
 }
 
+
+// The last few turns, compact: enough for the server to resolve "he", "his vote", "that initiative".
+function threadFrom(messages){
+ const turns=[];
+ for(let i=0;i<messages.length;i++){const m=messages[i];if(m.role!=='user')continue;const a=messages[i+1]?.role==='assistant'?messages[i+1].answer:null;
+  const cited=(a?.citations||[]).filter(x=>x.sourceType==='parliamentary-speech');
+  const person=a?.profile?{id:String(a.profile.id),name:a.profile.name}:cited.length&&new Set(cited.map(x=>x.personId)).size===1&&cited[0].personId?{id:String(cited[0].personId),name:cited[0].speaker}:null;
+  turns.push({question:m.text,answer:a?.answer?.lead?.text||a?.claims?.map(x=>x.text).join(' ')||'',person,proposal:a?.researchSummary?.proposal?{id:String(a.researchSummary.proposal.id),title:a.researchSummary.proposal.title}:null,speakers:[...new Set(cited.map(x=>x.speaker))].slice(0,4)});}
+ return turns.slice(-3);
+}

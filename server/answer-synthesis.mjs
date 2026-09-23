@@ -93,11 +93,12 @@ export async function synthesizeAnswer({question,language='en',claims,passages,s
  const units=claims.filter(c=>byEvidence.has(c.evidenceId)).map((c,i)=>({id:'u'+(i+1),claim:c.text,citation:byEvidence.get(c.evidenceId)}));
  if(!units.length)return {status:'no-units'};
  const citationFor=Object.fromEntries(units.map(u=>[u.id,u.citation])),unitIds=units.map(u=>u.id),intent=classifyIntent(question);
- const sourceOf=Object.fromEntries(citations.map(c=>[c.id,{speaker:c.speaker,role:c.role,date:c.date?.slice(0,10),proposal:c.title}]));
+ // Register entries are facts from Parliament's records, not statements; their date is when they were retrieved.
+ const sourceOf=Object.fromEntries(citations.map(c=>[c.id,c.sourceType==='parliamentary-speech'?{speaker:c.speaker,role:c.role,date:c.date?.slice(0,10),proposal:c.title}:{record:'Official Parliament register entry (not a statement)',about:c.speaker}]));
  const system=`/no_think
 You are Cleisthenes, a Swiss civic research guide. Write ONLY in ${target}. Every heading, sentence and follow-up question must be in ${target}, even when the verified units are in another language; translate their meaning faithfully.
 Use ONLY the verified units supplied. Do not add facts, numbers, dates, names, motives or context that the units do not state. Each paragraph lists the unit IDs it relies on in "units".
-Attribute every position to the named speaker with the date and role given. A speech is one person's intervention: never present it as the position of Parliament, a party or the Swiss people.
+Attribute every position to the named speaker with the date and role given. A speech is one person's intervention: never present it as the position of Parliament, a party or the Swiss people. Units from an official register entry are facts from Parliament's records: state them plainly, never as something the person said, and give no retrieval date.
 Lead: two to four sentences that directly answer the question from the units, naming the speakers. Do not open with "Parliament" or a generic statement. If the units only partly answer it (for example only one side of a debate was found), say so explicitly.
 ${STRUCTURE[intent]}
 If the units disagree, say so. Do not recommend how to vote. Neutral, plain, calm tone for a general audience.
