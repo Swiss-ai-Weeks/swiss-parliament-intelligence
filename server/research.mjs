@@ -61,7 +61,19 @@ export async function research(dossier,{question='',action='explain',language='e
   // one passage for facts that came from several unrelated records.
   // Keep each inference isolated to one source, but overlap two requests.
   const groups=[];
-  for(let i=0;i<evidence.length;i+=2)groups.push(...await Promise.all(evidence.slice(i,i+2).map(entry=>infer([entry]))));
+  try {
+    for(let i=0;i<evidence.length;i+=2)groups.push(...await Promise.all(evidence.slice(i,i+2).map(entry=>infer([entry]))));
+  } catch {
+    return {
+      status:'sources-only',
+      mode:'source-fallback',
+      claims:[],
+      language,
+      sourceIds:evidence.map(entry=>entry.id),
+      notice:'AI generation is temporarily unavailable; showing the retrieved official sources instead.',
+      policyVersion:ANSWER_POLICY_VERSION,
+    };
+  }
   const generatedClaims=groups.flat();
   const claims=generatedClaims.filter(c=>!unsupportedCollectiveClaim(c.text,evidence.find(e=>e.id===c.evidenceId)));
   const withheldClaims=generatedClaims.length-claims.length;
