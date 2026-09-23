@@ -1365,3 +1365,5 @@
 }
 
 .brand img.brand-bust{width:34px;height:34px;border-radius:50%;object-fit:cover;background:#efe9dc}
+/* The portrait mark is a photo-like illustration: never invert it over the opening artwork. */
+.civic-landing .site-header.nav-opening .brand img.brand-bust { filter: none; box-shadow: 0 0 0 2px color-mix(in oklab, var(--primary-foreground) 70%, transparent); }

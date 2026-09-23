@@ -117,5 +117,5 @@ export function WebResearch({web,t,intro}){
 
 // Web summaries may carry inline markdown links; sources are listed separately, so keep plain sentences.
 function webParagraphs(text){
- return String(text||'').split(/\n+/).map(p=>p.replace(/\s*\(\[[^\]]*\]\([^)]*\)\)/g,'').replace(/\[([^\]]+)\]\((https?:[^)]+)\)/g,'$1').trim()).filter(Boolean);
+ return String(text||'').split(/\n+/).map(p=>p.replace(/\s*\(\[[^\]]*\]\([^)]*\)\)/g,'').replace(/\[([^\]]+)\]\((https?:[^)]+)\)/g,'$1').replace(/\*\*/g,'').trim()).filter(Boolean);
 }
