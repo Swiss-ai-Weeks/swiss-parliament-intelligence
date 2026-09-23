@@ -1,7 +1,9 @@
 export function buildProfileCoverage(store){
- const speeches=new Map(),votes=new Map();
- for(const speech of store.speeches())if(speech.personId)speeches.set(String(speech.personId),(speeches.get(String(speech.personId))||0)+1);
- for(const vote of store.votings())if(vote.personId)votes.set(String(vote.personId),(votes.get(String(vote.personId))||0)+1);
+ const speeches=store.speechCounts?store.speechCounts.byPerson():new Map(),votes=store.votingCounts?store.votingCounts.byPerson():new Map();
+ if(!store.speechCounts){
+  for(const speech of store.speeches())if(speech.personId)speeches.set(String(speech.personId),(speeches.get(String(speech.personId))||0)+1);
+  for(const vote of store.votings())if(vote.personId)votes.set(String(vote.personId),(votes.get(String(vote.personId))||0)+1);
+ }
  const profiles=store.people().map(person=>{
   const id=String(person.id),missing=[];
   if(person.profileCoverage!=='enriched-official-profile')missing.push('official-detail');

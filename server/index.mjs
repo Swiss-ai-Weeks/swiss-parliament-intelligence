@@ -28,6 +28,14 @@ async function body(req,limit=16384) {
   let bytes=0;const chunks=[];for await(const c of req){bytes+=c.length;if(bytes>limit)throw fail('BODY_TOO_LARGE',413);chunks.push(c);}
   try {return JSON.parse(Buffer.concat(chunks).toString());}catch{throw fail('INVALID_JSON');}
 }
+// The archive holds ~50k proposals; the overview ships the current session and the most recently
+// updated proposals with imported debate, and states the totals so the page never implies completeness.
+export function parliamentOverview(parliament,limit=300){
+  const overview=parliament.overview(),all=parliament.listBusinesses(),today=new Date().toISOString().slice(0,10);
+  const current=new Set(overview.sessions.filter(s=>s.start?.slice(0,10)<=today&&s.end?.slice(0,10)>=today).flatMap(s=>s.businessIds||[]));
+  const shown=[...all.filter(b=>current.has(b.id)),...all.filter(b=>!current.has(b.id)&&b.passageCount>0)].slice(0,limit);
+  return {...overview,businesses:shown,businessTotals:{archive:all.length,withPassages:all.filter(b=>b.passageCount>0).length,shown:shown.length},people:parliament.people()};
+}
 export function createServer({store=createStore(path.join(root,'data/pilot.sqlite')),env=process.env,fetchImpl=fetch,authFile=':memory:'}={}) {
   const feedback=feedbackService(env,fetchImpl);
   const publicBase=(env.PUBLIC_BASE_PATH||'').replace(/\/$/,'');
@@ -59,7 +67,7 @@ export function createServer({store=createStore(path.join(root,'data/pilot.sqlit
       if(p==='/api/health'&&req.method==='GET')return json(res,200,{status:'ok',auth:auth.configured,ai:env.DEMO_REPLAY_FILE?'recorded-replay':env.INFERENCE_BASE_URL&&env.INFERENCE_MODEL?'configured-not-verified':'editorial-extracts',typesafe:env.TYPESAFE_MODE&&env.TYPESAFE_MODE!=='off'?(env.TYPESAFE_API_KEY?`${env.TYPESAFE_MODE}-configured-not-verified`:`${env.TYPESAFE_MODE}-missing-key`):'off',identity:'concept',videoCount:store.listDossiers().reduce((n,d)=>n+store.listEvidence(d.id).filter(e=>e.kind==='video').length,0)});
       if(p==='/api/dossiers'&&req.method==='GET')return json(res,200,store.listDossiers());
       if(p.startsWith('/api/chambers/')&&req.method==='GET')return json(res,200,readChamber(p.slice(14),url.searchParams.get('version')||undefined));
-      if(p==='/api/parliament'&&req.method==='GET')return json(res,200,{...par().overview(),businesses:par().listBusinesses(),people:par().people()});
+      if(p==='/api/parliament'&&req.method==='GET')return json(res,200,parliamentOverview(par()));
       if(p==='/api/parliament/archive-coverage'&&req.method==='GET')return json(res,200,readArchiveCoverage(root));
       if(p==='/api/parliament/profile-coverage'&&req.method==='GET')return json(res,200,buildProfileCoverage(par()));
       if(p==='/api/parliament/processing-backlog'&&req.method==='GET')return json(res,200,readProcessingBacklog(root));
