@@ -15,7 +15,7 @@ Figures as of 23 September 2026. They come from [Current status](STATUS.md), [Ho
 | **14,556** | quotes linked to their exact video second |
 | **2 × H100** | one serves answers, one did the bulk reading |
 
-**Watch it:** [intro film (1:46)](https://github.com/tomasgarro/swiss-parliament-intelligence/releases/download/hackathon-2026-09-24/cleisthenes-intro.mp4) · [app walkthrough (0:36)](https://github.com/tomasgarro/swiss-parliament-intelligence/releases/download/hackathon-2026-09-24/cleisthenes-app-walkthrough.mp4)
+**Watch it:** [intro film (1:46)](https://youtu.be/HFW6X0y2rJw) · [app walkthrough (0:36)](https://youtu.be/hy-n3Teu_Wk)
 
 **On this page:**
 
