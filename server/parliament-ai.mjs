@@ -1,4 +1,4 @@
-import {ANSWER_POLICY_VERSION,topicSearchText} from './answer-policy.mjs';
+import {ANSWER_POLICY_VERSION,topicSearchText,votingAdviceRequest} from './answer-policy.mjs';
 import {overviewEvidence} from './overview-evidence.mjs';
 import {research} from './research.mjs';
 import {answerProfile} from './profile-ai.mjs';
@@ -73,6 +73,7 @@ export async function answerParliament(store,input,env,fetchImpl=fetch,options={
  const filters=input.filters||{},language=input.language||'en';
  // Visible research stages for the streaming endpoint; never model reasoning.
  const progress=(stage,detail={})=>{try{options.onProgress?.({stage,...detail});}catch{}};progress('understanding');
+ if(votingAdviceRequest(input.question))return {status:'refused',reason:'voting-advice',claims:[],passages:[],language,suggestedFollowUps:neutralAlternative(input.question,language),policyVersion:ANSWER_POLICY_VERSION};
  const inScope=s=>(!filters.session||s.sessionId===filters.session)&&(!filters.date||s.date?.slice(0,10)===filters.date)&&(!filters.from||s.date?.slice(0,10)>=filters.from)&&(!filters.to||s.date?.slice(0,10)<=filters.to)&&(!filters.language||s.language===filters.language);
  if(filters.type==='popular-vote'||filters.category&&filters.category!=='parliament')return {status:'insufficient-evidence',claims:[],passages:[],coverage:'Open a matching topic dossier to ask within these ballot filters.'};
  const profileAnswer=Object.values(filters).some(Boolean)?null:await answerProfile(store,input,env,fetchImpl);if(profileAnswer)return profileAnswer;
@@ -151,3 +152,9 @@ export async function compareStatements(a,b,language,env,fetchImpl=fetch){
 // Questions phrased "what did Parliament say" are answered through named interventions; tell the
 // reviewer so it judges topical relevance, while claims that generalise a speech are still rejected.
 export function reviewQuestion(question){return `${question} (Answered through individual recorded interventions, each attributed to its named speaker.)`;}
+// Turns "how should I vote on X" into the neutral research question about X.
+export function neutralAlternative(question,language='en'){
+ const topic=String(question).replace(/[?!.\s]+$/u,'').match(/\b(?:on|about|regarding|sur|concernant|über|zur|zum|zu|su|sulla|sul)\s+(.{3,160})$/iu)?.[1];
+ if(!topic)return [];
+ return [{en:`What are the arguments for and against ${topic}?`,fr:`Quels sont les arguments pour et contre ${topic} ?`,de:`Welche Argumente gibt es für und gegen ${topic}?`,it:`Quali sono gli argomenti a favore e contro ${topic}?`}[language]||`What are the arguments for and against ${topic}?`];
+}

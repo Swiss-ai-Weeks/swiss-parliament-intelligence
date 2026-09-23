@@ -20,3 +20,9 @@ export function unsupportedCollectiveClaim(text,evidence){
   || /^(?:das\s+)?parlament\s+(?:unterstutzt|fordert|will|betont|empfiehlt|lehnt)\b/.test(t)
   || /^(?:il\s+)?parlamento\s+(?:sostiene|vuole|sottolinea|chiede|raccomanda|ritiene)\b/.test(t);
 }
+// Cleisthenes explains the public record; it never tells anyone how to vote or predicts outcomes.
+// Checked before retrieval so no evidence is dressed up as advice.
+export function votingAdviceRequest(question){
+ const q=String(question||'').normalize('NFD').replace(/\p{Diacritic}/gu,'').toLowerCase();
+ return /\b(how|what|who|which) should i vote\b|\bshould i (vote|support|oppose|accept|reject)\b|\b(recommend|advise)\b.{0,40}\bvot|\bwho (will|is going to) win\b|\bpredict\w*\b.{0,40}\b(vote|result|outcome|referendum|initiative)\b|\bcomment (dois|devrais)-?je voter\b|\bdois-?je voter\b|\bque (dois|devrais)-?je voter\b|\bpour qui voter\b|\bwie soll(te)? ich (ab)?stimmen\b|\bsoll(te)? ich .{0,40}(annehmen|ablehnen|stimmen)\b|\bcome (dovrei|devo) votare\b|\bper chi votare\b/.test(q);
+}

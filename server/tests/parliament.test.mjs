@@ -32,3 +32,14 @@ test('multilingual answers cache only the same question, scope and evidence revi
  assert.equal((await answerParliament(store,input,env,fetchImpl)).cacheHit,true);assert.equal(calls,5);
  speech.sha256='v2';assert.equal((await answerParliament(store,input,env,fetchImpl)).cacheHit,false);assert.equal(calls,9);
 });
+
+test('voting advice and predictions are refused before retrieval, with a neutral alternative',async()=>{
+ let calls=0;const store={speeches:()=>[],search:()=>{calls++;return [];}};
+ const env={INFERENCE_BASE_URL:'https://example.test/v1',INFERENCE_MODEL:'fixture'};
+ const fetchImpl=async()=>{calls++;throw new Error('model must not be called');};
+ const refused=await answerParliament(store,{question:'How should I vote on the neutrality initiative?',language:'en'},env,fetchImpl);
+ assert.equal(refused.status,'refused');assert.equal(refused.reason,'voting-advice');assert.equal(calls,0);
+ assert.deepEqual(refused.suggestedFollowUps,['What are the arguments for and against the neutrality initiative?']);
+ for(const q of ['Comment dois-je voter sur la neutralité ?','Wie soll ich abstimmen?','Who will win the vote?'])assert.equal((await answerParliament(store,{question:q,language:'en'},env,fetchImpl)).status,'refused');
+ assert.equal(calls,0);
+});

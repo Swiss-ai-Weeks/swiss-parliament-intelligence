@@ -157,3 +157,9 @@
 /* Expanded chat reads like an article */
 .cleisthenes-chat.expanded .cleisthenes-answer { font-size: 15px; max-width: 720px; }
 .cleisthenes-chat.expanded .cleisthenes-answer .answer-lead { font-size: 17px; }
+
+/* Policy refusal: explain the boundary, then offer the neutral research question */
+.answer-refusal { padding: 12px 14px; border: 1px solid #e7e1d6; border-radius: 14px; background: #fbf9f4; font-size: 13.5px; line-height: 1.55; }
+.answer-refusal p { margin: 0 0 10px; }
+.answer-refusal button { display: flex; width: 100%; justify-content: space-between; align-items: center; gap: 10px; text-align: left; padding: 8px 12px; border: 1px solid #e7e1d6; border-radius: 12px; background: #fff; font: inherit; font-size: 12.5px; cursor: pointer; }
+.answer-refusal button:hover:not(:disabled), .answer-refusal button:focus-visible { border-color: #983e35; outline: none; }
