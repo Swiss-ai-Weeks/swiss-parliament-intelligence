@@ -103,6 +103,8 @@ async function answerParliamentOnce(store,input,env,fetchImpl=fetch,options={}){
  }
  const focus=input.passageId?store.get?.('speech',input.passageId):null;
  if(input.passageId&&(!focus||!inScope(focus)||(input.personId&&focus.personId!==input.personId)||(input.businessId&&focus.businessId!==input.businessId&&!focus.businessIds?.includes(input.businessId))))return {status:'insufficient-evidence',claims:[],passages:[]};
+ // A question that names one speaker in full ("What did Walder Nicolas say…") reads that speaker's passages.
+ if(!input.personId&&!input.passageId){const words=new Set(fold(input.question).split(/[^\p{L}\p{N}]+/u)),named=(store.people?.()||[]).filter(p=>{const parts=fold(p.name).split(/\s+/).filter(x=>x.length>1);return parts.length>1&&parts.every(x=>words.has(x));});if(named.length===1)input={...input,personId:String(named[0].id),namedSpeaker:named[0].name};}
  const started=performance.now(),scope={businessId:input.businessId,personId:input.personId,limit:20};
  // Only an explicit person or proposal scope needs its full passage collection; the corpus holds ~1M speeches.
  const inCollection=s=>(!input.businessId||s.businessId===input.businessId)&&(!input.personId||s.personId===input.personId)&&inScope(s)&&(!filters.stage||store.get?.('business',s.businessId)?.statusGroup===filters.stage);
@@ -125,6 +127,11 @@ async function answerParliamentOnce(store,input,env,fetchImpl=fetch,options={}){
   if(proposal&&store.speechesWhere){
    retrieval={...retrieval,method:'resolved-proposal',proposal:{id:proposal.id,number:proposal.number,title:proposal.title}};
    score=rankWithinProposal(store.speechesWhere({businessId:proposal.id}).filter(usable),[input.question,...q.queries]);
+  }else if(collection?.length&&store.speechesWhere){
+   // Inside a proposal or speaker scope every passage is on topic: rank the scope for substance.
+   const business=input.businessId&&store.get?.('business',input.businessId);
+   if(business)retrieval={...retrieval,method:'resolved-proposal',proposal:{id:business.id,number:business.number,title:business.title}};
+   score=rankWithinProposal(collection,[input.question,...q.queries]);
   }else{
    score=new Map();for(const list of [passages,...q.queries.map(t=>store.search(topicSearchText(t),scope).filter(usable))])for(const [i,s]of list.entries()){if(s.text.length>=7000)continue;const prior=score.get(s.id);score.set(s.id,{passage:s,score:(prior?.score||0)+1/(10+i)});}
   }

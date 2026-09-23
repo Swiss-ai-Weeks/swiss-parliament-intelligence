@@ -86,6 +86,8 @@ function EvidenceMoments({answer,citations,active,setActive,onOpen,language,t,da
   if(cache.current.has(key)){setTranslated(cache.current.get(key));return;}setTranslated(null);let live=true;
   api.translatePassage({evidenceId:current.passageId,language:target}).then(r=>{if(r.status==='ok'&&r.text){cache.current.set(key,r.text);if(live)setTranslated(r.text);}}).catch(()=>{});
   return()=>{live=false;};},[current.passageId,target]);
+ // Warm the other sources' translations so switching speakers is instant.
+ useEffect(()=>{let live=true;(async()=>{for(const c of citations){const key=c.passageId+'|'+target;if(!live||cache.current.has(key)||!c.originalLanguage||c.originalLanguage===target)continue;try{const r=await api.translatePassage({evidenceId:c.passageId,language:target});if(r.status==='ok'&&r.text)cache.current.set(key,r.text);}catch{}}})();return()=>{live=false;};},[target,citations.length]);
  const quote=needsTranslation&&translated&&!showOriginal?translated:current.quote;
  return <figure className="answer-evidence">
   <figcaption><span className="answer-evidence-kind">{current.video?<><Play size={13} weight="fill"/>{t('Evidence moment · parliamentary video','Moment clé · vidéo parlementaire')}</>:<><Quotes size={13} weight="fill"/>{t('Evidence moment · official quotation','Moment clé · citation officielle')}</>}</span>
