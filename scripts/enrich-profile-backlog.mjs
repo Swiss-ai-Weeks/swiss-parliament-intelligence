@@ -18,7 +18,7 @@ const store=openParliament(resolve(root,'data/parliament.sqlite'));
 try{
  for(const [index,profile] of selected.entries()){
   console.log(`Profile ${index+1}/${selected.length}: ${profile.name} (${profile.id})`);const startedAt=new Date().toISOString();
-  try{const updated=await syncPerson(store,String(profile.id),{rawDir:resolve(root,'data/parliament/raw')});report.completed.push({id:profile.id,name:profile.name,startedAt,finishedAt:new Date().toISOString(),voteCount:updated.votes.length,contacts:updated.contacts.length,portrait:Boolean(updated.portraitIdentityVerified)});}
+  try{const updated=await syncPerson(store,String(profile.id),{rawDir:resolve(root,'data/parliament/raw')});report.completed.push({id:profile.id,name:profile.name,startedAt,finishedAt:new Date().toISOString(),voteCount:updated?.votes?.length??0,contacts:updated?.contacts?.length??0,portrait:Boolean(updated.portraitIdentityVerified)});}
   catch(error){report.failed.push({id:profile.id,name:profile.name,startedAt,finishedAt:new Date().toISOString(),error:error.message});console.error(`${profile.id}: ${error.message}`);}save();
  }
 }finally{store.close();}

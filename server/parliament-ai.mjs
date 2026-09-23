@@ -142,6 +142,14 @@ async function answerParliamentOnce(store,input,env,fetchImpl=fetch,options={}){
   }else{
    score=new Map();for(const list of [passages,...q.queries.map(t=>store.search(topicSearchText(t),scope).filter(usable))])for(const [i,s]of list.entries()){if(s.text.length>=7000)continue;const prior=score.get(s.id);score.set(s.id,{passage:s,score:(prior?.score||0)+1/(10+i)});}
   }
+  // Hybrid retrieval (flagged): E5 semantic ranks join the same reciprocal-rank fusion, over the whole
+  // archive or only the current scope's passages.
+  if(options.semantic){try{
+   const pool=proposal||collection?.length?[...score.values()].map(x=>x.passage.id):null;
+   const hits=await options.semantic(input.question,{k:30,passageIds:pool});
+   for(const [i,h] of hits.entries()){const s=score.get(h.passageId)?.passage||store.get?.('speech',h.passageId);if(!s||!usable(s)||s.text.length>=7000)continue;const prior=score.get(s.id);score.set(s.id,{passage:s,score:(prior?.score||0)+(options.semanticWeight??2)/(10+i)});}
+   retrieval={...retrieval,semantic:{model:'multilingual-e5-large',hits:hits.length}};
+  }catch{retrieval={...retrieval,semantic:{status:'unavailable'}};}}
   candidates=score.size;const selected=selectPassages(score,6,{distinctBusiness:Boolean(period)});if(selected.length)passages=selected;
  }catch{retrieval.warning='Query translation unavailable; using original-language search.';}}
  passages=passages.slice(0,6);const evidence=passages.map(speechEvidence);progress('reading',{passages:passages.length,candidates});const d={id:'parliament-'+(input.businessId||'collection'),title:{en:'Imported Swiss parliamentary speeches'},evidence};

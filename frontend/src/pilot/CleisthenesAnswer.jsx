@@ -6,6 +6,9 @@ import {openProfile} from './navigation.js';
 import './cleisthenes-answer.css';
 
 const LANGUAGE_LABEL={fr:'FR',de:'DE',it:'IT',rm:'RM',en:'EN'};
+// Official profile records are named by what they are, not by the person they describe.
+const RECORD_KINDS={profile:['Official directory entry','Fiche officielle'],terms:['Parliamentary terms','Mandats parlementaires'],committees:['Committees','Commissions'],votes:['Recorded votes','Votes enregistrés'],speaking:['Speaking record','Interventions'],occupation:['Declared occupation','Profession déclarée'],contact:['Published contact','Contact publié'],committee:['Committee','Commission'],party:['Party self-description','Description du parti']};
+export const sourceName=(c,fr)=>{if(c.sourceType==='parliamentary-speech')return c.speaker;const kind=RECORD_KINDS[String(c.passageId||'').split('-')[0]];return kind?kind[fr?1:0]:c.speaker;};
 const excerpt=(text,max=220)=>{const t=String(text||'').replace(/\s+/g,' ').trim();return t.length>max?t.slice(0,max).replace(/\s+\S*$/,'')+'…':t;};
 
 // Maps a typed citation back to the passage shape the evidence drawer and video player expect.
@@ -20,9 +23,9 @@ export default function CleisthenesAnswer({answer,language,onCite,onFollowUp,dis
  const day=value=>value?new Date(value).toLocaleDateString(fr?'fr-CH':'en-GB',{day:'numeric',month:'short',year:'numeric'}):'';
  const chips=ids=>ids.map(id=>{const c=citations.find(x=>x.id===id);if(!c)return null;const n=number(id);
   return <span className="cite" key={id}><button type="button" className="cite-chip" onClick={()=>cite(c)} aria-label={t(`Source ${n}: ${c.speaker}, ${day(c.date)}. Open evidence`,`Source ${n} : ${c.speaker}, ${day(c.date)}. Ouvrir la preuve`)}>{n}</button>
-   <span className="cite-preview" role="tooltip"><strong>{c.speaker}</strong><small>{day(c.date)} · {LANGUAGE_LABEL[c.originalLanguage]||''}{c.video?t(' · video moment',' · moment vidéo'):''}</small><span>“{excerpt(c.quote,160)}”</span></span></span>;});
+   <span className="cite-preview" role="tooltip"><strong>{sourceName(c,fr)}</strong><small>{day(c.date)} · {LANGUAGE_LABEL[c.originalLanguage]||''}{c.video?t(' · video moment',' · moment vidéo'):''}</small><span>“{excerpt(c.quote,160)}”</span></span></span>;});
  const paragraph=(p,key,className)=><p key={key} className={className}>{p.text} {chips(p.citationIds||[])}</p>;
- const featured=citations.find(c=>c.video)||citations[0],summary=answer.researchSummary;
+ const speeches=citations.filter(c=>c.sourceType==='parliamentary-speech'),featured=speeches.find(c=>c.video)||speeches[0],summary=answer.researchSummary;
  const [active,setActive]=useState(featured?.id);
  // Every way into a source (chip, list, tab) keeps the evidence card on that same source.
  const cite=c=>{setActive(c.id);onCite(c);};
@@ -32,8 +35,8 @@ export default function CleisthenesAnswer({answer,language,onCite,onFollowUp,dis
   {answer.profile&&<ProfileCard profile={answer.profile} t={t}/>}
   {paragraph(answer.answer.lead,'lead','answer-lead')}
   {answer.answer.sections?.map((s,i)=><section key={i} className="answer-section"><h3>{s.title}</h3>{s.paragraphs.map((p,j)=>paragraph(p,j))}</section>)}
-  {featured&&<EvidenceMoments answer={answer} citations={citations} active={active} setActive={setActive} onOpen={c=>onCite(c)} language={language} t={t} day={day}/>}
-  {citations.length>0&&<ol className="answer-sources" aria-label={t('Sources','Sources')}>{citations.map((c,i)=><li key={c.id}><button type="button" onClick={()=>cite(c)}><span className="answer-source-n">{i+1}</span><span><strong>{c.speaker}</strong><small>{day(c.date)} · {LANGUAGE_LABEL[c.originalLanguage]||''}{c.title?` · ${excerpt(c.title,70)}`:''}{c.video?t(' · video',' · vidéo'):''}</small></span></button></li>)}</ol>}
+  {featured&&<EvidenceMoments answer={answer} citations={speeches} active={active} setActive={setActive} onOpen={c=>onCite(c)} language={language} t={t} day={day}/>}
+  {citations.length>0&&<ol className="answer-sources" aria-label={t('Sources','Sources')}>{citations.map((c,i)=><li key={c.id}><button type="button" onClick={()=>cite(c)}><span className="answer-source-n">{i+1}</span><span><strong>{sourceName(c,fr)}</strong><small>{day(c.date)} · {LANGUAGE_LABEL[c.originalLanguage]||''}{c.title?` · ${excerpt(c.title,70)}`:''}{c.video?t(' · video',' · vidéo'):''}</small></span></button></li>)}</ol>}
   {answer.web&&<WebResearch web={answer.web} t={t}/>}
   {summary&&<ResearchSummary summary={summary} t={t}/>}
   {answer.suggestedFollowUps?.length>0&&<div className="answer-followups"><p>{t('Continue exploring','Continuer l’exploration')}</p>{answer.suggestedFollowUps.map(q=><button type="button" key={q} disabled={disabled} onClick={()=>onFollowUp(q)}>{q}<ArrowUpRight size={13}/></button>)}</div>}

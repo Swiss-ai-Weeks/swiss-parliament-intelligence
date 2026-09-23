@@ -23,6 +23,8 @@ import {probeInference,lastInferenceProbe} from './ai-readiness.mjs';
 import {findRecordedAnswer,replayRecorded,infrastructureFailure} from './demo-replay.mjs';
 import {webResearch,webResearchConfigured,webResearchIntent} from './web-research.mjs';
 import {searchProposals} from './proposal-search.mjs';
+import {semanticIndexAvailable,semanticSearch} from './semantic-search.mjs';
+import {embedQuery} from './query-embedding.mjs';
 import {buildProfileCoverage} from './profile-coverage.mjs';
 import {readProcessingBacklog} from './processing-backlog.mjs';
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
@@ -61,10 +63,12 @@ export function createServer({store=createStore(path.join(root,'data/pilot.sqlit
     try{const web=await webResearch({question:b.question,language:b.language||'en',context:scopeTitle(b)?'Scope: '+scopeTitle(b):undefined,env,fetchImpl});return web.status==='ok'?{...answer,web}:{...answer,webStatus:web.status};}
     catch{return {...answer,webStatus:'unavailable'};}
   }
+  // Hybrid retrieval is opt-in until evaluated: question embedded on this CPU, int8 E5 index searched here.
+  const semanticRetrieval=()=>env.HYBRID_RETRIEVAL==='on'&&semanticIndexAvailable(root,env)?(text,opts)=>embedQuery(text).then(vector=>semanticSearch(root,vector,{...opts,env})):undefined;
   async function answerWithFallback(b,onProgress){
     const recorded=findRecordedAnswer(root,b.question,b.language||'en');
     if(recorded&&lastInferenceProbe()?.state==='unreachable'&&(await probeInference(env,fetchImpl)).state==='unreachable')return replayRecorded(recorded);
-    try{const answer=await answerParliament(par(),b,env,fetchImpl,{coverage:answerCoverage(),scopeTitle:scopeTitle(b),onProgress});return recorded&&infrastructureFailure(answer)?replayRecorded(recorded):await withWebResearch(b,answer,onProgress);}
+    try{const answer=await answerParliament(par(),b,env,fetchImpl,{coverage:answerCoverage(),scopeTitle:scopeTitle(b),onProgress,semantic:semanticRetrieval()});return recorded&&infrastructureFailure(answer)?replayRecorded(recorded):await withWebResearch(b,answer,onProgress);}
     catch(error){if(recorded)return replayRecorded(recorded);throw error;}
   }
   const publicBase=(env.PUBLIC_BASE_PATH||'').replace(/\/$/,'');
