@@ -178,11 +178,11 @@ export default function CivicLanding({onNavigate,user,onUser,language='en',reduc
       </div>
       <LandingAccount open={accountOpen} onClose={()=>setAccountOpen(false)} onUser={u=>{onUser(u);setAccountOpen(false);onNavigate(null,"dashboard");}} onGuest={()=>{setAccountOpen(false);onNavigate(null,"dashboard");}}/>
       <header className={`site-header nav-${navState}`}>
-        <a href="#top" className="brand" aria-label="midnight.vote, Switzerland">
-          <img src={midnightMark} alt="" />
+        <a href="#top" className="brand" aria-label="Cleisthenes, Swiss civic companion">
+          <img src={cleisthenesBust} alt="" className="brand-bust" />
           <span>
-            <strong>midnight.vote</strong>
-            <small>Switzerland</small>
+            <strong>Cleisthenes</strong>
+            <small>Swiss civic companion</small>
           </span>
         </a>
         <nav aria-label="Main navigation">
@@ -318,9 +318,9 @@ export default function CivicLanding({onNavigate,user,onUser,language='en',reduc
           <img src={genevaFooter.url} alt="" />
         </div>
         <div className="footer-bottom">
-          <a href="#top" className="brand footer-brand" aria-label="midnight.vote home">
-            <img src={midnightMark} alt="" />
-            <strong>midnight.vote</strong>
+          <a href="#top" className="brand footer-brand" aria-label="Cleisthenes home">
+            <img src={cleisthenesBust} alt="" className="brand-bust" />
+            <strong>Cleisthenes</strong>
           </a>
           <nav className="footer-links" aria-label="Feature navigation">
             <div className="footer-feature-links">
