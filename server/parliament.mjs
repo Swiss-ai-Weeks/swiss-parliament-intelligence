@@ -4,7 +4,7 @@ import {dirname} from 'node:path';
 import {partyCatalog} from './party-catalog.mjs';
 import {processingCoverage} from './session-processing.mjs';
 import {readDebate,passageContext} from './debate-reader.mjs';
-export function plainText(html=''){return String(html).replace(/<[^>]*>/g,' ').replace(/&nbsp;|\[NB\]/g,' ').replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"').replace(/&#39;|&apos;/g,"'").replace(/&#(\d+);/g,(_,n)=>String.fromCodePoint(Number(n))).replace(/\s+/g,' ').trim();}
+export function plainText(html=''){return String(html??'').replace(/<[^>]*>/g,' ').replace(/&nbsp;|\[NB\]/g,' ').replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"').replace(/&#39;|&apos;/g,"'").replace(/&#(\d+);/g,(_,n)=>String.fromCodePoint(Number(n))).replace(/\s+/g,' ').trim();}
 export function officialDate(value){if(!value)return null;const m=String(value).match(/\/Date\((-?\d+)/);return m?new Date(Number(m[1])).toISOString():null;}
 export function statusGroup(text){if(/^(Liquidé|Retiré|Classé|Rejeté|Erledigt|Abgeschrieben|Zurückgezogen)$/i.test(text||''))return 'concluded';if(/déposé|conseil|commission|délibération|eingereicht|rat|kommission/i.test(text||''))return 'proceedings';return 'unclassified';}
 // Partial expression indexes keep per-person, per-business and per-recording lookups

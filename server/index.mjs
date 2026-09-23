@@ -70,9 +70,10 @@ export function createServer({store=createStore(path.join(root,'data/pilot.sqlit
   // Hybrid retrieval is opt-in until evaluated: question embedded on this CPU, int8 E5 index searched here.
   const semanticRetrieval=()=>env.HYBRID_RETRIEVAL==='on'&&semanticIndexAvailable(root,env)?(text,opts)=>embedQuery(text).then(vector=>semanticSearch(root,vector,{...opts,env})):undefined;
   async function answerWithFallback(b,onProgress){
-    // Conversation memory: resolve "he", "that initiative" … against the thread before any research.
+    // Conversation memory: resolve "he", "that initiative" … against the thread before any research. A follow-up
+    // stays on the thread's proposal ("what did she suggest?" means on that initiative); an off-topic answer from another debate would be worse than an honest gap.
     const resolution=await resolveQuestion(b.question,b.thread,{language:b.language||'en',env,fetchImpl});
-    if(resolution.resolved){try{onProgress?.({stage:'understanding',resolvedQuestion:resolution.question});}catch{}b={...b,question:resolution.question,originalQuestion:b.question,...(!b.personId&&!b.businessId&&!b.passageId&&resolution.person&&!resolution.proposal?{context:{...(b.context||{}),personId:resolution.person.id}}:{})};}
+    if(resolution.resolved){try{onProgress?.({stage:'understanding',resolvedQuestion:resolution.question});}catch{}b={...b,question:resolution.question,originalQuestion:b.question,...(b.personId||b.businessId||b.passageId?{}:resolution.proposal?{businessId:resolution.proposal.id}:resolution.person?{context:{...(b.context||{}),personId:resolution.person.id}}:{})};}
     const withResolution=answer=>resolution.resolved?{...answer,resolvedQuestion:resolution.question,originalQuestion:b.originalQuestion}:answer;
     const recorded=findRecordedAnswer(root,b.question,b.language||'en');
     if(recorded&&lastInferenceProbe()?.state==='unreachable'&&(await probeInference(env,fetchImpl)).state==='unreachable')return replayRecorded(recorded);
