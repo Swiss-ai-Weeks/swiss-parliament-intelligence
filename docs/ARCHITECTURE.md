@@ -100,6 +100,11 @@ ASR text is not substituted for the Official Bulletin. A machine alignment candi
 | Cosmos Embed1 / VSS | Model | Experimental visual embedding and similarity. |
 | multilingual-e5-large | Model | Offline text-vector generation; production retrieval integration is pending evaluation. |
 | Citation attachment and policy guards | Deterministic | Exact source quote attachment, allowed evidence IDs, attribution vetoes and coverage labels. |
+| TypeSafe Jev | Model | Optional typed `supports` / `contradicts` / `says_nothing` review of a generated claim against its public source. Shadow mode records decisions without changing answers; enforcement is confidence-gated. |
+
+Jev receives only the generated claim, its exact public quotation, the associated public source passage and public attribution metadata. Account data, saved research, conversation history and user profile data are excluded. Before calling Jev, code verifies that the quotation occurs in the source. The default `TYPESAFE_MODE=off`; `shadow` exposes evaluation metadata without filtering, while `enforce` retains only high-confidence supported claims and falls back to sources if the service is unavailable.
+
+The integration follows the current TypeSafe HTTP quickstart: `POST https://api.typesafe.ai/v1/systemone`, bearer authentication, `jev-latest`, a structured public `state`, and one typed Choice question per claim. To activate it, create an API key in the TypeSafe console, place `TYPESAFE_API_KEY` only in the uncommitted local `.env`, set `TYPESAFE_MODE=shadow`, and run `npm run evaluate:typesafe`. A passing synthetic run proves the request contract and fixture behaviour, not production semantic quality; enforcement remains disabled until a corpus-specific adjudicated evaluation is accepted.
 
 ## Trust boundaries
 
