@@ -53,3 +53,17 @@ test('a dropped download resumes with a Range request',async()=>{
  assert.match(readFileSync(join(dataDir,'parliament.sqlite'),'utf8'),/^resumed corpus/);
  rmSync(dataDir,{recursive:true,force:true});
 });
+
+test('a replaced database never replays the old write-ahead log',async()=>{
+ const {DatabaseSync}=await import('node:sqlite');const {copyFileSync}=await import('node:fs');
+ const dataDir=mkdtempSync(join(tmpdir(),'swiss-data-')),src=mkdtempSync(join(tmpdir(),'swiss-src-'));
+ const fresh=new DatabaseSync(join(src,'parliament.sqlite'));fresh.exec("CREATE TABLE records(id);CREATE TABLE speech_business_links(id);INSERT INTO records VALUES('new');");fresh.close();
+ const old=new DatabaseSync(join(dataDir,'parliament.sqlite'));old.exec("PRAGMA journal_mode=WAL;PRAGMA wal_autocheckpoint=0;CREATE TABLE records(id);INSERT INTO records VALUES('old');");
+ for(const s of ['-wal','-shm'])copyFileSync(join(dataDir,'parliament.sqlite'+s),join(dataDir,'keep'+s));old.close();
+ for(const s of ['-wal','-shm'])copyFileSync(join(dataDir,'keep'+s),join(dataDir,'parliament.sqlite'+s));
+ execFileSync('tar',['-czf','p.tgz','parliament.sqlite'],{cwd:src});const bytes=readFileSync(join(src,'p.tgz'));
+ await applyArchive({name:'corpus',url:'https://example.test/c.tgz',sha256:createHash('sha256').update(bytes).digest('hex'),dataDir,fetchImpl:serve(bytes)});
+ const db=new DatabaseSync(join(dataDir,'parliament.sqlite'));
+ assert.equal(db.prepare('SELECT id FROM records').get().id,'new');db.prepare('SELECT * FROM speech_business_links').all();db.close();
+ rmSync(dataDir,{recursive:true,force:true});rmSync(src,{recursive:true,force:true});
+});

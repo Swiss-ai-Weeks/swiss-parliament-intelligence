@@ -16,7 +16,12 @@ function merge(from,to){
  for(const name of readdirSync(from)){
   const src=join(from,name),dst=join(to,name);
   if(statSync(src).isDirectory()){mkdirSync(dst,{recursive:true});merge(src,dst);}
-  else renameSync(src,dst);
+  else{
+   // A replaced SQLite database must not meet the old one's write-ahead log: SQLite would replay the old
+   // pages onto the new file (tables vanish, old rows return).
+   if(/\.sqlite$/.test(name))for(const suffix of ['-wal','-shm','-journal'])rmSync(dst+suffix,{force:true});
+   renameSync(src,dst);
+  }
  }
 }
 
@@ -42,8 +47,9 @@ const sha256Of=file=>new Promise((done,fail)=>{const h=createHash('sha256');crea
 
 export async function applyArchive({name,url,sha256,dataDir,fetchImpl=fetch,retry}){
  if(!url||!/^[0-9a-f]{64}$/.test(sha256||''))return 'not-configured';
- const marker=join(dataDir,'.bootstrap-'+name);
- if(existsSync(marker)&&readFileSync(marker,'utf8').trim()===sha256)return 'current';
+ // v2: archives applied before stale-WAL removal are re-applied once.
+ const marker=join(dataDir,'.bootstrap-'+name),applied=sha256+' v2';
+ if(existsSync(marker)&&readFileSync(marker,'utf8').trim()===applied)return 'current';
  const archive=join(dataDir,'.incoming-'+name+'-'+sha256.slice(0,16)+'.tgz'),staging=join(dataDir,'.staging-'+name);
  for(const old of readdirSync(dataDir))if(old.startsWith('.incoming-'+name+'-')&&join(dataDir,old)!==archive)rmSync(join(dataDir,old),{force:true});
  rmSync(staging,{recursive:true,force:true});
@@ -56,7 +62,7 @@ export async function applyArchive({name,url,sha256,dataDir,fetchImpl=fetch,retr
   for(const file of PROTECTED)if(existsSync(join(dataDir,file)))rmSync(join(staging,file),{force:true});
   merge(staging,dataDir);
  }finally{rmSync(staging,{recursive:true,force:true});rmSync(archive,{force:true});}
- writeFileSync(marker,sha256);
+ writeFileSync(marker,applied);
  return 'applied';
 }
 

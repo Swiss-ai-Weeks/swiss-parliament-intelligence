@@ -186,7 +186,10 @@ export function createServer({store=createStore(path.join(root,'data/pilot.sqlit
       const data=await readFile(file);const range=req.headers.range?.match(/^bytes=(\d+)-(\d*)$/);const headers={'Content-Type':types[path.extname(file)]||'application/octet-stream','Accept-Ranges':'bytes'};
       if(range){const start=Number(range[1]);const end=Math.min(range[2]?Number(range[2]):data.length-1,data.length-1);if(start>end||start>=data.length) {res.writeHead(416,{'Content-Range':`bytes */${data.length}`});return res.end();}res.writeHead(206,{...headers,'Content-Range':`bytes ${start}-${end}/${data.length}`,'Content-Length':end-start+1});return res.end(data.subarray(start,end+1));}
       res.writeHead(200,headers);res.end(data);
-    }catch(error){json(res,error.status||500,{error:error.status?error.message:'INTERNAL_ERROR'});}
+    }catch(error){
+      // Unexpected failures are logged (method, path, message; never the body) so production is debuggable.
+      if(!error.status)console.error('API_ERROR',req.method,String(req.url).split('?')[0],error?.message);
+      json(res,error.status||500,{error:error.status?error.message:'INTERNAL_ERROR'});}
   });
   const agendaTimer=setInterval(()=>workspace.agenda().catch(()=>{}),3600000);agendaTimer.unref();
   server.on('close',()=>{clearInterval(agendaTimer);parliament?.close();auth.close();});
