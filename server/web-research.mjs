@@ -18,12 +18,14 @@ function underDailyCap(env){
 }
 
 const hostOf=url=>{try{return new URL(url).hostname.replace(/^www\./,'');}catch{return null;}};
+// Links are shown to readers as-is: drop tracking parameters the search tool appends.
+const cleanUrl=url=>{try{const u=new URL(url);for(const k of [...u.searchParams.keys()])if(/^utm_/i.test(k))u.searchParams.delete(k);return u.toString();}catch{return url;}};
 
 export function parseWebResponse(json){
  const messages=(json.output||[]).filter(o=>o.type==='message'),parts=messages.flatMap(m=>m.content||[]).filter(c=>c.type==='output_text');
  const text=(json.output_text||parts.map(p=>p.text).join('\n')).trim();
  const seen=new Map();
- for(const a of parts.flatMap(p=>p.annotations||[]))if(a.type==='url_citation'&&/^https:\/\//.test(a.url||'')&&!seen.has(a.url))seen.set(a.url,{url:a.url,title:a.title||hostOf(a.url),publisher:hostOf(a.url)});
+ for(const a of parts.flatMap(p=>p.annotations||[]))if(a.type==='url_citation'&&/^https:\/\//.test(a.url||'')){const url=cleanUrl(a.url);if(!seen.has(url))seen.set(url,{url,title:a.title||hostOf(url),publisher:hostOf(url)});}
  const queries=(json.output||[]).filter(o=>o.type==='web_search_call').map(o=>o.action?.query).filter(Boolean);
  return {text,sources:[...seen.values()].slice(0,8),queries};
 }
