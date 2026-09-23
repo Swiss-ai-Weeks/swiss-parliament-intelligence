@@ -29,7 +29,7 @@ export default function Cleisthenes({language,expanded,onExpand,onCollapse,conte
  // Navigation and language changes must not clear an existing conversation.
  useEffect(()=>{if(!openRequest||!ready)return;setOpen(true);setHistoryOpen(false);setQuestion(openRequest.prompt||'');setAction(openRequest.action||'explain');
   const same=chat?.scope?.id===context?.id&&chat?.scope?.kind===context?.kind&&chat?.scope?.passageId===context?.passageId;
-  let targetId=chat?.id;if(!same){const next=newConversation(context||null);setChats(c=>[next,...c].slice(0,20));setActiveId(next.id);targetId=next.id;}
+  let targetId=chat?.id;if(!same||openRequest.newChat){const next=newConversation(context||null);setChats(c=>[next,...c].slice(0,20));setActiveId(next.id);targetId=next.id;}
   // One-click actions (agenda items) send immediately instead of pre-filling the composer.
   if(openRequest.autoSend&&openRequest.prompt)autoSend.current={chatId:targetId,prompt:openRequest.prompt};
   requestAnimationFrame(()=>input.current?.focus());
@@ -53,6 +53,8 @@ export default function Cleisthenes({language,expanded,onExpand,onCollapse,conte
   }catch{if(ownerRef.current!==sendingOwner)return;setChats(c=>appendMessage(c,id,{role:'assistant',retry:q,retryAction:requestedAction,retryScope:selectedScope,error:t('I couldn’t reach the model. Your question is ready to retry.','Je n’ai pas pu joindre le modèle. Vous pouvez réessayer.')}));}
   finally{sending.current=false;setPending(null);setAction('explain');}
  }
+ useEffect(()=>{const drop=e=>remove(e.detail);addEventListener('delete-conversation',drop);return()=>removeEventListener('delete-conversation',drop);});
+ useEffect(()=>{try{window.dispatchEvent(new Event('conversations-changed'));}catch{}},[chats]);
  useEffect(()=>{const job=autoSend.current;if(!job||!ready||chat?.id!==job.chatId||sending.current)return;autoSend.current=null;send(null,job.prompt);},[chat?.id,ready,openRequest]);
  // A suggested follow-up continues the answer's debate, never a single passage.
  function askFollowUp(q,answer){const proposal=answer.researchSummary?.proposal,next=proposal?{kind:'business',id:proposal.id,title:proposal.title}:scope?{...scope,passageId:undefined}:null;setChats(c=>c.map(row=>row.id===chat.id?{...row,scope:next}:row));send(null,q,undefined,next);}
