@@ -90,7 +90,17 @@ async function answerParliamentOnce(store,input,env,fetchImpl=fetch,options={}){
  if(votingAdviceRequest(input.question))return {status:'refused',reason:'voting-advice',claims:[],passages:[],language,suggestedFollowUps:neutralAlternative(input.question,language),policyVersion:ANSWER_POLICY_VERSION};
  const inScope=s=>(!filters.session||s.sessionId===filters.session)&&(!filters.date||s.date?.slice(0,10)===filters.date)&&(!filters.from||s.date?.slice(0,10)>=filters.from)&&(!filters.to||s.date?.slice(0,10)<=filters.to)&&(!filters.language||s.language===filters.language);
  if(filters.type==='popular-vote'||filters.category&&filters.category!=='parliament')return {status:'insufficient-evidence',claims:[],passages:[],coverage:'Open a matching topic dossier to ask within these ballot filters.'};
- const profileAnswer=Object.values(filters).some(Boolean)?null:await answerProfile(store,input,env,fetchImpl);if(profileAnswer)return profileAnswer;
+ const profileAnswer=Object.values(filters).some(Boolean)?null:await answerProfile(store,input,env,fetchImpl);
+ if(profileAnswer){
+  // Profile answers get the same verified synthesis and typed citations as debate answers.
+  if(profileAnswer.status==='ok'&&profileAnswer.mode==='live-inference'&&profileAnswer.claims?.length){
+   progress('writing',{claims:profileAnswer.claims.length});
+   try{const synthesis=await synthesizeAnswer({question:input.question,language,claims:profileAnswer.claims,passages:profileAnswer.passages,store,env,fetchImpl});
+    if(synthesis.status==='ok')Object.assign(profileAnswer,{answer:synthesis.answer,citations:synthesis.citations,suggestedFollowUps:synthesis.suggestedFollowUps,synthesis:{status:'ok'}});}catch{profileAnswer.synthesis={status:'unavailable'};}
+  }
+  profileAnswer.researchSummary=researchSummary({scopeTitle:profileAnswer.profile?.name,retrieval:{method:'official-profile'},candidates:profileAnswer.passages?.length||0,passages:profileAnswer.passages||[],citations:profileAnswer.citations||[],withheld:profileAnswer.withheldClaims||0,coverage:null});
+  progress('done');return profileAnswer;
+ }
  const focus=input.passageId?store.get?.('speech',input.passageId):null;
  if(input.passageId&&(!focus||!inScope(focus)||(input.personId&&focus.personId!==input.personId)||(input.businessId&&focus.businessId!==input.businessId&&!focus.businessIds?.includes(input.businessId))))return {status:'insufficient-evidence',claims:[],passages:[]};
  const started=performance.now(),scope={businessId:input.businessId,personId:input.personId,limit:20};

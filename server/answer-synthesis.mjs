@@ -138,6 +138,6 @@ export function researchSummary({scopeTitle,retrieval,candidates,passages,citati
  if(coverage?.textSessions)limitations.push({code:'text-coverage',...coverage});
  if(citations.some(c=>c.video))limitations.push({code:'machine-video-timing'});
  if(withheld)limitations.push({code:'withheld',count:withheld});
- const method=retrieval?.method==='resolved-proposal'?'resolved-proposal':retrieval?.method==='multilingual-query-expansion'?'multilingual-search':retrieval?.method==='selected-passage'?'selected-passage':retrieval?.method==='selected-record-overview'?'selected-record':'full-text-search';
+ const method=retrieval?.method==='official-profile'?'official-profile':retrieval?.method==='resolved-proposal'?'resolved-proposal':retrieval?.method==='multilingual-query-expansion'?'multilingual-search':retrieval?.method==='selected-passage'?'selected-passage':retrieval?.method==='selected-record-overview'?'selected-record':'full-text-search';
  return {scope:scopeTitle||null,method,proposal:retrieval?.proposal||null,searchTerms:retrieval?.translatedQueries||[],recordsConsidered:candidates??passages.length,sourcesUsed:citations.length,sourceTypes:[...new Set(citations.map(c=>c.sourceType))],originalLanguages:languages,period:dates.length?{from:dates[0],to:dates.at(-1)}:null,limitations};
 }

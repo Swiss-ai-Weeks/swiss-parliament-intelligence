@@ -1,5 +1,6 @@
 import PassageVideo from './PassageVideo.jsx';
 import PassageTranslation from './PassageTranslation.jsx';
+import {openProfile} from './navigation.js';
 import React,{useEffect,useRef,useState} from 'react';
 import {X,ArrowLeft,Play,UserCircle} from '@phosphor-icons/react';
 import {pilotApi as api} from '../services/pilotApi.js';
@@ -31,7 +32,7 @@ export default function CitationInspector({source,quote,language,onClose,onFollo
  {source?.transcriptId&&<section className="citation-context"><h3>{t('Around this passage','Autour de cet extrait')}</h3>{error?<p role="alert">{error}</p>:!data?<p role="status">{t('Loading context…','Chargement du contexte…')}</p>:<>{data.passages.filter(p=>p.id!==source.id).length?data.passages.map(p=>p.id===source.id?<p key={p.id} className="citation-position">{t('↑ Cited passage','↑ Extrait cité')}</p>:<p key={p.id}>{p.text}</p>):<p>{t('This is the only imported paragraph in this intervention.','C’est le seul paragraphe importé pour cette intervention.')}</p>}<small>{t('Adjacent paragraphs from the same official intervention.','Paragraphes voisins de la même intervention officielle.')}</small></>}</section>}
  <a className="citation-official" href={source?.officialUrl} target="_blank" rel="noreferrer">{source?.sourceKind==='party-self-description'?t('Open party source ↗','Source du parti ↗'):t('Open the official record ↗','Ouvrir le compte rendu officiel ↗')}</a>
  </>}
- </div>{source?.personId&&<footer><button onClick={()=>follow('passage')}>{t('Explain this passage','Expliquer cet extrait')}</button><button onClick={()=>follow('profile')}>{t('Ask about this person','En savoir plus sur cette personne')}</button></footer>}
+ </div>{source?.personId&&source?.sourceKind==='official-structured-record'&&<footer><button onClick={()=>{onClose();openProfile(source.personId);}}>{t('Open full profile','Ouvrir le profil complet')}</button><button onClick={()=>{onClose();openProfile(source.personId,'votes');}}>{t('Recorded votes','Votes enregistrés')}</button></footer>}{source?.personId&&source?.sourceKind!=='official-structured-record'&&<footer><button onClick={()=>follow('passage')}>{t('Explain this passage','Expliquer cet extrait')}</button><button onClick={()=>follow('profile')}>{t('Ask about this person','En savoir plus sur cette personne')}</button></footer>}
  </section></div>;
 }
 

@@ -4,7 +4,7 @@ import './profile.css';
 import {cantonName} from './cantons.js';
 export default function PoliticianProfile({person:p,language,onUpdate}){
  const fr=language==='fr',t=(en,frText)=>fr?frText:en;
- const [tab,setTab]=useState('about'),[busy,setBusy]=useState(false),[error,setError]=useState(''),[filter,setFilter]=useState(''),[year,setYear]=useState(''),[page,setPage]=useState(0),[topic,setTopic]=useState(''),[draft,setDraft]=useState(null),[copied,setCopied]=useState(false);
+ const [tab,setTab]=useState(()=>{try{return new URLSearchParams(location.search).get('tab')==='votes'?'votes':'about';}catch{return 'about';}}),[busy,setBusy]=useState(false),[error,setError]=useState(''),[filter,setFilter]=useState(''),[year,setYear]=useState(''),[page,setPage]=useState(0),[topic,setTopic]=useState(''),[draft,setDraft]=useState(null),[copied,setCopied]=useState(false);
  const date=v=>v?new Date(v).toLocaleDateString(fr?'fr-CH':'en-GB'):'—';
  const votes=p.votes.filter(v=>(!year||v.date?.startsWith(year))&&`${v.title||''} ${v.subject||''} ${v.businessId}`.toLowerCase().includes(filter.toLowerCase()));
  const email=p.contacts?.find(c=>c.kind==='email');

@@ -24,7 +24,9 @@ export async function answerProfile(store,input,env,fetchImpl=fetch){
  const empty=reason=>({status:'insufficient-evidence',claims:[],passages:[],context,retrieval:{method:'source-type-routing',sourceType:intent},coverage:reason});
  if(!p)return empty('Choose a politician or name them in full so the source can be identified.');
  let passages=[];
- function passage(id,text,url,kind,speaker=p.name){return {id,evidenceId:id,text,language:'fr',officialUrl:url,sourceKind:kind,speaker,date:p.retrievedAt};}
+ function passage(id,text,url,kind,speaker=p.name){return {id,evidenceId:id,text,language:'fr',officialUrl:url,sourceKind:kind,speaker,date:p.retrievedAt,personId:kind==='party-self-description'?undefined:p.id};}
+ // Who the answer is about, so the interface can show the portrait and link the full profile page.
+ const profile={id:p.id,name:p.name,portraitUrl:p.portraitIdentityVerified?p.portraitUrl:null,party:p.party||null,group:p.group||null,canton:p.canton||null,council:p.council||null,active:Boolean(p.active),voteCount:p.votes?.length||0,voteHistoryComplete:p.voteHistory?.status==='complete-service-query'};
  if(intent==='membership'||intent==='profile'){
   const text=intent==='membership'?`${p.name} — Parti : ${p.party||'non renseigné'}. Groupe parlementaire : ${p.group||'non renseigné'}.`:
    `${p.name}. Parti : ${p.party||'non renseigné'}. Canton : ${p.canton}. Conseil : ${p.council}. Première entrée au Parlement : ${p.firstJoined?.slice(0,10)||'non renseignée'}. Début du mandat actuel : ${p.joined?.slice(0,10)||'non renseigné'}. Parcours déclaré : ${p.declaredMandates||'non renseigné'}. Élection : ${p.elected?.slice(0,10)||'non renseignée'}.`;
@@ -43,7 +45,7 @@ export async function answerProfile(store,input,env,fetchImpl=fetch){
   passages=topics.map(t=>({...passage('party-'+party.id+'-'+t.id,t.text,party.sourceUrl,'party-self-description',party.name),date:party.reviewedAt}));
  }else if(intent==='votes'){
   // Vote browsing is exact and explicit; don't have a model generalize a career from a few votes.
-  return {...empty('Use the profile’s voting history to filter dated roll calls and inspect what yes and no meant. No aggregate stance is inferred.'),status:'open-vote-history',profileId:p.id,voteCount:p.votes.length};
+  return {...empty('Use the profile’s voting history to filter dated roll calls and inspect what yes and no meant. No aggregate stance is inferred.'),status:'open-vote-history',profileId:p.id,voteCount:p.votes.length,profile};
  }
  if(!passages.length)return empty('This type of official profile evidence has not been imported yet. Load the profile’s official records.');
  const evidence=passages.slice(0,3).map(s=>({id:s.id,text:s.text,language:s.language,kind:'document',sourceKind:s.sourceKind,speaker:s.speaker,date:s.date,attribution:s.sourceKind==='party-self-description'?'Reviewed editorial summary of the party’s own description; attribute to the party, not the individual.':`Official structured record for ${p.name}, normalized into text.`,source:{url:s.officialUrl}}));
@@ -52,5 +54,5 @@ export async function answerProfile(store,input,env,fetchImpl=fetch){
   const reviewed=await reviewClaims(answer.claims,env,fetchImpl,{question:input.question,evidence});answer.claims=reviewed.claims;answer.withheldClaims=(answer.withheldClaims||0)+reviewed.withheld;if(!answer.claims.length)answer.status='insufficient-evidence';
   if(answer.claims.length&&env.TYPESAFE_MODE&&env.TYPESAFE_MODE!=='off')try{const typed=await reviewClaimsWithTypeSafe(answer.claims,env,fetchImpl,{evidence});answer.typesafeReview=publicTypeSafeReview(typed);if(typed.mode==='enforce'){answer.claims=typed.claims;answer.withheldClaims=(answer.withheldClaims||0)+typed.withheld;if(!answer.claims.length)answer.status='insufficient-evidence';}}catch{answer.typesafeReview={status:'unavailable',mode:env.TYPESAFE_MODE,model:env.TYPESAFE_MODEL||'jev-latest'};if(env.TYPESAFE_MODE==='enforce'){answer.claims=[];answer.status='sources-only';answer.mode='source-fallback';answer.notice='The secondary evidence review is unavailable; showing retrieved official profile sources instead.';}}
  }
- return {...answer,passages,context,latencyMs:Math.round(performance.now()-started),retrieval:{method:'source-type-routing',sourceType:intent},coverage:intent==='party'?'Reviewed summary of party self-description; not a personal position or independent evaluation.':'Official public profile snapshot; normalized structured fields.'};
+ return {...answer,profile,passages,context,latencyMs:Math.round(performance.now()-started),retrieval:{method:'source-type-routing',sourceType:intent},coverage:intent==='party'?'Reviewed summary of party self-description; not a personal position or independent evaluation.':'Official public profile snapshot; normalized structured fields.'};
 }

@@ -1,6 +1,7 @@
 import React from 'react';
 import {ArrowUpRight,MagnifyingGlass,Play,Quotes} from '@phosphor-icons/react';
 import PassageVideo from './PassageVideo.jsx';
+import {openProfile} from './navigation.js';
 import './cleisthenes-answer.css';
 
 const LANGUAGE_LABEL={fr:'FR',de:'DE',it:'IT',rm:'RM',en:'EN'};
@@ -24,6 +25,7 @@ export default function CleisthenesAnswer({answer,language,onCite,onFollowUp,dis
  return <div className="cleisthenes-answer">
   {answer.mode==='recorded-replay'&&<p className="answer-notice" role="note">{t(`Recorded answer from ${day(answer.recordedAt)}: the live model is unavailable right now, so Cleisthenes is showing the verified answer it produced earlier for this exact question.`,`Réponse enregistrée le ${day(answer.recordedAt)} : le modèle en direct est indisponible, Cleisthenes affiche la réponse vérifiée produite plus tôt pour cette question.`)}</p>}
   {summary?.broadened&&<p className="answer-notice" role="note">{summary.broadened.to==='debate'?t(`Nothing in the selected passage answered this, so Cleisthenes widened the search to the whole debate${summary.broadened.title?` on “${summary.broadened.title}”`:''}.`,`L’extrait sélectionné ne répondait pas à la question : Cleisthenes a élargi la recherche à tout le débat${summary.broadened.title?` sur « ${summary.broadened.title} »`:''}.`):t('Nothing in the selected scope answered this, so Cleisthenes searched the whole imported record.','La sélection ne répondait pas à la question : Cleisthenes a cherché dans l’ensemble des documents importés.')}</p>}
+  {answer.profile&&<ProfileCard profile={answer.profile} t={t}/>}
   {paragraph(answer.answer.lead,'lead','answer-lead')}
   {answer.answer.sections?.map((s,i)=><section key={i} className="answer-section"><h3>{s.title}</h3>{s.paragraphs.map((p,j)=>paragraph(p,j))}</section>)}
   {featured&&<figure className="answer-evidence">
@@ -40,6 +42,7 @@ export default function CleisthenesAnswer({answer,language,onCite,onFollowUp,dis
 }
 
 function methodLabel(summary,t){
+ if(summary.method==='official-profile')return t('Official Parliament profile records for this person','Données officielles du profil parlementaire de cette personne');
  if(summary.method==='resolved-proposal')return t(`Recognised the proposal “${summary.proposal?.title||''}” and read its debate in the original languages`,`Objet reconnu « ${summary.proposal?.title||''} », débat lu dans les langues originales`);
  if(summary.method==='multilingual-search')return t('Full-text search of the original French, German and Italian records','Recherche plein texte dans les textes originaux en français, allemand et italien');
  if(summary.method==='selected-passage')return t('The passage you selected','L’extrait sélectionné');
@@ -63,4 +66,14 @@ export function ResearchSummary({summary,t,open=false}){
   </dl>
   {summary.limitations?.length>0&&<ul>{summary.limitations.map(l=>limitationLabel(l,t)).filter(Boolean).map(l=><li key={l}>{l}</li>)}</ul>}
  </details>;
+}
+
+// Who a profile answer is about, with the way into our full profile and complete vote history.
+export function ProfileCard({profile,t}){
+ return <div className="answer-profile">
+  {profile.portraitUrl?<img src={profile.portraitUrl} alt=""/>:<span className="answer-profile-initials" aria-hidden="true">{String(profile.name||'?').split(/s+/).map(x=>x[0]).slice(0,2).join('')}</span>}
+  <div><strong>{profile.name}</strong><small>{[profile.party,profile.canton,profile.council].filter(Boolean).join(' · ')}</small>
+   <div className="answer-profile-actions"><button type="button" className="cta" onClick={()=>openProfile(profile.id)}>{t('Open full profile','Ouvrir le profil complet')} <ArrowUpRight size={13}/></button>
+    <button type="button" onClick={()=>openProfile(profile.id,'votes')}>{profile.voteHistoryComplete?t(`All recorded votes · ${profile.voteCount.toLocaleString()}`,`Tous les votes · ${profile.voteCount.toLocaleString()}`):t(`Recorded votes · ${profile.voteCount} (partial)`,`Votes enregistrés · ${profile.voteCount} (partiel)`)}</button></div></div>
+ </div>;
 }
