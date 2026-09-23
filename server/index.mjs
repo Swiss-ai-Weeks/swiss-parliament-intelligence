@@ -36,6 +36,15 @@ export function parliamentOverview(parliament,limit=300){
   const shown=[...all.filter(b=>current.has(b.id)),...all.filter(b=>!current.has(b.id)&&b.passageCount>0)].slice(0,limit);
   return {...overview,businesses:shown,businessTotals:{archive:all.length,withPassages:all.filter(b=>b.passageCount>0).length,shown:shown.length},people:parliament.people()};
 }
+let coverageCache=null;
+// Honest scope for answer summaries: sessions that actually hold official text, not merely imported ones.
+function answerCoverage(){
+  if(coverageCache&&Date.now()-coverageCache.at<300000)return coverageCache.value;
+  const c=readArchiveCoverage(root);
+  const value=c.status==='declared'?{textSessions:c.totals.sessionsWithText,totalSessions:c.totals.sessions,fromYear:c.totals.firstYearWithText||c.boundary.fromYear,toYear:c.boundary.toYear}:null;
+  coverageCache={at:Date.now(),value};return value;
+}
+const scopeTitle=b=>typeof b.scopeTitle==='string'&&b.scopeTitle.trim()?b.scopeTitle.trim().slice(0,200):undefined;
 export function createServer({store=createStore(path.join(root,'data/pilot.sqlite')),env=process.env,fetchImpl=fetch,authFile=':memory:'}={}) {
   const feedback=feedbackService(env,fetchImpl);
   const publicBase=(env.PUBLIC_BASE_PATH||'').replace(/\/$/,'');
@@ -81,7 +90,16 @@ export function createServer({store=createStore(path.join(root,'data/pilot.sqlit
       if(p==='/api/parliament/search'&&req.method==='GET')return json(res,200,par().search((url.searchParams.get('q')||'').slice(0,500),{businessId:url.searchParams.get('business'),personId:url.searchParams.get('person'),limit:20}));
       if(p==='/api/parliament/video-search'&&req.method==='POST'){const b=await body(req);if(typeof b.query!=='string'||!b.query.trim()||b.query.length>500||!['spoken','visual'].includes(b.mode))throw fail('INVALID_REQUEST');for(const k of ['personId','businessId'])if(b[k]!==undefined&&(typeof b[k]!=='string'||!/^\d+$/.test(b[k])))throw fail('INVALID_SCOPE');try{return json(res,200,await searchVideo({root:path.join(root,'data/parliament'),store:par(),query:b.query,mode:b.mode,personId:b.personId,businessId:b.businessId,env,fetchImpl}));}catch{throw fail('VIDEO_SEARCH_UNAVAILABLE',502);}}
       if(p==='/api/parliament/translate'&&req.method==='POST'){const b=await body(req);if(typeof b.evidenceId!=='string'||!languages.includes(b.language))throw fail('INVALID_REQUEST');const passage=par().get('speech',b.evidenceId);if(!passage)throw fail('NOT_FOUND',404);try{return json(res,200,await translatePassage(passage,b.language,env,fetchImpl));}catch(e){throw fail(e.status===429?'TRANSLATOR_BUSY':'TRANSLATION_UNAVAILABLE',e.status===429?429:502);}}
-      if(p==='/api/parliament/ask'&&req.method==='POST'){const b=await body(req);if(typeof b.question!=='string'||!b.question.trim()||b.question.length>500||!languages.includes(b.language||'en'))throw fail('INVALID_REQUEST');try{return json(res,200,await answerParliament(par(),b,env,fetchImpl));}catch{throw fail('MODEL_UNAVAILABLE_OR_INVALID_OUTPUT',502);}}
+      if(p==='/api/parliament/ask'&&req.method==='POST'){const b=await body(req);if(typeof b.question!=='string'||!b.question.trim()||b.question.length>500||!languages.includes(b.language||'en'))throw fail('INVALID_REQUEST');try{return json(res,200,await answerParliament(par(),b,env,fetchImpl,{coverage:answerCoverage(),scopeTitle:scopeTitle(b)}));}catch{throw fail('MODEL_UNAVAILABLE_OR_INVALID_OUTPUT',502);}}
+      // Same answer, streamed as newline-delimited JSON: research stages first, then the answer.
+      if(p==='/api/parliament/ask/stream'&&req.method==='POST'){
+        const b=await body(req);if(typeof b.question!=='string'||!b.question.trim()||b.question.length>500||!languages.includes(b.language||'en'))throw fail('INVALID_REQUEST');
+        res.writeHead(200,{'Content-Type':'application/x-ndjson; charset=utf-8','Cache-Control':'no-store','X-Accel-Buffering':'no','X-Content-Type-Options':'nosniff'});
+        const send=event=>{if(!res.writableEnded)res.write(JSON.stringify(event)+'\n');};
+        try{send({type:'answer',answer:await answerParliament(par(),b,env,fetchImpl,{coverage:answerCoverage(),scopeTitle:scopeTitle(b),onProgress:stage=>send({type:'stage',...stage})})});}
+        catch{send({type:'error',code:'MODEL_UNAVAILABLE_OR_INVALID_OUTPUT'});}
+        return res.end();
+      }
       if(p==='/api/parliament/compare'&&req.method==='POST'){const b=await body(req);if(!Array.isArray(b.ids)||b.ids.length!==2||!languages.includes(b.language||'en'))throw fail('INVALID_REQUEST');const pair=b.ids.map(id=>par().get('speech',id));if(pair.some(x=>!x))throw fail('NOT_FOUND',404);try{return json(res,200,await compareStatements(...pair,b.language||'en',env,fetchImpl));}catch{throw fail('MODEL_UNAVAILABLE_OR_INVALID_OUTPUT',502);}}
       if(p.startsWith('/api/dossiers/')&&req.method==='GET'){const d=store.getDossier(decodeURIComponent(p.slice(14)));if(!d)throw fail('NOT_FOUND',404);return json(res,200,d);}
       if(p.startsWith('/api/evidence/')&&req.method==='GET'){const e=store.getEvidence(decodeURIComponent(p.slice(14)));if(!e)throw fail('NOT_FOUND',404);return json(res,200,e);}
