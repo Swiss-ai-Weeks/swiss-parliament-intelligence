@@ -34,6 +34,7 @@ export default function CleisthenesAnswer({answer,language,onCite,onFollowUp,dis
   {answer.answer.sections?.map((s,i)=><section key={i} className="answer-section"><h3>{s.title}</h3>{s.paragraphs.map((p,j)=>paragraph(p,j))}</section>)}
   {featured&&<EvidenceMoments answer={answer} citations={citations} active={active} setActive={setActive} onOpen={c=>onCite(c)} language={language} t={t} day={day}/>}
   {citations.length>0&&<ol className="answer-sources" aria-label={t('Sources','Sources')}>{citations.map((c,i)=><li key={c.id}><button type="button" onClick={()=>cite(c)}><span className="answer-source-n">{i+1}</span><span><strong>{c.speaker}</strong><small>{day(c.date)} · {LANGUAGE_LABEL[c.originalLanguage]||''}{c.title?` · ${excerpt(c.title,70)}`:''}{c.video?t(' · video',' · vidéo'):''}</small></span></button></li>)}</ol>}
+  {answer.web&&<WebResearch web={answer.web} t={t}/>}
   {summary&&<ResearchSummary summary={summary} t={t}/>}
   {answer.suggestedFollowUps?.length>0&&<div className="answer-followups"><p>{t('Continue exploring','Continuer l’exploration')}</p>{answer.suggestedFollowUps.map(q=><button type="button" key={q} disabled={disabled} onClick={()=>onFollowUp(q)}>{q}<ArrowUpRight size={13}/></button>)}</div>}
  </div>;
@@ -100,4 +101,21 @@ function EvidenceMoments({answer,citations,active,setActive,onOpen,language,t,da
   {current.video?<PassageVideo key={current.id} source={citationPassage(answer,current)} language={language} open={videoOpen} autoPlay={videoOpen} onOpenChange={setVideoOpen}/>:<p className="answer-evidence-novideo">{t('No aligned video for this source yet.','Pas encore de vidéo alignée pour cette source.')}</p>}
   <span className="sr-only" aria-live="polite">{t(`Showing source ${n}`,`Source ${n} affichée`)}</span>
  </figure>;
+}
+
+// Web findings sit apart from the record: their own label, their own sources, never numbered record citations.
+export function WebResearch({web,t,intro}){
+ const day=value=>value?new Date(value).toLocaleDateString(undefined,{day:'numeric',month:'short',year:'numeric'}):'';
+ return <section className="answer-web" aria-label={t('Beyond the parliamentary record','Au-delà des archives parlementaires')}>
+  <p className="answer-web-label">{t('Beyond the parliamentary record · web sources','Au-delà des archives parlementaires · sources web')}</p>
+  {intro&&<p className="answer-web-intro">{intro}</p>}
+  {webParagraphs(web.summary).map((p,i)=><p key={i}>{p}</p>)}
+  <ul>{web.sources.map(s=><li key={s.url}><a href={s.url} target="_blank" rel="noreferrer">{s.title}</a><small>{s.publisher}</small></li>)}</ul>
+  <small className="answer-web-note">{t(`Found by web search on ${day(web.searchedAt)}. Not part of the official parliamentary record; check each source.`,`Trouvé par recherche web le ${day(web.searchedAt)}. Hors des archives parlementaires officielles ; vérifiez chaque source.`)}</small>
+ </section>;
+}
+
+// Web summaries may carry inline markdown links; sources are listed separately, so keep plain sentences.
+function webParagraphs(text){
+ return String(text||'').split(/\n+/).map(p=>p.replace(/\s*\(\[[^\]]*\]\([^)]*\)\)/g,'').replace(/\[([^\]]+)\]\((https?:[^)]+)\)/g,'$1').trim()).filter(Boolean);
 }

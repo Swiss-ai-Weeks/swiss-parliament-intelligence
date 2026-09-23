@@ -16,7 +16,7 @@ export function stageLabel(stage,e={},t){
 
 // One live line that advances step by step, even when the server reports several steps at once.
 export function LiveResearch({stages,t}){
- const reported=STAGE_ORDER.filter(s=>stages.some(x=>x.stage===s));
+ const reported=[...STAGE_ORDER,'web'].filter(s=>stages.some(x=>x.stage===s)),total=Math.max(STAGE_ORDER.length,reported.length);
  const [shown,setShown]=useState(0),last=useRef(0);
  useEffect(()=>{
   if(shown>=reported.length)return;
@@ -24,11 +24,11 @@ export function LiveResearch({stages,t}){
   const timer=setTimeout(()=>{last.current=Date.now();setShown(n=>Math.min(n+1,reported.length));},wait);
   return()=>clearTimeout(timer);
  },[shown,reported.length]);
- const current=reported[Math.max(0,shown-1)]||'understanding',index=Math.max(1,STAGE_ORDER.indexOf(current)+1);
+ const current=reported[Math.max(0,shown-1)]||'understanding',index=Math.max(1,reported.indexOf(current)+1);
  const event=stages.find(x=>x.stage===current)||{};
  return <div className="research-live" role="status" aria-live="polite">
-  <div className="research-live-meta"><span>{t(`Step ${index} of ${STAGE_ORDER.length}`,`Étape ${index} sur ${STAGE_ORDER.length}`)}</span>
-   <span className="research-live-bar" aria-hidden="true">{STAGE_ORDER.map((s,i)=><i key={s} data-done={i<index-1?'':undefined} data-active={i===index-1?'':undefined}/>)}</span></div>
+  <div className="research-live-meta"><span>{t(`Step ${index} of ${total}`,`Étape ${index} sur ${total}`)}</span>
+   <span className="research-live-bar" aria-hidden="true">{Array.from({length:total},(_,i)=><i key={i} data-done={i<index-1?'':undefined} data-active={i===index-1?'':undefined}/>)}</span></div>
   <p key={current} className="research-live-line">{stageLabel(current,event,t)}</p>
  </div>;
 }

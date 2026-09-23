@@ -21,6 +21,7 @@ import {searchVideo} from './video-search.mjs';
 import {readArchiveCoverage} from './archive-coverage.mjs';
 import {probeInference,lastInferenceProbe} from './ai-readiness.mjs';
 import {findRecordedAnswer,replayRecorded,infrastructureFailure} from './demo-replay.mjs';
+import {webResearch,webResearchConfigured,webResearchIntent} from './web-research.mjs';
 import {buildProfileCoverage} from './profile-coverage.mjs';
 import {readProcessingBacklog} from './processing-backlog.mjs';
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
@@ -50,10 +51,19 @@ const scopeTitle=b=>typeof b.scopeTitle==='string'&&b.scopeTitle.trim()?b.scopeT
 export function createServer({store=createStore(path.join(root,'data/pilot.sqlite')),env=process.env,fetchImpl=fetch,authFile=':memory:'}={}) {
   const feedback=feedbackService(env,fetchImpl);
   // Live first; a prepared demo question falls back to its labelled recording only on infrastructure failure.
+  // Router: the parliamentary record answers first and stays the authority; web research is added beside it,
+  // clearly labelled, for news and upcoming events or when the record holds nothing on the question.
+  async function withWebResearch(b,answer,onProgress){
+    if(!webResearchConfigured(env)||answer.status==='refused'||answer.mode==='recorded-replay')return answer;
+    if(!(b.webResearch===true||webResearchIntent(b.question)||answer.status==='insufficient-evidence'))return answer;
+    try{onProgress?.({stage:'web'});}catch{}
+    try{const web=await webResearch({question:b.question,language:b.language||'en',context:scopeTitle(b)?'Scope: '+scopeTitle(b):undefined,env,fetchImpl});return web.status==='ok'?{...answer,web}:{...answer,webStatus:web.status};}
+    catch{return {...answer,webStatus:'unavailable'};}
+  }
   async function answerWithFallback(b,onProgress){
     const recorded=findRecordedAnswer(root,b.question,b.language||'en');
     if(recorded&&lastInferenceProbe()?.state==='unreachable'&&(await probeInference(env,fetchImpl)).state==='unreachable')return replayRecorded(recorded);
-    try{const answer=await answerParliament(par(),b,env,fetchImpl,{coverage:answerCoverage(),scopeTitle:scopeTitle(b),onProgress});return recorded&&infrastructureFailure(answer)?replayRecorded(recorded):answer;}
+    try{const answer=await answerParliament(par(),b,env,fetchImpl,{coverage:answerCoverage(),scopeTitle:scopeTitle(b),onProgress});return recorded&&infrastructureFailure(answer)?replayRecorded(recorded):await withWebResearch(b,answer,onProgress);}
     catch(error){if(recorded)return replayRecorded(recorded);throw error;}
   }
   const publicBase=(env.PUBLIC_BASE_PATH||'').replace(/\/$/,'');

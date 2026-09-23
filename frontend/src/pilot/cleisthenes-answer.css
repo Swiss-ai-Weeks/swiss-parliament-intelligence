@@ -209,3 +209,12 @@
 .answer-evidence-open { padding: 5px 11px !important; border-radius: 999px !important; background: #a24f40 !important; color: #fffdf8 !important; font-weight: 500; }
 .answer-evidence-open:hover { background: #7e3a2f !important; }
 .answer-evidence-novideo { font-size: 11.5px; color: #8a8579; margin: 4px 0 0 !important; }
+
+/* Web research: visibly separate from the parliamentary record */
+.answer-web { margin: 14px 0 10px; padding: 12px 14px; border-radius: 12px; border: 1px dashed #7e9ba5; background: #f3f6f6; font-size: 13.5px; }
+.answer-web-label { margin: 0 0 6px !important; font-size: 10px; letter-spacing: .05em; text-transform: uppercase; color: #4e6c75; font-weight: 600; }
+.answer-web-intro { color: #55574f; }
+.answer-web ul { list-style: none; margin: 8px 0 6px; padding: 0; display: grid; gap: 4px; }
+.answer-web li a { color: #2f5561; font-size: 12.5px; }
+.answer-web li small { margin-left: 6px; color: #7c8b8f; font-size: 11px; }
+.answer-web-note { display: block; color: #6f7a7c; font-size: 11px; }
