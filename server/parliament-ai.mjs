@@ -69,7 +69,21 @@ export function selectPassages(scored,limit=4){
  for(const s of ranked){if(chosen.length===limit)break;if(!chosen.includes(s)&&!speakers.has(s.speaker)){chosen.push(s);speakers.add(s.speaker);}}
  return chosen;
 }
+// A follow-up asked inside a narrow scope (one passage or one person) should not dead-end: when that scope
+// holds no supporting evidence, widen once to the passage's whole debate, then to the full record, and say so.
 export async function answerParliament(store,input,env,fetchImpl=fetch,options={}){
+ const first=await answerParliamentOnce(store,input,env,fetchImpl,options);
+ if(first.status!=='insufficient-evidence'||!(input.passageId||input.personId)||input.noBroaden)return first;
+ const focus=input.passageId?store.get?.('speech',input.passageId):null,businessId=input.businessId||focus?.businessId;
+ const steps=[...(businessId&&(input.passageId||input.personId)?[{businessId,label:'debate'}]:[]),{label:'record'}];
+ for(const step of steps){
+  const wider={...input,passageId:undefined,personId:undefined,context:undefined,businessId:step.businessId,noBroaden:true};
+  const answer=await answerParliamentOnce(store,wider,env,fetchImpl,options);
+  if(answer.status==='ok'){const business=step.businessId&&store.get?.('business',step.businessId);answer.researchSummary={...answer.researchSummary,broadened:{to:step.label,businessId:step.businessId||null,title:business?.title||null}};return answer;}
+ }
+ return first;
+}
+async function answerParliamentOnce(store,input,env,fetchImpl=fetch,options={}){
  const filters=input.filters||{},language=input.language||'en';
  // Visible research stages for the streaming endpoint; never model reasoning.
  const progress=(stage,detail={})=>{try{options.onProgress?.({stage,...detail});}catch{}};progress('understanding');
