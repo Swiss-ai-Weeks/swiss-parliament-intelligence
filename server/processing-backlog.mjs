@@ -1,16 +1,19 @@
 const stableJob=job=>JSON.stringify({sessionId:String(job.sessionId),subjectId:String(job.subjectId),personId:job.personId===null?null:String(job.personId||''),language:job.language,officialPage:job.officialPage,durationHintSeconds:job.durationHintSeconds});
 
 export function mergeProcessingJobs(sessionQueues,previous=[]){
- const old=new Map(previous.map(job=>[String(job.id),job])),jobs=new Map();
+ const old=new Map(previous.map(job=>[String(job.id),job])),jobs=new Map(),rejected=[];
  for(const [sessionId,entries] of sessionQueues){
   if(!/^\d{4}$/.test(String(sessionId))||!Array.isArray(entries))throw new Error('INVALID_SESSION_QUEUE');
   for(const item of entries){
    const current=Object.fromEntries(Object.entries(item).filter(([,value])=>value!==undefined));const job={...old.get(String(item.id)),...current,id:String(item.id),sessionId:String(item.sessionId)};
-   if(!/^\d+$/.test(job.id)||job.sessionId!==String(sessionId)||!['de','fr','it','en'].includes(job.language)||!/^https:\/\/www\.parlament\.ch\//.test(job.officialPage)||!Number.isFinite(job.durationHintSeconds)||job.durationHintSeconds<0)throw new Error(`INVALID_PROCESSING_JOB ${job.id}`);
+   if(!/^\d+$/.test(job.id)||job.sessionId!==String(sessionId)||!['de','fr','it','en'].includes(job.language)||!/^https:\/\/www\.parlament\.ch\//.test(job.officialPage))throw new Error(`INVALID_PROCESSING_JOB ${job.id}`);
+   // Some 1999-2000 source records end before they start; without a usable duration the job cannot be scheduled, so it is set aside and counted.
+   if(!Number.isFinite(job.durationHintSeconds)||job.durationHintSeconds<0){rejected.push({id:job.id,sessionId:job.sessionId,reason:'invalid-source-duration'});continue;}
    const prior=jobs.get(job.id);if(prior&&stableJob(prior)!==stableJob(job))throw new Error(`CONFLICTING_PROCESSING_JOB ${job.id}`);jobs.set(job.id,job);
   }
  }
- return [...jobs.values()].sort((a,b)=>Number(b.sessionId)-Number(a.sessionId)||Number(a.id)-Number(b.id));
+ const merged=[...jobs.values()].sort((a,b)=>Number(b.sessionId)-Number(a.sessionId)||Number(a.id)-Number(b.id));
+ return Object.assign(merged,{rejected});
 }
 
 export function summarizeProcessingJobs(jobs){

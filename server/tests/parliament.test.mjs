@@ -26,9 +26,9 @@ test('multilingual answers cache only the same question, scope and evidence revi
  let calls=0;const speech={id:'cache-test',text:'Protection des données.',language:'fr',speaker:'Test fixture',sha256:'v1',businessId:'b',officialUrl:'https://example.test/source'};
  const store={speeches:()=>[speech],search:q=>/données/.test(q)?[speech]:[]};
  const env={INFERENCE_BASE_URL:'https://example.test/v1',INFERENCE_MODEL:'cache-fixture'};
- const fetchImpl=async(_u,options)=>{calls++;const p=JSON.parse(options.body);return {ok:true,json:async()=>({choices:[{message:{content:JSON.stringify(p.response_format.json_schema.name==='claim_support_review'?{'0':true}:p.response_format.json_schema.name==='search_terms'?{fr:'protection données',de:'Datenschutz',it:'protezione dati'}:{claims:[{text:'The passage concerns data protection.',evidenceId:'parl-cache-test',quote:speech.text}]})}}]})};};
+ const fetchImpl=async(_u,options)=>{calls++;const p=JSON.parse(options.body);return {ok:true,json:async()=>({choices:[{message:{content:JSON.stringify(p.response_format.json_schema.name==='claim_support_review'?{'0':true}:p.response_format.json_schema.name==='search_terms'?{fr:'protection données',de:'Datenschutz',it:'protezione dati'}:p.response_format.json_schema.name==='cleisthenes_answer'?{lead:{text:'Test fixture says that the passage is about the protection of data.',units:['u1']},sections:[],followUps:['What else was said about it?']}:{claims:[{text:'The passage concerns data protection.',evidenceId:'parl-cache-test',quote:speech.text}]})}}]})};};
  const input={question:'Explain data protection',language:'en',businessId:'b'};
- const first=await answerParliament(store,input,env,fetchImpl);assert.equal(first.status,'ok');assert.equal(first.cacheHit,false);assert.equal(calls,3);
- assert.equal((await answerParliament(store,input,env,fetchImpl)).cacheHit,true);assert.equal(calls,3);
- speech.sha256='v2';assert.equal((await answerParliament(store,input,env,fetchImpl)).cacheHit,false);assert.equal(calls,5);
+ const first=await answerParliament(store,input,env,fetchImpl);assert.equal(first.status,'ok');assert.equal(first.cacheHit,false);assert.equal(calls,5);assert.equal(first.answer.lead.citationIds[0],'c1');assert.equal(first.citations[0].passageId,'cache-test');
+ assert.equal((await answerParliament(store,input,env,fetchImpl)).cacheHit,true);assert.equal(calls,5);
+ speech.sha256='v2';assert.equal((await answerParliament(store,input,env,fetchImpl)).cacheHit,false);assert.equal(calls,9);
 });
