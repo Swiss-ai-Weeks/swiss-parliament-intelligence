@@ -6,7 +6,7 @@ import {multilingualQueries} from './parliament-ai.mjs';
 const STOP=new Set('the and for with about what who how are was were into from this that les des une pour sur par aux dans avec que qui est sont der die das und fur von mit ist il lo la gli di che per con initiative populaire'.split(' '));
 const fold=v=>String(v||'').normalize('NFD').replace(/\p{Diacritic}/gu,'').toLowerCase();
 export const searchTerms=v=>[...new Set((fold(v).match(/[\p{L}\p{N}]+/gu)||[]).map(t=>t.replace(/(?<=\p{L}{4})[sx]$/u,'')).filter(t=>(t.length>=3||/^\p{N}+$/u.test(t))&&!STOP.has(t)))];
-const number=b=>b.number||(/^\d{8}$/.test(String(b.id))?`${String(b.id).slice(2,4)}.${String(b.id).slice(5)}`:'');
+const number=b=>b.number||(/^\d{8}$/.test(String(b.id))?`${String(b.id).slice(2,4)}.${String(b.id).slice(4).replace(/^0/,"")}`:'');
 
 export function matchProposals(businesses,query,{stage,from,to,mode='all'}={}){
  const q=String(query||'').trim(),byNumber=q.match(/^(\d{2})\.(\d{3,4})$/);
