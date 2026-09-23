@@ -91,7 +91,7 @@ async function answerParliamentOnce(store,input,env,fetchImpl=fetch,options={}){
  // Visible research stages for the streaming endpoint; never model reasoning.
  const progress=(stage,detail={})=>{try{options.onProgress?.({stage,...detail});}catch{}};progress('understanding');
  if(votingAdviceRequest(input.question))return {status:'refused',reason:'voting-advice',claims:[],passages:[],language,suggestedFollowUps:neutralAlternative(input.question,language),policyVersion:ANSWER_POLICY_VERSION};
- const inScope=s=>(!filters.session||s.sessionId===filters.session)&&(!filters.date||s.date?.slice(0,10)===filters.date)&&(!filters.from||s.date?.slice(0,10)>=filters.from)&&(!filters.to||s.date?.slice(0,10)<=filters.to)&&(!filters.language||s.language===filters.language);
+ const inScope=s=>(!filters.session||s.sessionId===filters.session)&&(!filters.date||s.date?.slice(0,10)===filters.date)&&(!filters.from||s.date?.slice(0,10)>=filters.from)&&(!filters.to||s.date?.slice(0,10)<=filters.to)&&(!filters.language||s.language===filters.language)&&(!filters.chamber||!s.council||(filters.chamber==='nr'?/national/i:/etats|stände|stati/i).test(s.council));
  if(filters.type==='popular-vote'||filters.category&&filters.category!=='parliament')return {status:'insufficient-evidence',claims:[],passages:[],coverage:'Open a matching topic dossier to ask within these ballot filters.'};
  const profileAnswer=Object.values(filters).some(Boolean)?null:await answerProfile(store,input,env,fetchImpl);
  if(profileAnswer){

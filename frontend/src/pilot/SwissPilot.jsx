@@ -58,7 +58,7 @@ export function SwissPilot(){
  {error&&<div role="alert" className="error-banner">{error}<button onClick={()=>{setError('');boot();}}>{t.retry}</button></div>}
  {!['en','fr'].includes(lang)&&<div className="locale-note">{languageNames[lang]} · {lang==='rm'?'Texts uffizials e navigaziun; ulteriurs texts per englais.':'Navigation and dossier summaries translated; detailed research falls back to the available source language.'}</div>}
  <main id="main" className={route.view==='research'?'research-main':''}>
- {route.view==='dashboard'&&<Dashboard user={user} dossiers={dossiers} onNavigate={navigate} onAsk={openChat} onAccount={()=>setModal('auth')}/>}
+ {route.view==='dashboard'&&<Dashboard user={user} dossiers={dossiers} language={lang} onNavigate={navigate} onAsk={openChat} onAccount={()=>setModal('auth')}/>}
  {route.view==='profile'&&<MemberPage id={new URLSearchParams(location.search).get('person')} language={lang} user={user} onAsk={openChat} onAccount={()=>setModal('auth')}/>}
  {!route.id&&['explore','research'].includes(route.view)&&<Topics dossiers={dossiers} language={lang} onNavigate={navigate} onAsk={openChat}/>}
  {route.id&&!dossier&&!error&&<p role="status">{t.working}</p>}
