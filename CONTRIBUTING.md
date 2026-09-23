@@ -2,26 +2,18 @@
 
 ## Branch policy
 
-The working branch until final submission is:
+Work on a short-lived branch in Tomas Garro's fork (`tomasgarro/swiss-parliament-intelligence`), then open a pull request into the fork's `main`. The submission sprint used `sprint/cleisthenes-mvp`.
 
-```text
-tomasgarro/swiss-parliament-intelligence:feat/swiss-citizen-pilot
-```
+- Never push directly to `main`.
+- Never push to the organization repository (`Swiss-ai-Weeks/swiss-parliament-intelligence`) without explicit approval.
+- Deploys, releases and pushes each need explicit approval; show the plan and a diff summary first.
 
-Push implementation and documentation changes only to that branch. Do not push directly to either `main` branch or to `Swiss-ai-Weeks/swiss-parliament-intelligence` without explicit approval.
-
-Baseline on 20 September 2026:
-
-- `fork/feat/swiss-citizen-pilot` and `origin/main` had identical Git trees.
-- `fork/main` was two implementation commits behind and did not include the latest account, MFA and profile work.
-- Documentation work after that baseline intentionally makes the feature branch newer than both main branches.
-
-Before final submission, compare all three refs explicitly and review the merge rather than assuming branch names imply content parity:
+Before merging, compare the refs explicitly rather than assuming branch names imply content parity:
 
 ```bash
 git fetch --all --prune
-git diff --stat fork/main..fork/feat/swiss-citizen-pilot
-git diff --stat origin/main..fork/feat/swiss-citizen-pilot
+git diff --stat fork/main..HEAD
+git diff --stat origin/main..HEAD
 ```
 
 ## Development rules
@@ -55,5 +47,5 @@ Keep canonical-document changes and historical archive moves in separate commits
 ```bash
 git branch --show-current
 git remote -v
-git push fork feat/swiss-citizen-pilot
+git push fork "$(git branch --show-current)"
 ```

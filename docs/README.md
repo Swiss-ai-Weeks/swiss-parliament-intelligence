@@ -4,12 +4,13 @@ This index separates current implementation truth from product direction, operat
 
 ## Start here
 
-1. [Project README](../README.md) — product purpose, user journey and a two-minute technical overview.
-2. [How AI is used in Cleisthenes](AI-IN-CLEISTHENES.md) — every AI component: technology → feature → outcome, and what each is never allowed to do.
-3. [Architecture and data provenance](ARCHITECTURE.md) — data sources, request paths, AI responsibilities and trust boundaries.
-4. [Current implementation and corpus status](STATUS.md) — dated coverage, validation and known gaps.
-5. [Session, recording and GPU pipeline](SESSION-PIPELINE.md) — repeatable ingestion and processing stages.
-6. [Operations and deployment](OPERATIONS.md) — local runtime, private GPU services, release, backup and recovery.
+1. [Project README](../README.md) — product purpose, user journey, the two videos and a two-minute technical overview.
+2. [How Cleisthenes works](HOW-CLEISTHENES-WORKS.md) — one-page walkthrough: where each piece runs, one question step by step, embeddings, the two H100s, how we built it and what is live.
+3. [How AI is used in Cleisthenes](AI-IN-CLEISTHENES.md) — every AI component: technology → feature → outcome, and what each is never allowed to do.
+4. [Architecture and data provenance](ARCHITECTURE.md) — data sources, request paths, AI responsibilities and trust boundaries.
+5. [Current implementation and corpus status](STATUS.md) — dated coverage, validation and known gaps.
+6. [Session, recording and GPU pipeline](SESSION-PIPELINE.md) — repeatable ingestion and processing stages.
+7. [Operations and deployment](OPERATIONS.md) — local runtime, private GPU services, release, backup and recovery.
 
 ## Product and user experience
 
