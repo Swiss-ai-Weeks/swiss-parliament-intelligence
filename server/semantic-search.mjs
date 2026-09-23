@@ -45,6 +45,6 @@ async function searchNow(root,queryVector,{k=40,passageIds=null,env=process.env}
   const size=Math.ceil(rows.length/pool.length);parts=pool.map((w,i)=>ask(w,{q,rows:rows.slice(i*size,(i+1)*size),k:k*2}));}
  else{const n=ix.ids.length,size=Math.ceil(n/pool.length);parts=pool.map((w,i)=>ask(w,{q,from:i*size,to:Math.min(n,(i+1)*size),k:k*2}));}
  const best=new Map();
- for(const [s,r] of (await Promise.all(parts)).flat()){const [pid,chunk]=ix.ids[r];if(!best.has(pid)||best.get(pid).score<s)best.set(pid,{passageId:pid,chunk,score:s/127});}
+ for(const [s,r] of (await Promise.all(parts)).flat()){const [pid,chunk]=ix.ids[r],score=s/127;if(!best.has(pid)||best.get(pid).score<score)best.set(pid,{passageId:pid,chunk,score});}
  return [...best.values()].sort((a,b)=>b.score-a.score).slice(0,k);
 }
