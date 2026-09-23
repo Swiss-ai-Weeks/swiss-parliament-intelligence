@@ -38,7 +38,8 @@ services:
     security_opt: [no-new-privileges:true]
     cap_drop: [ALL]
     tmpfs: ["/tmp:uid=1000,gid=1000,mode=1777,size=512m", "/app:uid=1000,gid=1000,size=16m"]
-    # 1.5 GB is enough without semantic search; HYBRID_RETRIEVAL=on needs ~2.5 GB (int8 index + ONNX query model).
+    # 1.5 GB is enough without semantic search. HYBRID_RETRIEVAL=on peaked at 3.1 GB in the local rehearsal
+    # (int8 index + ONNX query model + corpus): give it SWISS_MEM_LIMIT=4g.
     mem_limit: ${SWISS_MEM_LIMIT:-1536m}
     cpus: ${SWISS_CPUS:-1.0}
     environment:
@@ -53,6 +54,7 @@ services:
       SEMANTIC_INDEX_URL: ${SEMANTIC_INDEX_URL:-}
       SEMANTIC_INDEX_SHA256: ${SEMANTIC_INDEX_SHA256:-}
       HYBRID_RETRIEVAL: ${HYBRID_RETRIEVAL:-off}
+      SEMANTIC_WORKERS: ${SEMANTIC_WORKERS:-2}
       EMBEDDING_CACHE_DIR: /app/data/models
       INFERENCE_BASE_URL: http://swiss-model-tunnel:4319/v1
       INFERENCE_MODEL: nvidia/nvidia-nemotron-nano-9b-v2

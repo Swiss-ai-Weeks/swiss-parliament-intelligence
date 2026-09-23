@@ -77,7 +77,7 @@ Release preparation follows these boundaries:
 
 The container launcher streams the backend archive into the `swiss-releases` volume, verifies it, runs `npm ci --omit=dev` once per release and starts `bootstrap.mjs`. The bootstrap streams each data archive to disk while hashing it, applies it once per checksum and never replaces `sessions.sqlite` or an existing `pilot.sqlite`. Nothing is held in memory, so a multi-gigabyte corpus fits a small container. Remove the archives from hosting once the VPS reports `bootstrap corpus: applied`.
 
-Memory: 1.5 GB (`SWISS_MEM_LIMIT`, default) is enough with `HYBRID_RETRIEVAL=off`. Semantic search loads the 1.2 GB index and the query model, so set `HYBRID_RETRIEVAL=on` only with `SWISS_MEM_LIMIT` of at least 3g. Disk: allow about 3× the corpus archive during the first bootstrap (archive, staging copy, previous files).
+Memory: 1.5 GB (`SWISS_MEM_LIMIT`, default) is enough with `HYBRID_RETRIEVAL=off`. Semantic search loads the 1.2 GB index and the query model, so set `HYBRID_RETRIEVAL=on` only with `SWISS_MEM_LIMIT=4g` (the 23 September rehearsal peaked at 3.1 GB with 3 GB allowed). `SEMANTIC_WORKERS` (default 2 in production) bounds the search threads, because a container sees the host's cores rather than its CPU quota. Disk: allow about 3× the corpus archive during the first bootstrap (archive, staging copy, previous files).
 
 Model keys (`NVIDIA_API_KEY`, `OPENAI_API_KEY`, `TYPESAFE_API_KEY`) are set in the protected hosting environment, never in the compose file or the archives. With `NVIDIA_API_KEY` set, answers continue on NVIDIA's hosted catalog when the LaunchPad tunnel is gone; `INFERENCE_PROVIDER=nvidia-catalog` forces that route.
 

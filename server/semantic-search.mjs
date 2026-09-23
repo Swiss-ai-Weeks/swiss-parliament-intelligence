@@ -32,7 +32,8 @@ parentPort.on('message',({q,from,to,rows,k})=>{const top=[];let min=-Infinity;
  parentPort.postMessage(top);});`;
 let pool=null;
 function workers(ix){
- if(!pool){const n=Math.max(1,Math.min(8,availableParallelism()-1));pool=Array.from({length:n},()=>new Worker(WORKER,{eval:true,workerData:{shared:ix.shared,dims:ix.dims}}));
+ // A container sees the host's cores, not its CPU quota, so production sets SEMANTIC_WORKERS explicitly.
+ if(!pool){const n=Math.max(1,Math.min(8,Number(process.env.SEMANTIC_WORKERS)||availableParallelism()-1));pool=Array.from({length:n},()=>new Worker(WORKER,{eval:true,workerData:{shared:ix.shared,dims:ix.dims}}));
   // A failed worker must not take the API down: drop the pool, the pending search rejects and retrieval stays lexical.
   const current=pool;current.forEach(w=>{w.unref();w.on('error',()=>{if(pool===current)pool=null;current.forEach(x=>x.terminate());});});}
  return pool;
