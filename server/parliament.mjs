@@ -4,7 +4,7 @@ import {dirname} from 'node:path';
 import {partyCatalog} from './party-catalog.mjs';
 import {processingCoverage} from './session-processing.mjs';
 import {readDebate,passageContext} from './debate-reader.mjs';
-export function plainText(html=''){return String(html).replace(/<[^>]*>/g,' ').replace(/&nbsp;|\[NB\]/g,' ').replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"').replace(/&#39;|&apos;/g,"'").replace(/&#(\d+);/g,(_,n)=>String.fromCodePoint(Number(n))).replace(/\s+/g,' ').trim();}
+export function plainText(html=''){return String(html??'').replace(/<[^>]*>/g,' ').replace(/&nbsp;|\[NB\]/g,' ').replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"').replace(/&#39;|&apos;/g,"'").replace(/&#(\d+);/g,(_,n)=>String.fromCodePoint(Number(n))).replace(/\s+/g,' ').trim();}
 export function officialDate(value){if(!value)return null;const m=String(value).match(/\/Date\((-?\d+)/);return m?new Date(Number(m[1])).toISOString():null;}
 export function statusGroup(text){if(/^(Liquidé|Retiré|Classé|Rejeté|Erledigt|Abgeschrieben|Zurückgezogen)$/i.test(text||''))return 'concluded';if(/déposé|conseil|commission|délibération|eingereicht|rat|kommission/i.test(text||''))return 'proceedings';return 'unclassified';}
 // Partial expression indexes keep per-person, per-business and per-recording lookups
@@ -13,7 +13,33 @@ export const RECORD_INDEXES=`CREATE INDEX IF NOT EXISTS records_speech_person ON
  CREATE INDEX IF NOT EXISTS records_speech_business ON records(json_extract(payload,'$.businessId')) WHERE kind='speech';
  CREATE INDEX IF NOT EXISTS records_speech_transcript ON records(json_extract(payload,'$.transcriptId')) WHERE kind='speech';
  CREATE INDEX IF NOT EXISTS records_speech_date ON records(json_extract(payload,'$.date')) WHERE kind='speech';
+ CREATE INDEX IF NOT EXISTS records_speech_session ON records(json_extract(payload,'$.sessionId')) WHERE kind='speech';
  CREATE INDEX IF NOT EXISTS records_voting_person ON records(json_extract(payload,'$.personId')) WHERE kind='voting';`;
+
+// Speech → business links, including joint debates (payload.businessIds), kept by triggers so every writer
+// (INSERT, INSERT OR REPLACE, DELETE) stays in sync. JSON arrays cannot be indexed directly.
+export const SPEECH_BUSINESS_LINKS=`CREATE TABLE IF NOT EXISTS speech_business_links(business TEXT NOT NULL,id TEXT NOT NULL,PRIMARY KEY(business,id)) WITHOUT ROWID;
+ CREATE INDEX IF NOT EXISTS speech_business_links_id ON speech_business_links(id);
+ CREATE TRIGGER IF NOT EXISTS speech_links_insert AFTER INSERT ON records WHEN new.kind='speech' BEGIN
+  DELETE FROM speech_business_links WHERE id=new.id;
+  INSERT OR IGNORE INTO speech_business_links SELECT CAST(value AS TEXT),new.id FROM json_each(new.payload,'$.businessIds') WHERE value IS NOT NULL;
+  INSERT OR IGNORE INTO speech_business_links SELECT CAST(json_extract(new.payload,'$.businessId') AS TEXT),new.id WHERE json_extract(new.payload,'$.businessId') IS NOT NULL;
+ END;
+ CREATE TRIGGER IF NOT EXISTS speech_links_update AFTER UPDATE OF payload ON records WHEN new.kind='speech' BEGIN
+  DELETE FROM speech_business_links WHERE id=new.id;
+  INSERT OR IGNORE INTO speech_business_links SELECT CAST(value AS TEXT),new.id FROM json_each(new.payload,'$.businessIds') WHERE value IS NOT NULL;
+  INSERT OR IGNORE INTO speech_business_links SELECT CAST(json_extract(new.payload,'$.businessId') AS TEXT),new.id WHERE json_extract(new.payload,'$.businessId') IS NOT NULL;
+ END;
+ CREATE TRIGGER IF NOT EXISTS speech_links_delete AFTER DELETE ON records WHEN old.kind='speech' BEGIN DELETE FROM speech_business_links WHERE id=old.id; END;`;
+function ensureSpeechBusinessLinks(db){
+ db.exec(SPEECH_BUSINESS_LINKS);
+ if(db.prepare("SELECT 1 FROM runs WHERE id='speech-business-links-v1'").get())return;
+ // One-time backfill for databases created before the links table (about a minute on the full archive).
+ db.exec(`BEGIN;DELETE FROM speech_business_links;
+  INSERT OR IGNORE INTO speech_business_links SELECT CAST(j.value AS TEXT),r.id FROM records r,json_each(r.payload,'$.businessIds') j WHERE r.kind='speech' AND j.value IS NOT NULL;
+  INSERT OR IGNORE INTO speech_business_links SELECT CAST(json_extract(payload,'$.businessId') AS TEXT),id FROM records WHERE kind='speech' AND json_extract(payload,'$.businessId') IS NOT NULL;
+  INSERT INTO runs VALUES('speech-business-links-v1','{}');COMMIT;`);
+}
 export function openParliament(file='data/parliament.sqlite'){
  if(file!==':memory:')mkdirSync(dirname(file),{recursive:true});const db=new DatabaseSync(file);
  db.exec(`PRAGMA journal_mode=WAL;
@@ -22,7 +48,7 @@ export function openParliament(file='data/parliament.sqlite'){
  CREATE TABLE IF NOT EXISTS runs(id TEXT PRIMARY KEY,payload TEXT);
  CREATE VIRTUAL TABLE IF NOT EXISTS speech_search USING fts5(id UNINDEXED,person_id UNINDEXED,business_id UNINDEXED,text,tokenize='unicode61 remove_diacritics 2');`);
  db.exec('PRAGMA busy_timeout=30000;');
- db.exec(RECORD_INDEXES);
+ db.exec(RECORD_INDEXES);ensureSpeechBusinessLinks(db);
  const alignmentFile=dirname(file)+'/parliament/video-alignments.json';const alignments=existsSync(alignmentFile)?JSON.parse(readFileSync(alignmentFile,'utf8')):{};
  const decode=r=>r?{...JSON.parse(r.payload),...(r.kind==='speech'&&alignments[r.id]?{video:alignments[r.id],videoStatus:'machine-aligned'}:{}),sourceUrl:r.source_url,retrievedAt:r.retrieved_at,sha256:r.sha256}:null;
  const all=kind=>db.prepare('SELECT * FROM records WHERE kind=?').all(kind).map(decode);

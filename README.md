@@ -6,13 +6,23 @@
 
 Your evidence-backed AI civic companion for understanding Swiss public decisions: ask in your language, get an answer built from the official parliamentary record, with the original words, the speaker and the exact video moment.
 
-[Open the Swiss pilot](https://midnight.vote/Switzerland/) · [How AI is used](docs/AI-IN-CLEISTHENES.md) · [Architecture](docs/ARCHITECTURE.md) · [Current status](docs/STATUS.md) · [Run locally](#run-locally)
+[Open the Swiss pilot](https://midnight.vote/Switzerland/) · [How it works](docs/HOW-CLEISTHENES-WORKS.md) · [How AI is used](docs/AI-IN-CLEISTHENES.md) · [Architecture](docs/ARCHITECTURE.md) · [Current status](docs/STATUS.md) · [Run locally](#run-locally)
 
-![Swiss civic landing with Alpine landscape and Cleisthenes](docs/images/landing.png)
+[![Watch the Cleisthenes intro film](docs/images/video-intro.jpg)](https://github.com/tomasgarro/swiss-parliament-intelligence/releases/download/hackathon-2026-09-24/cleisthenes-intro.mp4)
+
+**▶ [Watch the intro film](https://github.com/tomasgarro/swiss-parliament-intelligence/releases/download/hackathon-2026-09-24/cleisthenes-intro.mp4)** (1:46, with sound) · [App walkthrough](#see-it-in-action) (0:36)
 
 **Independent Swiss pilot · Built during the HPE–NVIDIA Agentic AI Hackathon / Swiss {ai} Weeks**
 
 </div>
+
+## See it in action
+
+[![App walkthrough: ask a question, get a cited answer, open the source, meet the speaker, explore the chamber](docs/images/video-app-walkthrough.jpg)](https://github.com/tomasgarro/swiss-parliament-intelligence/releases/download/hackathon-2026-09-24/cleisthenes-app-walkthrough.mp4)
+
+**App walkthrough** · 0:36 · with sound. The product flow: ask a question, get an answer with both sides and a citation on every claim, open the source with its translation, see who is speaking and how they voted, explore the chamber, and see what Cleisthenes will not do.
+
+Both videos are 1080p MP4 files attached to the [hackathon release](https://github.com/tomasgarro/swiss-parliament-intelligence/releases/tag/hackathon-2026-09-24). For how the whole system fits together on one page (diagrams, the two H100s, embeddings, status), read **[How Cleisthenes works](docs/HOW-CLEISTHENES-WORKS.md)**.
 
 ## The problem
 
@@ -32,7 +42,7 @@ Cleisthenes is **your evidence-backed AI civic companion for understanding Swiss
 *"What are the arguments for and against the initiative 'No to a Switzerland of 10 million'?"*
 
 1. Cleisthenes shows its research live, one step at a time: understanding, searching 134 sessions in FR/DE/IT, reading, checking statements, writing.
-2. The answer arrives in about 10 seconds: a direct summary, sections for each side, and small numbered citations on every sentence.
+2. The answer arrives in about 20 seconds on the live pilot: a direct summary, sections for each side, and small numbered citations on every sentence.
 3. The evidence card plays **Lorenzo Quadri (for)** and **Céline Weber (against)** from the official video at the exact moment, with the original words and a labelled English translation.
 4. A citation opens the source drawer: speaker, role, party, the full passage in context and a link to the Official Bulletin.
 5. Follow-ups remember the conversation: *"What did he vote on it?"* is understood as *"What did Lorenzo Quadri vote on…"*.
@@ -65,7 +75,7 @@ AI finds, reads, translates and explains; deterministic code decides what counts
 
 ## Built on NVIDIA
 
-- **Live inference:** Nemotron Nano 9B v2 as an NVIDIA NIM on H100 GPUs (NVIDIA LaunchPad); automatic fallback to NVIDIA's hosted API catalog when the GPU allocation ends.
+- **Live inference:** Nemotron Nano 9B v2 as an NVIDIA NIM on H100 GPUs (NVIDIA LaunchPad); automatic fallback to NVIDIA's hosted API catalog (Nemotron 3 Super 120B) when the GPU allocation ends, verified end to end on the demo questions; the catalog key is configured on the live server.
 - **Batch processing on H100:** Canary speech recognition (11,092 recordings so far, still running) and the E5 semantic index (1,140,943 passages in under 10 minutes, ~1,900 passages per second).
 - **After the hackathon:** semantic search runs on an ordinary CPU (int8 index, ~1 s per search over the full archive); answers stay on NVIDIA models through the API catalog.
 
@@ -138,6 +148,7 @@ npm run docs:status
 
 ## Documentation
 
+- [How Cleisthenes works](docs/HOW-CLEISTHENES-WORKS.md): the one-page walkthrough with diagrams
 - [Developer documentation index](docs/README.md)
 - [Product specification](docs/PRODUCT-SPEC.md)
 - [Architecture and data provenance](docs/ARCHITECTURE.md)
@@ -158,6 +169,6 @@ npm run docs:status
 
 ## Repository and release discipline
 
-The active development branch is `feat/swiss-citizen-pilot` in Tomas Garro's fork. Until final submission, changes go there only; neither `fork/main` nor the organization repository is updated without explicit approval. See [CONTRIBUTING.md](CONTRIBUTING.md).
+Work happens on short-lived branches in Tomas Garro's fork and reaches `main` through reviewed pull requests. The organization repository is never updated without explicit approval. See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 This non-commercial civic pilot is independent and has no government affiliation. Parliamentary material comes from Swiss Parliamentary Services and remains subject to its [source usage conditions](https://www.parlament.ch/de/services/Seiten/Nutzungsbedingungen.aspx); credit **© ParlCH** and any named photographer. Model weights, fonts and third-party assets retain their own licences.

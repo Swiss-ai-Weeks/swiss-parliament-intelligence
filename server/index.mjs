@@ -70,9 +70,10 @@ export function createServer({store=createStore(path.join(root,'data/pilot.sqlit
   // Hybrid retrieval is opt-in until evaluated: question embedded on this CPU, int8 E5 index searched here.
   const semanticRetrieval=()=>env.HYBRID_RETRIEVAL==='on'&&semanticIndexAvailable(root,env)?(text,opts)=>embedQuery(text).then(vector=>semanticSearch(root,vector,{...opts,env})):undefined;
   async function answerWithFallback(b,onProgress){
-    // Conversation memory: resolve "he", "that initiative" … against the thread before any research.
+    // Conversation memory: resolve "he", "that initiative" … against the thread before any research. A follow-up
+    // stays on the thread's proposal ("what did she suggest?" means on that initiative); an off-topic answer from another debate would be worse than an honest gap.
     const resolution=await resolveQuestion(b.question,b.thread,{language:b.language||'en',env,fetchImpl});
-    if(resolution.resolved){try{onProgress?.({stage:'understanding',resolvedQuestion:resolution.question});}catch{}b={...b,question:resolution.question,originalQuestion:b.question,...(!b.personId&&!b.businessId&&!b.passageId&&resolution.person&&!resolution.proposal?{context:{...(b.context||{}),personId:resolution.person.id}}:{})};}
+    if(resolution.resolved){try{onProgress?.({stage:'understanding',resolvedQuestion:resolution.question});}catch{}b={...b,question:resolution.question,originalQuestion:b.question,...(b.personId||b.businessId||b.passageId?{}:resolution.proposal?{businessId:resolution.proposal.id}:resolution.person?{context:{...(b.context||{}),personId:resolution.person.id}}:{})};}
     const withResolution=answer=>resolution.resolved?{...answer,resolvedQuestion:resolution.question,originalQuestion:b.originalQuestion}:answer;
     const recorded=findRecordedAnswer(root,b.question,b.language||'en');
     if(recorded&&lastInferenceProbe()?.state==='unreachable'&&(await probeInference(env,fetchImpl)).state==='unreachable')return replayRecorded(recorded);
@@ -87,6 +88,9 @@ export function createServer({store=createStore(path.join(root,'data/pilot.sqlit
   let profileImportBusy=false;
   let parliament;const par=()=>parliament||(parliament=openParliament(path.join(root,'data/parliament.sqlite')));
   const workspace=workspaceService({par,fetchImpl,directory:path.join(root,'data/workspace')});
+  // The overview reads every business and person (seconds of synchronous SQLite): build it at most every 10 minutes.
+  let overviewCache=null;const overview=()=>{if(!overviewCache||Date.now()-overviewCache.at>600000)overviewCache={at:Date.now(),value:parliamentOverview(par())};return overviewCache.value;};
+  if(env.WARM_OVERVIEW!=='off')setTimeout(()=>{try{overview();}catch{}},1500).unref();
   const json=(res,status,data,headers={})=>{res.writeHead(status,{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store',...headers});res.end(JSON.stringify(data));};
   const server=http.createServer(async(req,res)=>{
     res.setHeader('X-Content-Type-Options','nosniff');res.setHeader('Referrer-Policy','strict-origin-when-cross-origin');
@@ -108,7 +112,7 @@ export function createServer({store=createStore(path.join(root,'data/pilot.sqlit
       if(p==='/api/health'&&req.method==='GET')return json(res,200,{status:'ok',auth:auth.configured,ai:env.DEMO_REPLAY_FILE?'recorded-replay':env.INFERENCE_BASE_URL&&env.INFERENCE_MODEL?(lastInferenceProbe()?.state?'live-'+lastInferenceProbe().state:'configured-not-verified'):'editorial-extracts',aiCheckedAt:lastInferenceProbe()?.checkedAt||null,typesafe:env.TYPESAFE_MODE&&env.TYPESAFE_MODE!=='off'?(env.TYPESAFE_API_KEY?`${env.TYPESAFE_MODE}-configured-not-verified`:`${env.TYPESAFE_MODE}-missing-key`):'off',identity:'concept',videoCount:store.listDossiers().reduce((n,d)=>n+store.listEvidence(d.id).filter(e=>e.kind==='video').length,0)});
       if(p==='/api/dossiers'&&req.method==='GET')return json(res,200,store.listDossiers());
       if(p.startsWith('/api/chambers/')&&req.method==='GET')return json(res,200,readChamber(p.slice(14),url.searchParams.get('version')||undefined));
-      if(p==='/api/parliament'&&req.method==='GET')return json(res,200,parliamentOverview(par()));
+      if(p==='/api/parliament'&&req.method==='GET')return json(res,200,overview());
       if(p==='/api/parliament/proposals'&&req.method==='GET'){const q=(url.searchParams.get('q')||'').slice(0,200),date=v=>/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(v||'')?v:undefined;return json(res,200,await searchProposals(par(),{q,stage:['proceedings','concluded','unclassified'].includes(url.searchParams.get('stage'))?url.searchParams.get('stage'):undefined,from:date(url.searchParams.get('from')),to:date(url.searchParams.get('to')),page:Math.min(200,Number(url.searchParams.get('page'))||0)},env,fetchImpl));}
       if(p==='/api/parliament/archive-coverage'&&req.method==='GET')return json(res,200,readArchiveCoverage(root));
       if(p==='/api/parliament/profile-coverage'&&req.method==='GET')return json(res,200,buildProfileCoverage(par()));
@@ -182,7 +186,10 @@ export function createServer({store=createStore(path.join(root,'data/pilot.sqlit
       const data=await readFile(file);const range=req.headers.range?.match(/^bytes=(\d+)-(\d*)$/);const headers={'Content-Type':types[path.extname(file)]||'application/octet-stream','Accept-Ranges':'bytes'};
       if(range){const start=Number(range[1]);const end=Math.min(range[2]?Number(range[2]):data.length-1,data.length-1);if(start>end||start>=data.length) {res.writeHead(416,{'Content-Range':`bytes */${data.length}`});return res.end();}res.writeHead(206,{...headers,'Content-Range':`bytes ${start}-${end}/${data.length}`,'Content-Length':end-start+1});return res.end(data.subarray(start,end+1));}
       res.writeHead(200,headers);res.end(data);
-    }catch(error){json(res,error.status||500,{error:error.status?error.message:'INTERNAL_ERROR'});}
+    }catch(error){
+      // Unexpected failures are logged (method, path, message; never the body) so production is debuggable.
+      if(!error.status)console.error('API_ERROR',req.method,String(req.url).split('?')[0],error?.message);
+      json(res,error.status||500,{error:error.status?error.message:'INTERNAL_ERROR'});}
   });
   const agendaTimer=setInterval(()=>workspace.agenda().catch(()=>{}),3600000);agendaTimer.unref();
   server.on('close',()=>{clearInterval(agendaTimer);parliament?.close();auth.close();});

@@ -1,7 +1,7 @@
 // CPU semantic search over the int8 E5 index exported from the H100 run (scripts/export-embedding-index.py).
 // Exact search (no approximation): every vector is scored, split across worker threads, so ranking only
 // differs from float32 by int8 quantisation. A passage scope (proposal, speaker, period) scores only its rows.
-import {existsSync,readFileSync,statSync} from 'node:fs';
+import {closeSync,existsSync,openSync,readFileSync,readSync,statSync} from 'node:fs';
 import {join} from 'node:path';
 import {Worker} from 'node:worker_threads';
 import {availableParallelism} from 'node:os';
@@ -15,13 +15,16 @@ export function loadSemanticIndex(root,env=process.env){
  const prefix=semanticIndexPath(root,env),manifest=JSON.parse(readFileSync(prefix+'.json','utf8'));
  const bytes=statSync(prefix+'.i8').size;if(bytes!==manifest.count*manifest.dimensions)throw new Error('SEMANTIC_INDEX_SIZE_MISMATCH');
  // SharedArrayBuffer lets worker threads read the same vectors without copying 1.2 GB.
- const shared=new SharedArrayBuffer(bytes),vectors=new Int8Array(shared);const raw=readFileSync(prefix+'.i8');vectors.set(new Int8Array(raw.buffer,raw.byteOffset,raw.byteLength));
+ // Read straight into the shared buffer in 64 MB chunks: a whole-file read would hold a second 1.2 GB copy.
+ const shared=new SharedArrayBuffer(bytes),vectors=new Int8Array(shared),target=new Uint8Array(shared),fd=openSync(prefix+'.i8','r');
+ try{for(let at=0;at<bytes;){const n=readSync(fd,target,at,Math.min(64<<20,bytes-at),at);if(!n)throw new Error('SEMANTIC_INDEX_TRUNCATED');at+=n;}}finally{closeSync(fd);}
  const ids=readFileSync(prefix+'.ids.jsonl','utf8').split('\n').filter(Boolean).map(l=>JSON.parse(l));
  const rowsOf=new Map();ids.forEach(([pid],row)=>{const list=rowsOf.get(pid);if(list)list.push(row);else rowsOf.set(pid,[row]);});
  index={manifest,vectors,shared,ids,rowsOf,dims:manifest.dimensions};return index;
 }
 
-const WORKER=`const {parentPort,workerData}=require('node:worker_threads');
+// process.getBuiltinModule works whether Node evaluates this as CommonJS or as an ES module (24.21 uses the package type).
+const WORKER=`const {parentPort,workerData}=process.getBuiltinModule('node:worker_threads');
 const v=new Int8Array(workerData.shared),d=workerData.dims;
 parentPort.on('message',({q,from,to,rows,k})=>{const top=[];let min=-Infinity;
  const score=r=>{let s=0;const o=r*d;for(let i=0;i<d;i++)s+=v[o+i]*q[i];if(top.length<k||s>min){top.push([s,r]);if(top.length>k){top.sort((a,b)=>b[0]-a[0]);top.length=k;min=top[k-1][0];}}};
@@ -29,10 +32,16 @@ parentPort.on('message',({q,from,to,rows,k})=>{const top=[];let min=-Infinity;
  parentPort.postMessage(top);});`;
 let pool=null;
 function workers(ix){
- if(!pool){const n=Math.max(1,Math.min(8,availableParallelism()-1));pool=Array.from({length:n},()=>new Worker(WORKER,{eval:true,workerData:{shared:ix.shared,dims:ix.dims}}));pool.forEach(w=>w.unref());}
+ // A container sees the host's cores, not its CPU quota, so production sets SEMANTIC_WORKERS explicitly.
+ if(!pool){const n=Math.max(1,Math.min(8,Number(process.env.SEMANTIC_WORKERS)||availableParallelism()-1));pool=Array.from({length:n},()=>new Worker(WORKER,{eval:true,workerData:{shared:ix.shared,dims:ix.dims}}));
+  // A failed worker must not take the API down: drop the pool, the pending search rejects and retrieval stays lexical.
+  const current=pool;current.forEach(w=>{w.unref();w.on('error',()=>{if(pool===current)pool=null;current.forEach(x=>x.terminate());});});}
  return pool;
 }
-const ask=(w,msg)=>new Promise(resolve=>{w.once('message',resolve);w.postMessage(msg);});
+const ask=(w,msg)=>new Promise((resolve,reject)=>{
+ const off=()=>{w.off('message',done);w.off('error',fail);w.off('exit',exited);};
+ const done=m=>{off();resolve(m);},fail=e=>{off();reject(e);},exited=()=>fail(new Error('SEMANTIC_WORKER_EXITED'));
+ w.on('message',done);w.on('error',fail);w.on('exit',exited);w.postMessage(msg);});
 
 // Returns [{passageId, chunk, score}] best-first; one entry per passage (best chunk).
 // Searches run one at a time so each worker reply belongs to the right query.

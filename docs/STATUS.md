@@ -1,5 +1,16 @@
 # Current implementation and corpus status
 
+## Live pilot — 23 September 2026, evening
+
+What runs at [midnight.vote/Switzerland](https://midnight.vote/Switzerland/), checked on the live site the same evening:
+
+- **Deploy:** the full archive and the int8 E5 meaning index on the Hostinger VPS, with hybrid (keyword + meaning) retrieval on, a 4 GB container and two search threads.
+- **Answers:** Nemotron Nano 9B v2 as an NVIDIA NIM on LaunchPad GPU 0, reached over the SSH tunnel. The 10-million question was answered in 21.3 s with 4 citations from 1,149 records considered.
+- **Fallback:** the NVIDIA API catalog key is configured, so answers switch to Nemotron 3 Super 120B when the GPU is unreachable. The switch was verified end to end locally; it was not exercised on the live site, to keep the GPU path serving.
+- **Web research:** enabled (`gpt-6-luna`, daily cap 60). A news question returned the separate "Beyond the parliamentary record" block with 3 web sources.
+- **TypeSafe Jev:** off on the live pilot; its shadow evaluation (below) ran locally.
+- **Canary worker:** still running on GPU 1. At 19:21 UTC it had finished 11,144 of the 20,307 recordings in its current queue. Transcripts count below only after they are pulled back, validated and imported.
+
 ## Update — 23 September 2026
 
 These counts supersede the archive-wide figures in the sections below; the validated-baseline snapshot contract that follows is unchanged.
