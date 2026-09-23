@@ -1,6 +1,7 @@
 import {reviewClaims} from './claim-review.mjs';
 import {partyCatalog} from './party-catalog.mjs';
 import {research} from './research.mjs';
+import {publicTypeSafeReview,reviewClaimsWithTypeSafe} from './typesafe-review.mjs';
 const norm=s=>String(s||'').normalize('NFD').replace(/\p{Diacritic}/gu,'').toLowerCase();
 export function profileIntent(question,context={}){
  const q=norm(question);
@@ -47,6 +48,9 @@ export async function answerProfile(store,input,env,fetchImpl=fetch){
  if(!passages.length)return empty('This type of official profile evidence has not been imported yet. Load the profile’s official records.');
  const evidence=passages.slice(0,3).map(s=>({id:s.id,text:s.text,language:s.language,kind:'document',sourceKind:s.sourceKind,speaker:s.speaker,date:s.date,attribution:s.sourceKind==='party-self-description'?'Reviewed editorial summary of the party’s own description; attribute to the party, not the individual.':`Official structured record for ${p.name}, normalized into text.`,source:{url:s.officialUrl}}));
  const started=performance.now();const answer=await research({id:'profile-'+p.id,title:{en:'Official profile and attributed party background'},evidence},{question:input.question,language:input.language||'en'},env,fetchImpl,evidence);
- if(answer.mode==='live-inference'){const reviewed=await reviewClaims(answer.claims,env,fetchImpl,{question:input.question,evidence});answer.claims=reviewed.claims;answer.withheldClaims=(answer.withheldClaims||0)+reviewed.withheld;if(!answer.claims.length)answer.status='insufficient-evidence';}
+ if(answer.mode==='live-inference'){
+  const reviewed=await reviewClaims(answer.claims,env,fetchImpl,{question:input.question,evidence});answer.claims=reviewed.claims;answer.withheldClaims=(answer.withheldClaims||0)+reviewed.withheld;if(!answer.claims.length)answer.status='insufficient-evidence';
+  if(answer.claims.length&&env.TYPESAFE_MODE&&env.TYPESAFE_MODE!=='off')try{const typed=await reviewClaimsWithTypeSafe(answer.claims,env,fetchImpl,{evidence});answer.typesafeReview=publicTypeSafeReview(typed);if(typed.mode==='enforce'){answer.claims=typed.claims;answer.withheldClaims=(answer.withheldClaims||0)+typed.withheld;if(!answer.claims.length)answer.status='insufficient-evidence';}}catch{answer.typesafeReview={status:'unavailable',mode:env.TYPESAFE_MODE,model:env.TYPESAFE_MODEL||'jev-latest'};if(env.TYPESAFE_MODE==='enforce'){answer.claims=[];answer.status='sources-only';answer.mode='source-fallback';answer.notice='The secondary evidence review is unavailable; showing retrieved official profile sources instead.';}}
+ }
  return {...answer,passages,context,latencyMs:Math.round(performance.now()-started),retrieval:{method:'source-type-routing',sourceType:intent},coverage:intent==='party'?'Reviewed summary of party self-description; not a personal position or independent evaluation.':'Official public profile snapshot; normalized structured fields.'};
 }

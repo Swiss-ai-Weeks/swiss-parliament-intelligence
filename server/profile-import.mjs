@@ -11,7 +11,18 @@ export function safeContact(address){
  try{const u=new URL(value);if(u.protocol==='https:'&&!u.username&&!u.password)return {kind:'website',value:u.hostname,href:u.href};}catch{}
  return null;
 }
-export async function syncPerson(store,id,{fetchImpl=fetch,rawDir='data/parliament/raw'}={}){
+export async function collectVotingHistory(query,{pageSize=500,pageLimit=200}={}){
+ if(!Number.isInteger(pageSize)||pageSize<1||!Number.isInteger(pageLimit)||pageLimit<1)throw new Error('INVALID_VOTE_PAGINATION');
+ const votes=[];let complete=false;
+ for(let pageNumber=0;pageNumber<pageLimit;pageNumber++){
+  const page=await query('Voting',{'$orderby':'ID asc','$top':String(pageSize),'$skip':String(pageNumber*pageSize)});
+  votes.push(...page);if(page.length<pageSize){complete=true;break;}
+ }
+ if(!complete)throw new Error('VOTE_HISTORY_PAGE_LIMIT');
+ if(new Set(votes.map(v=>v.ID)).size!==votes.length)throw new Error('UNSTABLE_VOTE_PAGINATION');
+ return votes;
+}
+export async function syncPerson(store,id,{fetchImpl=fetch,rawDir='data/parliament/raw',votePageSize=500,votePageLimit=200}={}){
  if(!/^\d{1,6}$/.test(id)||!store.people().some(p=>p.id===id))throw new Error('UNKNOWN_PERSON');
  mkdirSync(rawDir,{recursive:true});const started=new Date().toISOString(),queries=[];
  async function query(table,extra={}){
@@ -24,10 +35,7 @@ export async function syncPerson(store,id,{fetchImpl=fetch,rawDir='data/parliame
   query('PersonCommunication',{'$select':'ID,Language,PersonNumber,Address,CommunicationTypeText'}),
   query('PersonOccupation',{'$select':'ID,Language,PersonNumber,OccupationName,Employer,JobTitle,StartDate,EndDate'}),query('MemberCommittee',{'$select':'ID,Language,PersonNumber,CommitteeName,CommitteeFunctionName'}),query('MemberCouncilHistory')]);
  if(members.length!==1)throw new Error('AMBIGUOUS_MEMBERSHIP');const r=members[0];
- const votes=[];let complete=false;
- for(let skip=0;skip<20000;skip+=500){const page=await query('Voting',{'$orderby':'ID asc','$top':'500','$skip':String(skip)});votes.push(...page);if(page.length<500){complete=true;break;}}
- if(!complete)throw new Error('VOTE_HISTORY_PAGE_LIMIT');
- if(new Set(votes.map(v=>v.ID)).size!==votes.length)throw new Error('UNSTABLE_VOTE_PAGINATION');
+ const votes=await collectVotingHistory(query,{pageSize:votePageSize,pageLimit:votePageLimit});
  let portrait={portraitUrl:null,portraitIdentityVerified:false};
  try{portrait=await officialPortrait(id,fetchImpl);}catch{}
  const portraitUrl=portrait.portraitUrl;

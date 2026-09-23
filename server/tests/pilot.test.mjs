@@ -22,8 +22,8 @@ test('Romansh is not presented as automatic translation',async()=>{
 test('invented citation IDs and quotes are rejected',()=>{
  const e=[{id:'one',text:'Official source wording.'}];assert.throws(()=>validateClaims([{text:'X',evidenceId:'fake',quote:'Official'}],e));assert.throws(()=>validateClaims([{text:'X',evidenceId:'one',quote:'made up'}],e));
 });
-test('configured model failure never falls back to success',async()=>{
- const s=createStore(':memory:');try{await assert.rejects(()=>research(s.getDossier('eid'),{}, {INFERENCE_BASE_URL:'https://model.invalid/v1',INFERENCE_MODEL:'test'},async()=>({ok:false})),/INFERENCE_UNAVAILABLE/);}finally{s.close();}
+test('configured model failure falls back to sources without inventing an answer',async()=>{
+ const s=createStore(':memory:');try{const answer=await research(s.getDossier('eid'),{}, {INFERENCE_BASE_URL:'https://model.invalid/v1',INFERENCE_MODEL:'test'},async()=>({ok:false}));assert.equal(answer.status,'sources-only');assert.equal(answer.mode,'source-fallback');assert.deepEqual(answer.claims,[]);assert.ok(answer.sourceIds.length);}finally{s.close();}
 });
 test('Supabase sessions are revoked on logout and upstream expiry',async()=>{
  let revoked=false;const auth=createAuth({SUPABASE_URL:'https://auth.invalid',SUPABASE_ANON_KEY:'public'},async url=>({ok:!revoked,status:401,json:async()=>url.includes('token')?{user:{id:'alice',email:'a@example.test'},access_token:'secret',expires_in:3600}:{id:'alice',email:'a@example.test'}}));

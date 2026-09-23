@@ -1,0 +1,39 @@
+.cleisthenes-composer {
+  align-items: flex-end;
+}
+
+.cleisthenes-composer textarea,
+.cleisthenes-chat .cleisthenes-composer textarea {
+  min-width: 0;
+  width: 0;
+  flex: 1;
+  resize: none;
+  overflow-y: auto;
+  border: 0 !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+  background: transparent;
+  font: inherit;
+  font-size: 13px;
+  line-height: 1.45;
+  padding: 9px;
+}
+
+.cleisthenes-composer button {
+  height: 36px;
+}
+
+.source-fallback {
+  padding: 12px;
+  border: 1px solid #e5dfd4;
+  border-radius: 14px;
+  background: #faf8f2;
+}
+
+.source-fallback > p {
+  margin-top: 0;
+}
+
+.source-fallback .chat-citation + .chat-citation {
+  margin-top: 8px;
+}

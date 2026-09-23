@@ -1363,3 +1363,5 @@
   .civic-landing .site-header { grid-template-columns: minmax(0, 1fr) auto; }
   .civic-landing .site-header nav { display: none; }
 }
+
+.brand img.brand-bust{width:34px;height:34px;border-radius:50%;object-fit:cover;background:#efe9dc}

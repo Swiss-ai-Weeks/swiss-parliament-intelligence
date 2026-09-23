@@ -12,6 +12,9 @@ This index separates current implementation truth from product direction, operat
 
 ## Product and user experience
 
+- [Cleisthenes product proposal](CLEISTHENES-PROPOSAL.md) — proposed product hierarchy, positioning, UX programme, data-completeness contract and submission plan.
+- [Cleisthenes research answer experience](CLEISTHENES-ANSWER-EXPERIENCE.md) — coherent long-form answers, research-process summaries, single-language output and typed evidence actions.
+- [Submission sprint and product roadmap](SPRINT-2026-09-22-SUBMISSION.md) — two-day priorities, model responsibilities, acceptance criteria and the production horizon.
 - [Product specification](PRODUCT-SPEC.md) — current scope, journeys, non-goals and acceptance principles.
 - [User guide](USER-GUIDE.md) — citizen-facing navigation and evidence interpretation.
 - [Demo and user test](DEMO-AND-USER-TEST.md) — rehearsal flow and manual acceptance tasks.
