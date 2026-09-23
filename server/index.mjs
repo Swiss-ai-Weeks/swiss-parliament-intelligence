@@ -22,6 +22,7 @@ import {readArchiveCoverage} from './archive-coverage.mjs';
 import {probeInference,lastInferenceProbe} from './ai-readiness.mjs';
 import {findRecordedAnswer,replayRecorded,infrastructureFailure} from './demo-replay.mjs';
 import {webResearch,webResearchConfigured,webResearchIntent} from './web-research.mjs';
+import {searchProposals} from './proposal-search.mjs';
 import {buildProfileCoverage} from './profile-coverage.mjs';
 import {readProcessingBacklog} from './processing-backlog.mjs';
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
@@ -96,6 +97,7 @@ export function createServer({store=createStore(path.join(root,'data/pilot.sqlit
       if(p==='/api/dossiers'&&req.method==='GET')return json(res,200,store.listDossiers());
       if(p.startsWith('/api/chambers/')&&req.method==='GET')return json(res,200,readChamber(p.slice(14),url.searchParams.get('version')||undefined));
       if(p==='/api/parliament'&&req.method==='GET')return json(res,200,parliamentOverview(par()));
+      if(p==='/api/parliament/proposals'&&req.method==='GET'){const q=(url.searchParams.get('q')||'').slice(0,200),date=v=>/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(v||'')?v:undefined;return json(res,200,await searchProposals(par(),{q,stage:['proceedings','concluded','unclassified'].includes(url.searchParams.get('stage'))?url.searchParams.get('stage'):undefined,from:date(url.searchParams.get('from')),to:date(url.searchParams.get('to')),page:Math.min(200,Number(url.searchParams.get('page'))||0)},env,fetchImpl));}
       if(p==='/api/parliament/archive-coverage'&&req.method==='GET')return json(res,200,readArchiveCoverage(root));
       if(p==='/api/parliament/profile-coverage'&&req.method==='GET')return json(res,200,buildProfileCoverage(par()));
       if(p==='/api/parliament/processing-backlog'&&req.method==='GET')return json(res,200,readProcessingBacklog(root));

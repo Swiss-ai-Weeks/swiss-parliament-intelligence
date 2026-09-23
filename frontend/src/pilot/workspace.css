@@ -8,3 +8,17 @@
 @media(max-width:760px){.swiss-app :is(.civic-dashboard,.topics-workspace,.member-page){padding-top:30px}.swiss-app .dashboard-shortcuts button{display:block}.swiss-app .dashboard-shortcuts span{margin-bottom:8px}}
 
 .passage-video-disclosure{margin:12px 0;padding:14px;border:1px solid #d9cbb4;border-radius:12px;background:#faf7ef}.passage-video-disclosure summary{cursor:pointer;color:#a24f40;font-size:14px}.passage-video-disclosure p{font-size:13px;line-height:1.6}.passage-video-disclosure video{display:block;width:100%;max-height:360px;background:#252823;border-radius:8px;margin:12px 0}.passage-video-disclosure a{font-size:13px}.citation-profile dl{display:grid;grid-template-columns:1fr 1.6fr;gap:12px}.citation-profile dt{color:#777}.citation-profile dd{margin:0}.profile-history{border-top:1px solid #d9cbb4;margin:24px 0;padding-top:16px}.citation-profile .primary{display:inline-block;padding:14px;text-decoration:none}
+
+/* Topics: featured debate and a plain explanation of the two record types */
+.topics-explainer { font-size: 13px; color: #5f6157; margin: 4px 0 18px; max-width: 78ch; }
+.featured-proposal { display: grid; grid-template-columns: 1fr auto; gap: 18px 28px; align-items: end; padding: 22px 24px; margin: 0 0 22px; border-radius: 18px; background: linear-gradient(135deg,#f7efe2,#efe6d4); border: 1px solid #e0d2ba; position: relative; }
+.featured-mark { position: absolute; top: -10px; left: 22px; padding: 3px 10px; border-radius: 999px; background: #a24f40; color: #fffdf8; font-size: 10.5px; letter-spacing: .06em; text-transform: uppercase; }
+.featured-proposal small { color: #8a6f4f; font-size: 11.5px; letter-spacing: .03em; }
+.featured-proposal h2 { font: normal 28px/1.15 Georgia, serif; margin: 6px 0 8px; }
+.featured-proposal p { margin: 0; color: #4f5148; max-width: 62ch; }
+.featured-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.featured-ask { padding: 11px 18px; border-radius: 999px; border: 0; background: #a24f40; color: #fffdf8; font: inherit; font-weight: 500; cursor: pointer; }
+.featured-ask:hover { background: #7e3a2f; }
+.topics-ask:disabled { opacity: .5; cursor: default; }
+.topics-translated { color: #8a8579; font-size: 12px; }
+@media (max-width: 720px) { .featured-proposal { grid-template-columns: 1fr; } .featured-proposal h2 { font-size: 23px; } }
