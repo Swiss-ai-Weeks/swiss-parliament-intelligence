@@ -55,7 +55,7 @@ export function createServer({store=createStore(path.join(root,'data/pilot.sqlit
   // clearly labelled, for news and upcoming events or when the record holds nothing on the question.
   async function withWebResearch(b,answer,onProgress){
     if(!webResearchConfigured(env)||answer.status==='refused'||answer.mode==='recorded-replay')return answer;
-    if(!(b.webResearch===true||webResearchIntent(b.question)||answer.status==='insufficient-evidence'))return answer;
+    if(!(b.webResearch===true||webResearchIntent(b.question)||['insufficient-evidence','upcoming'].includes(answer.status)))return answer;
     try{onProgress?.({stage:'web'});}catch{}
     try{const web=await webResearch({question:b.question,language:b.language||'en',context:scopeTitle(b)?'Scope: '+scopeTitle(b):undefined,env,fetchImpl});return web.status==='ok'?{...answer,web}:{...answer,webStatus:web.status};}
     catch{return {...answer,webStatus:'unavailable'};}
