@@ -19,6 +19,8 @@ import {draftMessage} from './message-draft.mjs';
 import {translatePassage} from './translation.mjs';
 import {searchVideo} from './video-search.mjs';
 import {readArchiveCoverage} from './archive-coverage.mjs';
+import {probeInference,lastInferenceProbe} from './ai-readiness.mjs';
+import {findRecordedAnswer,replayRecorded,infrastructureFailure} from './demo-replay.mjs';
 import {buildProfileCoverage} from './profile-coverage.mjs';
 import {readProcessingBacklog} from './processing-backlog.mjs';
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
@@ -47,6 +49,13 @@ function answerCoverage(){
 const scopeTitle=b=>typeof b.scopeTitle==='string'&&b.scopeTitle.trim()?b.scopeTitle.trim().slice(0,200):undefined;
 export function createServer({store=createStore(path.join(root,'data/pilot.sqlite')),env=process.env,fetchImpl=fetch,authFile=':memory:'}={}) {
   const feedback=feedbackService(env,fetchImpl);
+  // Live first; a prepared demo question falls back to its labelled recording only on infrastructure failure.
+  async function answerWithFallback(b,onProgress){
+    const recorded=findRecordedAnswer(root,b.question,b.language||'en');
+    if(recorded&&lastInferenceProbe()?.state==='unreachable'&&(await probeInference(env,fetchImpl)).state==='unreachable')return replayRecorded(recorded);
+    try{const answer=await answerParliament(par(),b,env,fetchImpl,{coverage:answerCoverage(),scopeTitle:scopeTitle(b),onProgress});return recorded&&infrastructureFailure(answer)?replayRecorded(recorded):answer;}
+    catch(error){if(recorded)return replayRecorded(recorded);throw error;}
+  }
   const publicBase=(env.PUBLIC_BASE_PATH||'').replace(/\/$/,'');
   if(publicBase&&!/^\/[A-Za-z0-9_-]+$/.test(publicBase))throw new Error('INVALID_PUBLIC_BASE_PATH');
   const auth=createAuth(env,fetchImpl,{file:authFile}),items=accountStore(env,fetchImpl);const rates=new Map();
@@ -73,7 +82,7 @@ export function createServer({store=createStore(path.join(root,'data/pilot.sqlit
       if(p==='/api/agenda'&&req.method==='GET')return json(res,200,await workspace.agenda());
       if(p==='/api/feed'&&req.method==='GET')return json(res,200,workspace.feed());
       if(p==='/api/broadcast'&&req.method==='GET')return json(res,200,workspace.broadcast());
-      if(p==='/api/health'&&req.method==='GET')return json(res,200,{status:'ok',auth:auth.configured,ai:env.DEMO_REPLAY_FILE?'recorded-replay':env.INFERENCE_BASE_URL&&env.INFERENCE_MODEL?'configured-not-verified':'editorial-extracts',typesafe:env.TYPESAFE_MODE&&env.TYPESAFE_MODE!=='off'?(env.TYPESAFE_API_KEY?`${env.TYPESAFE_MODE}-configured-not-verified`:`${env.TYPESAFE_MODE}-missing-key`):'off',identity:'concept',videoCount:store.listDossiers().reduce((n,d)=>n+store.listEvidence(d.id).filter(e=>e.kind==='video').length,0)});
+      if(p==='/api/health'&&req.method==='GET')return json(res,200,{status:'ok',auth:auth.configured,ai:env.DEMO_REPLAY_FILE?'recorded-replay':env.INFERENCE_BASE_URL&&env.INFERENCE_MODEL?(lastInferenceProbe()?.state?'live-'+lastInferenceProbe().state:'configured-not-verified'):'editorial-extracts',aiCheckedAt:lastInferenceProbe()?.checkedAt||null,typesafe:env.TYPESAFE_MODE&&env.TYPESAFE_MODE!=='off'?(env.TYPESAFE_API_KEY?`${env.TYPESAFE_MODE}-configured-not-verified`:`${env.TYPESAFE_MODE}-missing-key`):'off',identity:'concept',videoCount:store.listDossiers().reduce((n,d)=>n+store.listEvidence(d.id).filter(e=>e.kind==='video').length,0)});
       if(p==='/api/dossiers'&&req.method==='GET')return json(res,200,store.listDossiers());
       if(p.startsWith('/api/chambers/')&&req.method==='GET')return json(res,200,readChamber(p.slice(14),url.searchParams.get('version')||undefined));
       if(p==='/api/parliament'&&req.method==='GET')return json(res,200,parliamentOverview(par()));
@@ -90,13 +99,14 @@ export function createServer({store=createStore(path.join(root,'data/pilot.sqlit
       if(p==='/api/parliament/search'&&req.method==='GET')return json(res,200,par().search((url.searchParams.get('q')||'').slice(0,500),{businessId:url.searchParams.get('business'),personId:url.searchParams.get('person'),limit:20}));
       if(p==='/api/parliament/video-search'&&req.method==='POST'){const b=await body(req);if(typeof b.query!=='string'||!b.query.trim()||b.query.length>500||!['spoken','visual'].includes(b.mode))throw fail('INVALID_REQUEST');for(const k of ['personId','businessId'])if(b[k]!==undefined&&(typeof b[k]!=='string'||!/^\d+$/.test(b[k])))throw fail('INVALID_SCOPE');try{return json(res,200,await searchVideo({root:path.join(root,'data/parliament'),store:par(),query:b.query,mode:b.mode,personId:b.personId,businessId:b.businessId,env,fetchImpl}));}catch{throw fail('VIDEO_SEARCH_UNAVAILABLE',502);}}
       if(p==='/api/parliament/translate'&&req.method==='POST'){const b=await body(req);if(typeof b.evidenceId!=='string'||!languages.includes(b.language))throw fail('INVALID_REQUEST');const passage=par().get('speech',b.evidenceId);if(!passage)throw fail('NOT_FOUND',404);try{return json(res,200,await translatePassage(passage,b.language,env,fetchImpl));}catch(e){throw fail(e.status===429?'TRANSLATOR_BUSY':'TRANSLATION_UNAVAILABLE',e.status===429?429:502);}}
-      if(p==='/api/parliament/ask'&&req.method==='POST'){const b=await body(req);if(typeof b.question!=='string'||!b.question.trim()||b.question.length>500||!languages.includes(b.language||'en'))throw fail('INVALID_REQUEST');try{return json(res,200,await answerParliament(par(),b,env,fetchImpl,{coverage:answerCoverage(),scopeTitle:scopeTitle(b)}));}catch{throw fail('MODEL_UNAVAILABLE_OR_INVALID_OUTPUT',502);}}
+      if(p==='/api/health/ai'&&req.method==='GET')return json(res,200,await probeInference(env,fetchImpl));
+      if(p==='/api/parliament/ask'&&req.method==='POST'){const b=await body(req);if(typeof b.question!=='string'||!b.question.trim()||b.question.length>500||!languages.includes(b.language||'en'))throw fail('INVALID_REQUEST');try{return json(res,200,await answerWithFallback(b));}catch{throw fail('MODEL_UNAVAILABLE_OR_INVALID_OUTPUT',502);}}
       // Same answer, streamed as newline-delimited JSON: research stages first, then the answer.
       if(p==='/api/parliament/ask/stream'&&req.method==='POST'){
         const b=await body(req);if(typeof b.question!=='string'||!b.question.trim()||b.question.length>500||!languages.includes(b.language||'en'))throw fail('INVALID_REQUEST');
         res.writeHead(200,{'Content-Type':'application/x-ndjson; charset=utf-8','Cache-Control':'no-store','X-Accel-Buffering':'no','X-Content-Type-Options':'nosniff'});
         const send=event=>{if(!res.writableEnded)res.write(JSON.stringify(event)+'\n');};
-        try{send({type:'answer',answer:await answerParliament(par(),b,env,fetchImpl,{coverage:answerCoverage(),scopeTitle:scopeTitle(b),onProgress:stage=>send({type:'stage',...stage})})});}
+        try{send({type:'answer',answer:await answerWithFallback(b,stage=>send({type:'stage',...stage}))});}
         catch{send({type:'error',code:'MODEL_UNAVAILABLE_OR_INVALID_OUTPUT'});}
         return res.end();
       }

@@ -59,10 +59,10 @@ export async function research(dossier,{question='',action='explain',language='e
   }
   // Isolate generation by source so a fluent synthesis cannot silently cite just
   // one passage for facts that came from several unrelated records.
-  // Keep each inference isolated to one source; up to four run concurrently.
+  // Keep each inference isolated to one source; up to six run concurrently.
   const groups=[];
   try {
-    for(let i=0;i<evidence.length;i+=4)groups.push(...await Promise.all(evidence.slice(i,i+4).map(entry=>infer([entry]))));
+    for(let i=0;i<evidence.length;i+=6)groups.push(...await Promise.all(evidence.slice(i,i+6).map(entry=>infer([entry]))));
   } catch {
     return {
       status:'sources-only',

@@ -1,0 +1,29 @@
+{
+  "purpose": "Prepared demonstration questions. Answers are recorded from live runs by scripts/record-demo-answers.mjs and replayed only when the live model is unavailable.",
+  "questions": [
+    {
+      "id": "ten-million",
+      "language": "en",
+      "question": "What are the arguments for and against the initiative 'No to a Switzerland of 10 million'?",
+      "expect": "ok"
+    },
+    {
+      "id": "blackout-fr",
+      "language": "fr",
+      "question": "Quels arguments ont été avancés au Parlement sur l'initiative « Stop au blackout » ?",
+      "expect": "ok"
+    },
+    {
+      "id": "crans-montana",
+      "language": "en",
+      "question": "What did speakers say about the law supporting the victims of the Crans-Montana fire?",
+      "expect": "ok"
+    },
+    {
+      "id": "refusal",
+      "language": "en",
+      "question": "How should I vote on the neutrality initiative?",
+      "expect": "refused"
+    }
+  ]
+}

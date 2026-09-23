@@ -1,0 +1,1190 @@
+{
+ "generatedAt": "2026-09-23T08:23:12.597Z",
+ "note": "Live answers recorded for demonstration fallback only; replayed with a visible label when the model is unavailable.",
+ "answers": [
+  {
+   "id": "ten-million",
+   "question": "What are the arguments for and against the initiative 'No to a Switzerland of 10 million'?",
+   "language": "en",
+   "recordedAt": "2026-09-23T08:22:44.749Z",
+   "model": "nvidia/nvidia-nemotron-nano-9b-v2",
+   "seconds": 11.563,
+   "answer": {
+    "status": "ok",
+    "mode": "live-inference",
+    "model": "nvidia/nvidia-nemotron-nano-9b-v2",
+    "claims": [
+     {
+      "text": "The speaker argues that the 'No to a Switzerland of 10 million' initiative is legitimate because it targets asylum and family reunification cases rather than opposing free movement or the Bilaterals directly, as the text clarifies. The speaker also cites Professor Reiner Eichenberger's research showing Bilaterals I's economic contribution to Switzerland is nearly nonexistent, making their potential exit manageable.",
+      "evidenceId": "parl-364201-7",
+      "quote": "Tutelarsi è legittimo. L'iniziativa popolare \"No ad una Svizzera da 10 milioni\" non è di per sé un'iniziativa contro la libera circolazione delle persone e quindi contro i Bilaterali, perché - il testo è chiaro - quando si raggiungono i limiti indicati si interviene sul settore dell'asilo e sui ricongiungimenti familiari, quindi in sostanza su quelle persone che nemmeno dovrebbero essere qui. La disdetta della libera circolazione delle persone sarebbe l'ultima ratio. In ogni caso, in un recente approfondimento, pubblicato nel mese di giugno su \"Finanz und Wirtschaft\", il professor Reiner Eichenberger dell'Università di Friburgo dimostra che l'apporto economico dei Bilaterali I alla Svizzera è pressoché inesistente e quindi una loro eventuale disdetta sarebbe facile da gestire."
+     },
+     {
+      "text": "The argument against the initiative 'No to a Switzerland of 10 million' is that it imposes a bureaucratic solution that misses its target and unnecessarily constrains future generations, as reported by Weber Céline from Mit-F.",
+      "evidenceId": "parl-363295-0",
+      "quote": "Le constat est clair. Il suffit d'écouter les gens sur les marchés le samedi matin : une Suisse à 10 millions ne fait pas rêver ou alors que très peu de gens. Oui, la Suisse se questionne sur l'évolution de sa démographie et ne rien faire n'est pas une option. À la solution bureaucratique qui manque sa cible et qui veut mettre la Suisse inutilement dans un corset, telle que la propose l'initiative, le Parti vert'libéral préfère des solutions pragmatiques, adaptées aux différentes situations régionales et qui ne contraignent pas sans raison les générations futures."
+     },
+     {
+      "text": "Walder Nicolas argues that the initiative 'No to a Switzerland of 10 million' is a political imposture disguised as a sustainability measure, as it does not address real environmental issues like energy transition or biodiversity preservation, but instead targets permits rather than population limits or consumption causes.",
+      "evidenceId": "parl-363317-0",
+      "quote": "Disons-le sans détour : l'initiative \"Pas de Suisse à 10 millions !\", prétendument \"pour la durabilité\", est une imposture politique, doublée d'une grande tartuferie. Son intitulé évoque la maîtrise démographique et la protection de l'environnement, mais, en réalité, elle ne garantit ni l'une ni l'autre. Ce texte ne fixe pas une limite contraignante à la population, mais uniquement aux permis stables et durables. Il exclut de son champ les permis précaires, les frontaliers, les touristes. Par ailleurs, ce texte ne s'attaque ni aux causes réelles de la surconsommation des ressources ni à notre empreinte carbone. Il ne parle pas de transition énergétique ni de préservation de la biodiversité. Autrement dit, cette initiative prétend résoudre des problèmes en ciblant les mauvaises personnes, avec les mauvais outils et pour de mauvaises raisons."
+     },
+     {
+      "text": "Nantermod Philippe argues that the initiative 'No to a Switzerland of 10 million' aims to freeze the current population size without allowing growth, which he sees as incompatible with Switzerland's future in Europe.",
+      "evidenceId": "parl-363318-3",
+      "quote": "Mesdames, Messieurs, la Suisse n'a d'avenir que dans le cortège des nations de l'Europe. Nous le savons depuis hier, mais nous le savons depuis plusieurs décennies. L'initiative qui vise à limiter l'immigration à 10 millions de personnes vise finalement à figer la situation telle qu'elle est aujourd'hui sans nous donner de possibilités de croître. Et, en dehors de la croissance, il n'y a pas d'avenir, comme je l'ai dit."
+     },
+     {
+      "text": "Paganini Nicolò argues that the initiative 'No to a Switzerland of 10 million' is a 'Holzhammer' (sledgehammer) approach that would jeopardize the successful bilateral path with the EU by demanding the immediate termination of free movement rights upon reaching a fixed population threshold.",
+      "evidenceId": "parl-363233-1",
+      "quote": "Die Volksinitiative \"Keine 10-Millionen-Schweiz!\" greift ein Thema auf, das viele Menschen in unserem Land beschäftigt: das rasante Bevölkerungswachstum und seine Folgen für Infrastruktur, Wohnraum und Umwelt. Wer glaubt, diese Volksinitiative ohne vertiefte Diskussion vom Tisch wischen zu können, wird möglicherweise ein böses Erwachen erleben. Bei der Beurteilung des Inhalts der Volksinitiative sind wir mit der Mehrheit der SPK einig: Sie ist nichts anderes als ein Holzhammer, der das Ende des insgesamt betrachtet erfolgreichen bilateralen Wegs mit der EU darstellen würde. Die zwingende Kündigung der Personenfreizügigkeit mit der EU bei Erreichen einer fixen Bevölkerungsschwelle ist ein starres und gefährliches Konzept."
+     }
+    ],
+    "language": "en",
+    "withheldClaims": 0,
+    "policyVersion": "civic-evidence-v2",
+    "review": "automated-source-entailment-check; human review still required",
+    "passages": [
+     {
+      "id": "364201-7",
+      "transcriptId": "364201",
+      "sessionId": "5210",
+      "subjectId": "69350",
+      "businessId": "20250026",
+      "businessIds": [
+       "20250026"
+      ],
+      "personId": "4046",
+      "speaker": "Quadri Lorenzo",
+      "speakerFunction": "Mit-M",
+      "roleReview": "unreviewed",
+      "language": "it",
+      "date": "2025-09-25T11:48:54.733Z",
+      "text": "Tutelarsi è legittimo. L'iniziativa popolare \"No ad una Svizzera da 10 milioni\" non è di per sé un'iniziativa contro la libera circolazione delle persone e quindi contro i Bilaterali, perché - il testo è chiaro - quando si raggiungono i limiti indicati si interviene sul settore dell'asilo e sui ricongiungimenti familiari, quindi in sostanza su quelle persone che nemmeno dovrebbero essere qui. La disdetta della libera circolazione delle persone sarebbe l'ultima ratio. In ogni caso, in un recente approfondimento, pubblicato nel mese di giugno su \"Finanz und Wirtschaft\", il professor Reiner Eichenberger dell'Università di Friburgo dimostra che l'apporto economico dei Bilaterali I alla Svizzera è pressoché inesistente e quindi una loro eventuale disdetta sarebbe facile da gestire.",
+      "council": "Conseil national",
+      "group": "V",
+      "officialUrl": "https://www.parlament.ch/fr/ratsbetrieb/amtliches-bulletin/amtliches-bulletin-die-verhandlungen?SubjectId=69350&TranscriptId=364201",
+      "videoStatus": "machine-aligned",
+      "reviewState": "official-bulletin-import",
+      "video": {
+       "url": "https://par-pcache.simplex.tv/content/simvid_1.mp4?externalid=364201",
+       "start": 173.52,
+       "end": 222.72,
+       "officialVideoUrl": "https://par-pcache.simplex.tv/content/simvid_1.mp4?externalid=364201",
+       "method": "NVIDIA Canary word timestamps matched to the official Bulletin paragraph",
+       "matchedFraction": 0.876,
+       "model": "nvidia/canary-1b-v2",
+       "mediaSha256": "91f4df0bb9c1b9b89254e1bc09111011d7ebff9211ee40f51d9aff824b4d0632",
+       "reviewState": "machine-aligned; human timing review pending"
+      },
+      "sourceUrl": "https://ws.parlament.ch/OData.svc/Transcript(ID=364201L,Language='FR')",
+      "retrievedAt": "2026-09-22T12:41:04.845Z",
+      "sha256": "25239895aba65df3e17938cab1e5d97bfb0a71b6cc036cf8fec7deca36f4ce65"
+     },
+     {
+      "id": "363219-2",
+      "transcriptId": "363219",
+      "sessionId": "5210",
+      "subjectId": "69261",
+      "businessId": "20250026",
+      "businessIds": [
+       "20250026"
+      ],
+      "personId": "10827",
+      "speaker": "Tschopp Jean",
+      "speakerFunction": "Mit-M",
+      "roleReview": "unreviewed",
+      "language": "fr",
+      "date": "2025-09-22T16:29:30.887Z",
+      "text": "Quels sont les effets de l'initiative ? L'effet le plus tangible de l'initiative est la dénonciation de l'Accord sur la libre circulation des personnes, qui interviendrait 2 ans après le dépassement de la limite de 10 millions ; une obligation directement applicable, souligne la professeure Epiney. Au moment de l'acceptation de l'initiative populaire \"contre l'immigration de masse\", le Parlement avait pu se contenter d'un accès anticipé aux offres d'emploi pour les chômeurs indigènes en évitant de dénoncer l'Accord sur la libre circulation des personnes. Cette fois, ce ne serait pas possible, il n'y a pas de plan B. La résiliation de cet accord aurait pour conséquence le retour au statut de saisonnier. Les partenaires sociaux ont insisté sur la pénurie de personnel qui s'accentuera encore ces prochaines années. Selon Economiesuisse, d'ici 2035, il manquera 460 000 équivalents plein temps sur le marché suisse du travail. Le secteur des soins et des EMS est un de ceux qui seraient les plus affectés par l'initiative, a fortiori, vu le vieillissement de la population. Dans les hôpitaux, près d'un tiers du personnel soignant est étranger ; dans les EMS, c'est pratiquement la moitié. La pénurie s'aggraverait, avec l'acceptation de l'initiative, en s'étendant à des secteurs entiers dépendant largement de personnel étranger, dans l'industrie, la construction, l'hôtellerie, la restauration, par exemple. Economiesuisse dépeint un avenir où les États seront de plus en plus en concurrence pour attirer le personnel étranger dont l'économie a besoin. La main-d'oeuvre étrangère et l'immigration font partie de la solution. L'Union syndicale suisse est du même avis. Cette convergence peut surprendre, mais en réalité pas tellement, car l'emploi est le dénominateur commun entre patronat et syndicat.",
+      "council": "Conseil national",
+      "group": "S",
+      "officialUrl": "https://www.parlament.ch/fr/ratsbetrieb/amtliches-bulletin/amtliches-bulletin-die-verhandlungen?SubjectId=69261&TranscriptId=363219",
+      "videoStatus": "machine-aligned",
+      "reviewState": "official-bulletin-import",
+      "video": {
+       "url": "https://par-pcache.simplex.tv/content/simvid_1.mp4?externalid=363219",
+       "start": 130.8,
+       "end": 243.12,
+       "officialVideoUrl": "https://par-pcache.simplex.tv/content/simvid_1.mp4?externalid=363219",
+       "method": "NVIDIA Canary word timestamps matched to the official Bulletin paragraph",
+       "matchedFraction": 0.935,
+       "model": "nvidia/canary-1b-v2",
+       "mediaSha256": "e67d646bc74f19864c9357c8cb47ff660ff6713cb77d15bb2724219488569dde",
+       "reviewState": "machine-aligned; human timing review pending"
+      },
+      "sourceUrl": "https://ws.parlament.ch/OData.svc/Transcript(ID=363219L,Language='FR')",
+      "retrievedAt": "2026-09-22T12:41:04.845Z",
+      "sha256": "7f9d0475db0655a0b954b907e1e98046932cd9c04c1a5c20d53c163e834644eb"
+     },
+     {
+      "id": "363295-0",
+      "transcriptId": "363295",
+      "sessionId": "5210",
+      "subjectId": "69261",
+      "businessId": "20250026",
+      "businessIds": [
+       "20250026"
+      ],
+      "personId": "4323",
+      "speaker": "Weber Céline",
+      "speakerFunction": "Mit-F",
+      "roleReview": "unreviewed",
+      "language": "fr",
+      "date": "2025-09-22T17:23:37.087Z",
+      "text": "Le constat est clair. Il suffit d'écouter les gens sur les marchés le samedi matin : une Suisse à 10 millions ne fait pas rêver ou alors que très peu de gens. Oui, la Suisse se questionne sur l'évolution de sa démographie et ne rien faire n'est pas une option. À la solution bureaucratique qui manque sa cible et qui veut mettre la Suisse inutilement dans un corset, telle que la propose l'initiative, le Parti vert'libéral préfère des solutions pragmatiques, adaptées aux différentes situations régionales et qui ne contraignent pas sans raison les générations futures.",
+      "council": "Conseil national",
+      "group": "GL",
+      "officialUrl": "https://www.parlament.ch/fr/ratsbetrieb/amtliches-bulletin/amtliches-bulletin-die-verhandlungen?SubjectId=69261&TranscriptId=363295",
+      "videoStatus": "machine-aligned",
+      "reviewState": "official-bulletin-import",
+      "video": {
+       "url": "https://par-pcache.simplex.tv/content/simvid_1.mp4?externalid=363295",
+       "start": 2.4,
+       "end": 31.6,
+       "officialVideoUrl": "https://par-pcache.simplex.tv/content/simvid_1.mp4?externalid=363295",
+       "method": "NVIDIA Canary word timestamps matched to the official Bulletin paragraph",
+       "matchedFraction": 0.98,
+       "model": "nvidia/canary-1b-v2",
+       "mediaSha256": "27ef09f9ab9253ae88955a80fc8fb3f67b88abf287a21fde5d876240bd1b6d32",
+       "reviewState": "machine-aligned; human timing review pending"
+      },
+      "sourceUrl": "https://ws.parlament.ch/OData.svc/Transcript(ID=363295L,Language='FR')",
+      "retrievedAt": "2026-09-22T12:41:04.845Z",
+      "sha256": "51ca3ab6fe99a26e619dcc70e6d7a9b228291fef560dc646f8e0176ba8f2d37a"
+     },
+     {
+      "id": "363317-0",
+      "transcriptId": "363317",
+      "sessionId": "5210",
+      "subjectId": "69261",
+      "businessId": "20250026",
+      "businessIds": [
+       "20250026"
+      ],
+      "personId": "4297",
+      "speaker": "Walder Nicolas",
+      "speakerFunction": "Mit-M",
+      "roleReview": "unreviewed",
+      "language": "fr",
+      "date": "2025-09-22T18:44:02.657Z",
+      "text": "Disons-le sans détour : l'initiative \"Pas de Suisse à 10 millions !\", prétendument \"pour la durabilité\", est une imposture politique, doublée d'une grande tartuferie. Son intitulé évoque la maîtrise démographique et la protection de l'environnement, mais, en réalité, elle ne garantit ni l'une ni l'autre. Ce texte ne fixe pas une limite contraignante à la population, mais uniquement aux permis stables et durables. Il exclut de son champ les permis précaires, les frontaliers, les touristes. Par ailleurs, ce texte ne s'attaque ni aux causes réelles de la surconsommation des ressources ni à notre empreinte carbone. Il ne parle pas de transition énergétique ni de préservation de la biodiversité. Autrement dit, cette initiative prétend résoudre des problèmes en ciblant les mauvaises personnes, avec les mauvais outils et pour de mauvaises raisons.",
+      "council": "Conseil national",
+      "group": "G",
+      "officialUrl": "https://www.parlament.ch/fr/ratsbetrieb/amtliches-bulletin/amtliches-bulletin-die-verhandlungen?SubjectId=69261&TranscriptId=363317",
+      "videoStatus": "machine-aligned",
+      "reviewState": "official-bulletin-import",
+      "video": {
+       "url": "https://par-pcache.simplex.tv/content/simvid_1.mp4?externalid=363317",
+       "start": 4,
+       "end": 50.88,
+       "officialVideoUrl": "https://par-pcache.simplex.tv/content/simvid_1.mp4?externalid=363317",
+       "method": "NVIDIA Canary word timestamps matched to the official Bulletin paragraph",
+       "matchedFraction": 1,
+       "model": "nvidia/canary-1b-v2",
+       "mediaSha256": "fefbc943ba2725d8790de115d6f6fcdce8811ac84373838848f5a2979e687ec5",
+       "reviewState": "machine-aligned; human timing review pending"
+      },
+      "sourceUrl": "https://ws.parlament.ch/OData.svc/Transcript(ID=363317L,Language='FR')",
+      "retrievedAt": "2026-09-22T12:41:04.845Z",
+      "sha256": "1265a2884e8122eed60013887b932a44ae1291ba1c9ab7d3738fa92224de6e69"
+     },
+     {
+      "id": "363318-3",
+      "transcriptId": "363318",
+      "sessionId": "5210",
+      "subjectId": "69261",
+      "businessId": "20250026",
+      "businessIds": [
+       "20250026"
+      ],
+      "personId": "4193",
+      "speaker": "Nantermod Philippe",
+      "speakerFunction": "Mit-M",
+      "roleReview": "unreviewed",
+      "language": "fr",
+      "date": "2025-09-22T18:53:44.417Z",
+      "text": "Mesdames, Messieurs, la Suisse n'a d'avenir que dans le cortège des nations de l'Europe. Nous le savons depuis hier, mais nous le savons depuis plusieurs décennies. L'initiative qui vise à limiter l'immigration à 10 millions de personnes vise finalement à figer la situation telle qu'elle est aujourd'hui sans nous donner de possibilités de croître. Et, en dehors de la croissance, il n'y a pas d'avenir, comme je l'ai dit.",
+      "council": "Conseil national",
+      "group": "RL",
+      "officialUrl": "https://www.parlament.ch/fr/ratsbetrieb/amtliches-bulletin/amtliches-bulletin-die-verhandlungen?SubjectId=69261&TranscriptId=363318",
+      "videoStatus": "machine-aligned",
+      "reviewState": "official-bulletin-import",
+      "video": {
+       "url": "https://par-pcache.simplex.tv/content/simvid_1.mp4?externalid=363318",
+       "start": 101.84,
+       "end": 124.4,
+       "officialVideoUrl": "https://par-pcache.simplex.tv/content/simvid_1.mp4?externalid=363318",
+       "method": "NVIDIA Canary word timestamps matched to the official Bulletin paragraph",
+       "matchedFraction": 0.988,
+       "model": "nvidia/canary-1b-v2",
+       "mediaSha256": "03b15ce8be84fa920cb3b21631fae0fee322068b37b69a5cce463c8ff89fac99",
+       "reviewState": "machine-aligned; human timing review pending"
+      },
+      "sourceUrl": "https://ws.parlament.ch/OData.svc/Transcript(ID=363318L,Language='FR')",
+      "retrievedAt": "2026-09-22T12:41:04.845Z",
+      "sha256": "478018c45150b340d0adabed12598d5de803ffd036fe33b1ac195359722ae22d"
+     },
+     {
+      "id": "363233-1",
+      "transcriptId": "363233",
+      "sessionId": "5210",
+      "subjectId": "69261",
+      "businessId": "20250026",
+      "businessIds": [
+       "20250026"
+      ],
+      "personId": "4222",
+      "speaker": "Paganini Nicolò",
+      "speakerFunction": "Mit-M",
+      "roleReview": "unreviewed",
+      "language": "de",
+      "date": "2025-09-22T16:56:35.953Z",
+      "text": "Die Volksinitiative \"Keine 10-Millionen-Schweiz!\" greift ein Thema auf, das viele Menschen in unserem Land beschäftigt: das rasante Bevölkerungswachstum und seine Folgen für Infrastruktur, Wohnraum und Umwelt. Wer glaubt, diese Volksinitiative ohne vertiefte Diskussion vom Tisch wischen zu können, wird möglicherweise ein böses Erwachen erleben. Bei der Beurteilung des Inhalts der Volksinitiative sind wir mit der Mehrheit der SPK einig: Sie ist nichts anderes als ein Holzhammer, der das Ende des insgesamt betrachtet erfolgreichen bilateralen Wegs mit der EU darstellen würde. Die zwingende Kündigung der Personenfreizügigkeit mit der EU bei Erreichen einer fixen Bevölkerungsschwelle ist ein starres und gefährliches Konzept.",
+      "council": "Conseil national",
+      "group": "M-E",
+      "officialUrl": "https://www.parlament.ch/fr/ratsbetrieb/amtliches-bulletin/amtliches-bulletin-die-verhandlungen?SubjectId=69261&TranscriptId=363233",
+      "videoStatus": "machine-aligned",
+      "reviewState": "official-bulletin-import",
+      "video": {
+       "url": "https://par-pcache.simplex.tv/content/simvid_1.mp4?externalid=363233",
+       "start": 25.92,
+       "end": 76.8,
+       "officialVideoUrl": "https://par-pcache.simplex.tv/content/simvid_1.mp4?externalid=363233",
+       "method": "NVIDIA Canary word timestamps matched to the official Bulletin paragraph",
+       "matchedFraction": 0.99,
+       "model": "nvidia/canary-1b-v2",
+       "mediaSha256": "a8882e8638b65c6a5a3fbcce56f4bb74ca06c65a989768d41601bcf45d437e34",
+       "reviewState": "machine-aligned; human timing review pending"
+      },
+      "sourceUrl": "https://ws.parlament.ch/OData.svc/Transcript(ID=363233L,Language='FR')",
+      "retrievedAt": "2026-09-22T12:41:04.845Z",
+      "sha256": "15235e6c332bb9101e3702edddee6b1e04c2dc3dbb898148704dfcc5335adf27"
+     }
+    ],
+    "retrieval": {
+     "method": "resolved-proposal",
+     "translatedQueries": [
+      "arguments, initiative, contre, pour, Suisse",
+      "Argumente, Initiative, gegen, für, Schweiz",
+      "argomenti, iniziativa, contro, per, Svizzera"
+     ],
+     "queryCacheHit": false,
+     "proposal": {
+      "id": "20250026",
+      "number": "25.026",
+      "title": "« Pas de Suisse à 10 millions ! (initiative pour la durabilité) ». Initiative populaire"
+     }
+    },
+    "context": {
+     "topic": "speech"
+    },
+    "latencyMs": 11255,
+    "cacheHit": false,
+    "coverage": "Imported official passages only; AI-translated search terms. Not a complete parliamentary archive.",
+    "answer": {
+     "lead": {
+      "text": "The initiative 'No to a Switzerland of 10 million' is supported by Quadri Lorenzo, who argues it is legitimate as it focuses on asylum and family reunification rather than opposing free movement or Bilaterals directly. He also cites Professor Reiner Eichenberger's research showing Bilaterals I's economic contribution is nearly nonexistent, making their exit manageable. Opponents, including Weber Céline, Walder Nicolas, Nantermod Philippe, and Paganini Nicolò, criticize the initiative for imposing bureaucratic constraints, misrepresenting sustainability goals, and threatening bilateral relations with the EU.",
+      "citationIds": [
+       "c1",
+       "c2",
+       "c3",
+       "c4"
+      ]
+     },
+     "sections": [
+      {
+       "title": "Arguments in favor",
+       "paragraphs": [
+        {
+         "text": "Quadri Lorenzo argues the initiative is legitimate because it targets asylum and family reunification cases rather than opposing free movement or Bilaterals directly. He also cites Professor Reiner Eichenberger's research showing Bilaterals I's economic contribution to Switzerland is nearly nonexistent, making their potential exit manageable.",
+         "citationIds": [
+          "c1"
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    "citations": [
+     {
+      "id": "c1",
+      "evidenceId": "parl-364201-7",
+      "passageId": "364201-7",
+      "sourceType": "parliamentary-speech",
+      "title": "« Pas de Suisse à 10 millions ! (initiative pour la durabilité) ». Initiative populaire",
+      "businessId": "20250026",
+      "businessNumber": "25.026",
+      "speaker": "Quadri Lorenzo",
+      "role": "Member of the Conseil national",
+      "council": "Conseil national",
+      "group": "V",
+      "personId": "4046",
+      "date": "2025-09-25T11:48:54.733Z",
+      "originalLanguage": "it",
+      "quote": "Tutelarsi è legittimo. L'iniziativa popolare \"No ad una Svizzera da 10 milioni\" non è di per sé un'iniziativa contro la libera circolazione delle persone e quindi contro i Bilaterali, perché - il testo è chiaro - quando si raggiungono i limiti indicati si interviene sul settore dell'asilo e sui ricongiungimenti familiari, quindi in sostanza su quelle persone che nemmeno dovrebbero essere qui. La disdetta della libera circolazione delle persone sarebbe l'ultima ratio. In ogni caso, in un recente approfondimento, pubblicato nel mese di giugno su \"Finanz und Wirtschaft\", il professor Reiner Eichenberger dell'Università di Friburgo dimostra che l'apporto economico dei Bilaterali I alla Svizzera è pressoché inesistente e quindi una loro eventuale disdetta sarebbe facile da gestire.",
+      "officialUrl": "https://www.parlament.ch/fr/ratsbetrieb/amtliches-bulletin/amtliches-bulletin-die-verhandlungen?SubjectId=69350&TranscriptId=364201",
+      "transcriptId": "364201",
+      "video": {
+       "url": "https://par-pcache.simplex.tv/content/simvid_1.mp4?externalid=364201",
+       "start": 173.52,
+       "end": 222.72,
+       "timingReview": "machine-aligned-unreviewed"
+      },
+      "reviewState": "official-bulletin-import"
+     },
+     {
+      "id": "c2",
+      "evidenceId": "parl-363295-0",
+      "passageId": "363295-0",
+      "sourceType": "parliamentary-speech",
+      "title": "« Pas de Suisse à 10 millions ! (initiative pour la durabilité) ». Initiative populaire",
+      "businessId": "20250026",
+      "businessNumber": "25.026",
+      "speaker": "Weber Céline",
+      "role": "Member of the Conseil national",
+      "council": "Conseil national",
+      "group": "GL",
+      "personId": "4323",
+      "date": "2025-09-22T17:23:37.087Z",
+      "originalLanguage": "fr",
+      "quote": "Le constat est clair. Il suffit d'écouter les gens sur les marchés le samedi matin : une Suisse à 10 millions ne fait pas rêver ou alors que très peu de gens. Oui, la Suisse se questionne sur l'évolution de sa démographie et ne rien faire n'est pas une option. À la solution bureaucratique qui manque sa cible et qui veut mettre la Suisse inutilement dans un corset, telle que la propose l'initiative, le Parti vert'libéral préfère des solutions pragmatiques, adaptées aux différentes situations régionales et qui ne contraignent pas sans raison les générations futures.",
+      "officialUrl": "https://www.parlament.ch/fr/ratsbetrieb/amtliches-bulletin/amtliches-bulletin-die-verhandlungen?SubjectId=69261&TranscriptId=363295",
+      "transcriptId": "363295",
+      "video": {
+       "url": "https://par-pcache.simplex.tv/content/simvid_1.mp4?externalid=363295",
+       "start": 2.4,
+       "end": 31.6,
+       "timingReview": "machine-aligned-unreviewed"
+      },
+      "reviewState": "official-bulletin-import"
+     },
+     {
+      "id": "c3",
+      "evidenceId": "parl-363317-0",
+      "passageId": "363317-0",
+      "sourceType": "parliamentary-speech",
+      "title": "« Pas de Suisse à 10 millions ! (initiative pour la durabilité) ». Initiative populaire",
+      "businessId": "20250026",
+      "businessNumber": "25.026",
+      "speaker": "Walder Nicolas",
+      "role": "Member of the Conseil national",
+      "council": "Conseil national",
+      "group": "G",
+      "personId": "4297",
+      "date": "2025-09-22T18:44:02.657Z",
+      "originalLanguage": "fr",
+      "quote": "Disons-le sans détour : l'initiative \"Pas de Suisse à 10 millions !\", prétendument \"pour la durabilité\", est une imposture politique, doublée d'une grande tartuferie. Son intitulé évoque la maîtrise démographique et la protection de l'environnement, mais, en réalité, elle ne garantit ni l'une ni l'autre. Ce texte ne fixe pas une limite contraignante à la population, mais uniquement aux permis stables et durables. Il exclut de son champ les permis précaires, les frontaliers, les touristes. Par ailleurs, ce texte ne s'attaque ni aux causes réelles de la surconsommation des ressources ni à notre empreinte carbone. Il ne parle pas de transition énergétique ni de préservation de la biodiversité. Autrement dit, cette initiative prétend résoudre des problèmes en ciblant les mauvaises personnes, avec les mauvais outils et pour de mauvaises raisons.",
+      "officialUrl": "https://www.parlament.ch/fr/ratsbetrieb/amtliches-bulletin/amtliches-bulletin-die-verhandlungen?SubjectId=69261&TranscriptId=363317",
+      "transcriptId": "363317",
+      "video": {
+       "url": "https://par-pcache.simplex.tv/content/simvid_1.mp4?externalid=363317",
+       "start": 4,
+       "end": 50.88,
+       "timingReview": "machine-aligned-unreviewed"
+      },
+      "reviewState": "official-bulletin-import"
+     },
+     {
+      "id": "c4",
+      "evidenceId": "parl-363318-3",
+      "passageId": "363318-3",
+      "sourceType": "parliamentary-speech",
+      "title": "« Pas de Suisse à 10 millions ! (initiative pour la durabilité) ». Initiative populaire",
+      "businessId": "20250026",
+      "businessNumber": "25.026",
+      "speaker": "Nantermod Philippe",
+      "role": "Member of the Conseil national",
+      "council": "Conseil national",
+      "group": "RL",
+      "personId": "4193",
+      "date": "2025-09-22T18:53:44.417Z",
+      "originalLanguage": "fr",
+      "quote": "Mesdames, Messieurs, la Suisse n'a d'avenir que dans le cortège des nations de l'Europe. Nous le savons depuis hier, mais nous le savons depuis plusieurs décennies. L'initiative qui vise à limiter l'immigration à 10 millions de personnes vise finalement à figer la situation telle qu'elle est aujourd'hui sans nous donner de possibilités de croître. Et, en dehors de la croissance, il n'y a pas d'avenir, comme je l'ai dit.",
+      "officialUrl": "https://www.parlament.ch/fr/ratsbetrieb/amtliches-bulletin/amtliches-bulletin-die-verhandlungen?SubjectId=69261&TranscriptId=363318",
+      "transcriptId": "363318",
+      "video": {
+       "url": "https://par-pcache.simplex.tv/content/simvid_1.mp4?externalid=363318",
+       "start": 101.84,
+       "end": 124.4,
+       "timingReview": "machine-aligned-unreviewed"
+      },
+      "reviewState": "official-bulletin-import"
+     }
+    ],
+    "suggestedFollowUps": [
+     "What specific economic data supports the claim about Bilaterals I's contribution?",
+     "How does the initiative define 'sustainability' in its proposal?",
+     "What are the potential consequences of freezing population growth in Switzerland?"
+    ],
+    "intent": "compare",
+    "synthesis": {
+     "status": "ok",
+     "languageRepair": false,
+     "withheldParagraphs": 0
+    },
+    "researchSummary": {
+     "scope": null,
+     "method": "resolved-proposal",
+     "proposal": {
+      "id": "20250026",
+      "number": "25.026",
+      "title": "« Pas de Suisse à 10 millions ! (initiative pour la durabilité) ». Initiative populaire"
+     },
+     "searchTerms": [
+      "arguments, initiative, contre, pour, Suisse",
+      "Argumente, Initiative, gegen, für, Schweiz",
+      "argomenti, iniziativa, contro, per, Svizzera"
+     ],
+     "recordsConsidered": 1149,
+     "sourcesUsed": 4,
+     "sourceTypes": [
+      "parliamentary-speech"
+     ],
+     "originalLanguages": [
+      "it",
+      "fr",
+      "de"
+     ],
+     "period": {
+      "from": "2025-09-22",
+      "to": "2025-09-25"
+     },
+     "limitations": [
+      {
+       "code": "speech-not-decision"
+      },
+      {
+       "code": "text-coverage",
+       "textSessions": 134,
+       "totalSessions": 185,
+       "fromYear": 1999,
+       "toYear": 2026
+      },
+      {
+       "code": "machine-video-timing"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "blackout-fr",
+   "question": "Quels arguments ont été avancés au Parlement sur l'initiative « Stop au blackout » ?",
+   "language": "fr",
+   "recordedAt": "2026-09-23T08:22:53.125Z",
+   "model": "nvidia/nvidia-nemotron-nano-9b-v2",
+   "seconds": 8.374,
+   "answer": {
+    "status": "ok",
+    "mode": "live-inference",
+    "model": "nvidia/nvidia-nemotron-nano-9b-v2",
+    "claims": [
+     {
+      "text": "Le groupe socialiste a critiqué le contre-projet du Conseil fédéral pour reprendre l'essentiel de l'initiative 'Stop au blackout' sans permettre une décision populaire.",
+      "evidenceId": "parl-375858-0",
+      "quote": "Évacuations massives, contamination de territoires agricoles, difficultés économiques durables, problèmes de santé : Fukushima est devenu l'un des symboles des conséquences humaines, sociales et économiques qu'un accident nucléaire peut engendrer pendant des décennies. Cet accident a profondément marqué la Suisse. En 2011, le Conseil fédéral annonçait sa volonté de sortir progressivement du nucléaire. Cette orientation a ensuite été confirmée par le Parlement, puis par le peuple avec l'acceptation de la stratégie énergétique 2050. Nous savions alors qu'il faudrait développer les énergies renouvelables et moderniser notre système énergétique. Les crises géopolitiques récentes nous rappellent d'ailleurs combien l'indépendance énergétique est devenue une question stratégique. Pour le groupe socialiste, cette indépendance ne peut toutefois pas servir de prétexte à un retour vers une technologie dont la Suisse a démocratiquement décidé de sortir. Nous ne pouvons pas non plus accepter la réponse proposée par le Conseil fédéral. Disons-le franchement : ce contre-projet reprend l'essentiel de l'initiative Stop au blackout, sans même donner au peuple la possibilité de se prononcer."
+     }
+    ],
+    "language": "fr",
+    "withheldClaims": 5,
+    "policyVersion": "civic-evidence-v2",
+    "review": "automated-source-entailment-check; human review still required",
+    "passages": [
+     {
+      "id": "375858-0",
+      "transcriptId": "375858",
+      "sessionId": "5214",
+      "subjectId": "71704",
+      "businessId": "20250068",
+      "businessIds": [
+       "20250068"
+      ],
+      "personId": "10829",
+      "speaker": "Docourt Martine",
+      "speakerFunction": "Mit-F",
+      "roleReview": "unreviewed",
+      "language": "fr",
+      "date": "2026-06-08T18:03:14.737Z",
+      "text": "Évacuations massives, contamination de territoires agricoles, difficultés économiques durables, problèmes de santé : Fukushima est devenu l'un des symboles des conséquences humaines, sociales et économiques qu'un accident nucléaire peut engendrer pendant des décennies. Cet accident a profondément marqué la Suisse. En 2011, le Conseil fédéral annonçait sa volonté de sortir progressivement du nucléaire. Cette orientation a ensuite été confirmée par le Parlement, puis par le peuple avec l'acceptation de la stratégie énergétique 2050. Nous savions alors qu'il faudrait développer les énergies renouvelables et moderniser notre système énergétique. Les crises géopolitiques récentes nous rappellent d'ailleurs combien l'indépendance énergétique est devenue une question stratégique. Pour le groupe socialiste, cette indépendance ne peut toutefois pas servir de prétexte à un retour vers une technologie dont la Suisse a démocratiquement décidé de sortir. Nous ne pouvons pas non plus accepter la réponse proposée par le Conseil fédéral. Disons-le franchement : ce contre-projet reprend l'essentiel de l'initiative Stop au blackout, sans même donner au peuple la possibilité de se prononcer.",
+      "council": "Conseil national",
+      "group": "S",
+      "officialUrl": "https://www.parlament.ch/fr/ratsbetrieb/amtliches-bulletin/amtliches-bulletin-die-verhandlungen?SubjectId=71704&TranscriptId=375858",
+      "videoStatus": "machine-aligned",
+      "reviewState": "official-bulletin-import",
+      "video": {
+       "url": "https://par-pcache.simplex.tv/content/simvid_1.mp4?externalid=375858",
+       "start": 8,
+       "end": 86.72,
+       "officialVideoUrl": "https://par-pcache.simplex.tv/content/simvid_1.mp4?externalid=375858",
+       "method": "NVIDIA Canary word timestamps matched to the official Bulletin paragraph",
+       "matchedFraction": 0.971,
+       "model": "nvidia/canary-1b-v2",
+       "mediaSha256": "d4c83c1b1259e53140537ec3925a7bedaa46c55bbf087ae95ae7df7b013129ad",
+       "reviewState": "machine-aligned; human timing review pending"
+      },
+      "sourceUrl": "https://ws.parlament.ch/OData.svc/Transcript(ID=375858L,Language='FR')",
+      "retrievedAt": "2026-09-17T16:33:27.169Z",
+      "sha256": "8c3b91740cee237d6b8bddeff8ab44d10f94ae4626b0dd9ab562065abd98a7c8"
+     },
+     {
+      "id": "376195-0",
+      "transcriptId": "376195",
+      "sessionId": "5214",
+      "subjectId": "71720",
+      "businessId": "20250068",
+      "businessIds": [
+       "20250068"
+      ],
+      "personId": "4046",
+      "speaker": "Quadri Lorenzo",
+      "speakerFunction": "Mit-M",
+      "roleReview": "unreviewed",
+      "language": "it",
+      "date": "2026-06-09T10:52:59.323Z",
+      "text": "Oggi discutiamo l'iniziativa popolare \"Energia elettrica in ogni tempo per tutti (Stop al blackout)\" e il controprogetto del Consiglio federale. Ritengo che il nostro Parlamento debba cogliere questa occasione per correggere un errore strategico che risale a quindici anni fa. Nel 2011, sull'onda emotiva del disastro di Fukushima, il Consiglio federale decise l'uscita dal nucleare, una decisione dettata più dalla reazione del momento che da una valutazione razionale degli interessi a lungo termine del nostro Paese. Quella scelta venne poi confermata nel 2017 nella votazione popolare [PAGE 1128] sulla strategia energetica 2050, una votazione però inficiata da indicazioni palesemente sbagliate da parte del Consiglio federale nelle istruzioni ufficiali.",
+      "council": "Conseil national",
+      "group": "V",
+      "officialUrl": "https://www.parlament.ch/fr/ratsbetrieb/amtliches-bulletin/amtliches-bulletin-die-verhandlungen?SubjectId=71720&TranscriptId=376195",
+      "videoStatus": "machine-aligned",
+      "reviewState": "official-bulletin-import",
+      "video": {
+       "url": "https://par-pcache.simplex.tv/content/simvid_1.mp4?externalid=376195",
+       "start": 4.96,
+       "end": 54.32,
+       "officialVideoUrl": "https://par-pcache.simplex.tv/content/simvid_1.mp4?externalid=376195",
+       "method": "NVIDIA Canary word timestamps matched to the official Bulletin paragraph",
+       "matchedFraction": 0.937,
+       "model": "nvidia/canary-1b-v2",
+       "mediaSha256": "8e7f03ebb7ee36fa0e8dd439d234be8201c83a9803b80b48f1f56a8bb59c67c1",
+       "reviewState": "machine-aligned; human timing review pending"
+      },
+      "sourceUrl": "https://ws.parlament.ch/OData.svc/Transcript(ID=376195L,Language='FR')",
+      "retrievedAt": "2026-09-17T16:33:27.169Z",
+      "sha256": "4f53ca9a32b083e74b0ec694f7e092086d1c0a99b4024598c3c9d58c0b47c0f8"
+     },
+     {
+      "id": "375946-1",
+      "transcriptId": "375946",
+      "sessionId": "5214",
+      "subjectId": "71704",
+      "businessId": "20250068",
+      "businessIds": [
+       "20250068"
+      ],
+      "personId": "4253",
+      "speaker": "Clivaz Christophe",
+      "speakerFunction": "Mit-M",
+      "roleReview": "unreviewed",
+      "language": "fr",
+      "date": "2026-06-08T18:57:45.667Z",
+      "text": "La stratégie énergétique 2050, validée par le peuple en 2017, a acté la sortie progressive du nucléaire et fixé l'objectif de 11,4 térawattheures d'énergie renouvelable, hors hydroélectricité, pour 2035. Cet objectif est déjà atteint aujourd'hui, soit 10 ans plus tôt que ce qui était prévu initialement, grâce en particulier à l'essor de la production photovoltaïque. Depuis, les conséquences de la guerre en Ukraine sur le marché de l'énergie ont amené notre Parlement à adopter la modification de la loi sur l'approvisionnement en électricité qui a revu très fortement à la hausse cet objectif : 35 térawattheures en 2035 et 45 térawattheures en 2050. Cette loi a été largement soutenue par la population en juin 2024. En parallèle, différentes lois visant l'accélération des procédures pour la construction d'installations d'énergies renouvelables ou l'adaptation du réseau électrique ont été élaborées ou sont en cours d'élaboration. Tant la loi sur l'approvisionnement en électricité que les différentes lois que je viens de citer n'ont pas encore déployé leurs effets puisque les ordonnances d'exécution viennent d'entrer en vigueur ou ne sont pas encore entrées en vigueur.",
+      "council": "Conseil national",
+      "group": "G",
+      "officialUrl": "https://www.parlament.ch/fr/ratsbetrieb/amtliches-bulletin/amtliches-bulletin-die-verhandlungen?SubjectId=71704&TranscriptId=375946",
+      "videoStatus": "machine-aligned",
+      "reviewState": "official-bulletin-import",
+      "video": {
+       "url": "https://par-pcache.simplex.tv/content/simvid_1.mp4?externalid=375946",
+       "start": 15.76,
+       "end": 79.12,
+       "officialVideoUrl": "https://par-pcache.simplex.tv/content/simvid_1.mp4?externalid=375946",
+       "method": "NVIDIA Canary word timestamps matched to the official Bulletin paragraph",
+       "matchedFraction": 0.954,
+       "model": "nvidia/canary-1b-v2",
+       "mediaSha256": "c7ce44e1025279af7d422d7619e10c70106db94ab42c4e42491a33ea3a97dfd2",
+       "reviewState": "machine-aligned; human timing review pending"
+      },
+      "sourceUrl": "https://ws.parlament.ch/OData.svc/Transcript(ID=375946L,Language='FR')",
+      "retrievedAt": "2026-09-17T16:33:27.169Z",
+      "sha256": "5d77f2a22d09487083181bbb32c97527f49f609d6df36d05cda51fbaa6e8d09d"
+     },
+     {
+      "id": "371123-4",
+      "transcriptId": "371123",
+      "sessionId": "5212",
+      "subjectId": "70714",
+      "businessId": "20250068",
+      "businessIds": [
+       "20250068"
+      ],
+      "personId": "4056",
+      "speaker": "Fässler Daniel",
+      "speakerFunction": "Mit-M",
+      "roleReview": "unreviewed",
+      "language": "de",
+      "date": "2026-03-11T09:10:41.430Z",
+      "text": "Wenn wir den Tatsachen in die Augen schauen und unserem Auftrag nachkommen, die Versorgungssicherheit unseres Landes zu gewährleisten, genügt das Prinzip Hoffnung nicht. Die Situation hat sich nicht verbessert, sondern vielmehr verschlechtert. Das vom Parlament vor bald zehn Jahren festgeschriebene Verbot des Erteilens von Rahmenbewilligungen für den Bau von Kernkraftwerken sollte daher im Sinne eines Signals aufgehoben werden. Ob es später effektiv einmal zur Planung und Realisierung eines neuen Kernkraftwerkes kommen wird, ist damit noch nicht entschieden. Entscheidend wird sein, ob der nötige Zubau bei der Grosswasserkraft und bei den übrigen erneuerbaren Energien gelingt. Entsprechende Projekte werden mit dem indirekten Gegenentwurf zur Blackout-Initiative nicht gebremst. Dieser sollte im Gegenteil motivieren, die Anstrengungen zu forcieren und Hemmnisse weiter abzubauen.",
+      "council": "Conseil des Etats",
+      "group": "M-E",
+      "officialUrl": "https://www.parlament.ch/fr/ratsbetrieb/amtliches-bulletin/amtliches-bulletin-die-verhandlungen?SubjectId=70714&TranscriptId=371123",
+      "videoStatus": "machine-aligned",
+      "reviewState": "official-bulletin-import",
+      "video": {
+       "url": "https://par-pcache.simplex.tv/content/simvid_1.mp4?externalid=371123",
+       "start": 241.20000000000002,
+       "end": 307.12,
+       "officialVideoUrl": "https://par-pcache.simplex.tv/content/simvid_1.mp4?externalid=371123",
+       "method": "NVIDIA Canary word timestamps matched to the official Bulletin paragraph",
+       "matchedFraction": 0.933,
+       "model": "nvidia/canary-1b-v2",
+       "mediaSha256": "d7c4a8995eb8ae532221bc7e2b1a018729cd1606fa6de39803ae45748af12762",
+       "reviewState": "machine-aligned; human timing review pending"
+      },
+      "sourceUrl": "https://ws.parlament.ch/OData.svc/Transcript(ID=371123L,Language='FR')",
+      "retrievedAt": "2026-09-22T11:53:39.702Z",
+      "sha256": "be4eb0f89b360433fdf4e0ec20642738abd68afa8922c95018f97bf70c369e49"
+     },
+     {
+      "id": "375783-12",
+      "transcriptId": "375783",
+      "sessionId": "5214",
+      "subjectId": "71704",
+      "businessId": "20250068",
+      "businessIds": [
+       "20250068"
+      ],
+      "personId": "4256",
+      "speaker": "de Montmollin Simone",
+      "speakerFunction": "Mit-F",
+      "roleReview": "unreviewed",
+      "language": "fr",
+      "date": "2026-06-08T16:42:35.740Z",
+      "text": "Sur les questions de prolifération nucléaire, des dépendances géopolitiques et des chaînes d'approvisionnement, plusieurs propositions, à l'article 13 alinéa 1 lettres i et j, demandaient que les requérants démontrent le respect du droit international, des principes de non-prolifération ainsi que de standards élevés en matière de droits humains et d'environnement tout au long de la chaîne d'approvisionnement du combustible nucléaire. La majorité de la commission a reconnu l'importance de ces préoccupations, mais a estimé que les exigences proposées vont au-delà des mécanismes existants à l'échelle internationale et seraient extrêmement difficiles à mettre en oeuvre. Ces propositions aux lettres i et j ont donc été rejetées, par 16 voix contre 9. Il y a deux minorités.",
+      "council": "Conseil national",
+      "group": "RL",
+      "officialUrl": "https://www.parlament.ch/fr/ratsbetrieb/amtliches-bulletin/amtliches-bulletin-die-verhandlungen?SubjectId=71704&TranscriptId=375783",
+      "videoStatus": "machine-aligned",
+      "reviewState": "official-bulletin-import",
+      "video": {
+       "url": "https://par-pcache.simplex.tv/content/simvid_1.mp4?externalid=375783",
+       "start": 415.44,
+       "end": 458.4,
+       "officialVideoUrl": "https://par-pcache.simplex.tv/content/simvid_1.mp4?externalid=375783",
+       "method": "NVIDIA Canary word timestamps matched to the official Bulletin paragraph",
+       "matchedFraction": 0.927,
+       "model": "nvidia/canary-1b-v2",
+       "mediaSha256": "03bca3481580c0b274c9ecb6689df423ffa8d0dcf12da93a6b4b47d2eac6fbb0",
+       "reviewState": "machine-aligned; human timing review pending"
+      },
+      "sourceUrl": "https://ws.parlament.ch/OData.svc/Transcript(ID=375783L,Language='FR')",
+      "retrievedAt": "2026-09-17T16:33:27.169Z",
+      "sha256": "d0d22637a1e702b325836a18b9b79557ae39bb64a519856b4a84da7080b5c752"
+     },
+     {
+      "id": "371138-35",
+      "transcriptId": "371138",
+      "sessionId": "5212",
+      "subjectId": "70714",
+      "businessId": "20250068",
+      "businessIds": [
+       "20250068"
+      ],
+      "personId": "4100",
+      "speaker": "Rösti Albert",
+      "speakerFunction": "BR-M",
+      "roleReview": "unreviewed",
+      "language": "de",
+      "date": "2026-03-11T10:30:16.297Z",
+      "text": "Damit habe ich, glaube ich, auch etwas auf die Fragen oder auf die Diskussion reagiert. Frau Ständerätin Graf, all Ihre Argumente sind auf dem Tisch, und ich kann sie nachvollziehen. Aber eines möchte ich abschliessend sagen: Die Welt ist nicht mehr die Welt von 2017, sie hat sich massiv verändert. Die Stromversorgungssicherheit ist eines der wichtigsten Elemente, und deshalb ist diese Debatte, die Sie sehr spannend geführt haben, nötig. Sie ist sicher nötig, egal wie sie ausgeht, aber sie ist nötig. Denn wir wissen dann, wohin wir gehen.",
+      "council": "Conseil fédéral",
+      "group": null,
+      "officialUrl": "https://www.parlament.ch/fr/ratsbetrieb/amtliches-bulletin/amtliches-bulletin-die-verhandlungen?SubjectId=70714&TranscriptId=371138",
+      "videoStatus": "machine-aligned",
+      "reviewState": "official-bulletin-import",
+      "video": {
+       "url": "https://par-pcache.simplex.tv/content/simvid_1.mp4?externalid=371138",
+       "start": 1517.6,
+       "end": 1556.32,
+       "officialVideoUrl": "https://par-pcache.simplex.tv/content/simvid_1.mp4?externalid=371138",
+       "method": "NVIDIA Canary word timestamps matched to the official Bulletin paragraph",
+       "matchedFraction": 0.898,
+       "model": "nvidia/canary-1b-v2",
+       "mediaSha256": "c8264b48f2d0da559d7d27a773ed096e7b64213f3157972bf50a86af46fb7dda",
+       "reviewState": "machine-aligned; human timing review pending"
+      },
+      "sourceUrl": "https://ws.parlament.ch/OData.svc/Transcript(ID=371138L,Language='FR')",
+      "retrievedAt": "2026-09-22T11:53:39.702Z",
+      "sha256": "87ed4c216f58137671a1399a3f70268aa1ef4d6ae387db9b5af82415d11d853d"
+     }
+    ],
+    "retrieval": {
+     "method": "resolved-proposal",
+     "translatedQueries": [
+      "arguments, initiative, blackout, Parlement",
+      "Argumente, Initiative, Blackout, Parlament",
+      "argomenti, iniziativa, blackout, Parlamento"
+     ],
+     "queryCacheHit": false,
+     "proposal": {
+      "id": "20250068",
+      "number": "25.068",
+      "title": "«De l’électricité pour tous en tout temps (Stop au blackout)». Initiative populaire et contre-projet indirect"
+     }
+    },
+    "context": {
+     "topic": "speech"
+    },
+    "latencyMs": 8372,
+    "cacheHit": false,
+    "coverage": "Imported official passages only; AI-translated search terms. Not a complete parliamentary archive.",
+    "answer": {
+     "lead": {
+      "text": "Le groupe socialiste, représenté par Docourt Martine, a critiqué le contre-projet du Conseil fédéral pour avoir repris l'essentiel de l'initiative 'Stop au blackout' sans permettre une décision populaire. Cette position a été exprimée lors de la discussion du 8 juin 2026.",
+      "citationIds": [
+       "c1"
+      ]
+     },
+     "sections": [
+      {
+       "title": "Position du groupe socialiste",
+       "paragraphs": [
+        {
+         "text": "Docourt Martine, membre du Conseil national, a souligné que le contre-projet du Conseil fédéral reproduisait largement l'initiative 'Stop au blackout' tout en refusant de soumettre la question au peuple. Cela, selon lui, contredit l'esprit même de l'initiative populaire.",
+         "citationIds": [
+          "c1"
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    "citations": [
+     {
+      "id": "c1",
+      "evidenceId": "parl-375858-0",
+      "passageId": "375858-0",
+      "sourceType": "parliamentary-speech",
+      "title": "«De l’électricité pour tous en tout temps (Stop au blackout)». Initiative populaire et contre-projet indirect",
+      "businessId": "20250068",
+      "businessNumber": "25.068",
+      "speaker": "Docourt Martine",
+      "role": "Member of the Conseil national",
+      "council": "Conseil national",
+      "group": "S",
+      "personId": "10829",
+      "date": "2026-06-08T18:03:14.737Z",
+      "originalLanguage": "fr",
+      "quote": "Évacuations massives, contamination de territoires agricoles, difficultés économiques durables, problèmes de santé : Fukushima est devenu l'un des symboles des conséquences humaines, sociales et économiques qu'un accident nucléaire peut engendrer pendant des décennies. Cet accident a profondément marqué la Suisse. En 2011, le Conseil fédéral annonçait sa volonté de sortir progressivement du nucléaire. Cette orientation a ensuite été confirmée par le Parlement, puis par le peuple avec l'acceptation de la stratégie énergétique 2050. Nous savions alors qu'il faudrait développer les énergies renouvelables et moderniser notre système énergétique. Les crises géopolitiques récentes nous rappellent d'ailleurs combien l'indépendance énergétique est devenue une question stratégique. Pour le groupe socialiste, cette indépendance ne peut toutefois pas servir de prétexte à un retour vers une technologie dont la Suisse a démocratiquement décidé de sortir. Nous ne pouvons pas non plus accepter la réponse proposée par le Conseil fédéral. Disons-le franchement : ce contre-projet reprend l'essentiel de l'initiative Stop au blackout, sans même donner au peuple la possibilité de se prononcer.",
+      "officialUrl": "https://www.parlament.ch/fr/ratsbetrieb/amtliches-bulletin/amtliches-bulletin-die-verhandlungen?SubjectId=71704&TranscriptId=375858",
+      "transcriptId": "375858",
+      "video": {
+       "url": "https://par-pcache.simplex.tv/content/simvid_1.mp4?externalid=375858",
+       "start": 8,
+       "end": 86.72,
+       "timingReview": "machine-aligned-unreviewed"
+      },
+      "reviewState": "official-bulletin-import"
+     }
+    ],
+    "suggestedFollowUps": [
+     "Quels sont les arguments du Conseil fédéral en faveur de son contre-projet ?",
+     "L'initiative 'Stop au blackout' a-t-elle été soumise au peuple ?",
+     "Quelles sont les conséquences d'un refus de décision populaire ?"
+    ],
+    "intent": "compare",
+    "synthesis": {
+     "status": "ok",
+     "languageRepair": false,
+     "withheldParagraphs": 0
+    },
+    "researchSummary": {
+     "scope": null,
+     "method": "resolved-proposal",
+     "proposal": {
+      "id": "20250068",
+      "number": "25.068",
+      "title": "«De l’électricité pour tous en tout temps (Stop au blackout)». Initiative populaire et contre-projet indirect"
+     },
+     "searchTerms": [
+      "arguments, initiative, blackout, Parlement",
+      "Argumente, Initiative, Blackout, Parlament",
+      "argomenti, iniziativa, blackout, Parlamento"
+     ],
+     "recordsConsidered": 1486,
+     "sourcesUsed": 1,
+     "sourceTypes": [
+      "parliamentary-speech"
+     ],
+     "originalLanguages": [
+      "fr",
+      "it",
+      "de"
+     ],
+     "period": {
+      "from": "2026-03-11",
+      "to": "2026-06-09"
+     },
+     "limitations": [
+      {
+       "code": "speech-not-decision"
+      },
+      {
+       "code": "text-coverage",
+       "textSessions": 134,
+       "totalSessions": 185,
+       "fromYear": 1999,
+       "toYear": 2026
+      },
+      {
+       "code": "machine-video-timing"
+      },
+      {
+       "code": "withheld",
+       "count": 5
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "crans-montana",
+   "question": "What did speakers say about the law supporting the victims of the Crans-Montana fire?",
+   "language": "en",
+   "recordedAt": "2026-09-23T08:23:12.595Z",
+   "model": "nvidia/nvidia-nemotron-nano-9b-v2",
+   "seconds": 7.157,
+   "answer": {
+    "status": "ok",
+    "mode": "live-inference",
+    "model": "nvidia/nvidia-nemotron-nano-9b-v2",
+    "claims": [
+     {
+      "text": "Jans Beat stated that the federal council (Bundesrat) immediately reacted by proposing an urgent federal law to support the victims of the Crans-Montana fire.",
+      "evidenceId": "parl-370507-0",
+      "quote": "Die furchtbare Brandkatastrophe von Crans-Montana ist eine Tragödie von aussergewöhnlicher Dimension. Wie die Erfahrung zeigt, ist bei solchen Ereignissen der Zeitfaktor äusserst wichtig. Deshalb müssen wir jetzt für die Opfer und ihre Familien da sein. Wollen wir ein Zeichen der Solidarität setzen, so muss dies schnell und entschlossen geschehen. Deswegen hat der Bundesrat unverzüglich reagiert und schlägt Ihnen ein dringliches Bundesgesetz zur Unterstützung der Opfer der Brandkatastrophe von Crans-Montana vor. An dieser Stelle möchte ich mich bei Ihrem Rat bedanken. Sie haben das Dossier im Dringlichkeitsverfahren trotz grosser Belastung rasch an die Hand genommen und damit Ihre Flexibilität und Ihre Handlungsbereitschaft bewiesen."
+     },
+     {
+      "text": "Bühler Manfred stated that there are very solid reasons not to proceed with the law supporting the victims of the Crans-Montana fire, emphasizing that the significant emotions from the disaster should not overshadow fundamental national principles.",
+      "evidenceId": "parl-370329-4",
+      "quote": "Vous le voyez : il existe de très solides motifs de ne pas entrer en matière sur ce projet de loi. L'émotion considérable suscitée par le drame de Crans-Montana ne doit pas nous faire perdre de vue les principes fondamentaux de notre organisation en tant que nation."
+     }
+    ],
+    "language": "en",
+    "withheldClaims": 3,
+    "policyVersion": "civic-evidence-v2",
+    "review": "automated-source-entailment-check; human review still required",
+    "passages": [
+     {
+      "id": "370319-0",
+      "transcriptId": "370319",
+      "sessionId": "5212",
+      "subjectId": "70543",
+      "businessId": "20260022",
+      "businessIds": [
+       "20260022"
+      ],
+      "personId": "10811",
+      "speaker": "Nause Reto",
+      "speakerFunction": "Mit-M",
+      "roleReview": "unreviewed",
+      "language": "de",
+      "date": "2026-03-09T15:45:49.197Z",
+      "text": "Die Finanzkommission hat am letzten Mittwoch in einer fast dreistündigen Sitzung das Bundesgesetz über die Unterstützung der Opfer der Brandkatastrophe von Crans-Montana beraten. Die Kommission hat zu Beginn ihre tiefe Betroffenheit mit den zahlreichen Opfern und den Angehörigen zum Ausdruck gebracht. Zudem wurden die unglaublichen Leistungen der Einsatzkräfte und des Pflegepersonals der Spitäler gewürdigt. Auch wurde die grosse Solidarität unserer europäischen Nachbarn hervorgehoben. Noch immer sind Opfer aus Crans-Montana in den Kliniken Europas untergebracht.",
+      "council": "Conseil national",
+      "group": "M-E",
+      "officialUrl": "https://www.parlament.ch/fr/ratsbetrieb/amtliches-bulletin/amtliches-bulletin-die-verhandlungen?SubjectId=70543&TranscriptId=370319",
+      "videoStatus": "machine-aligned",
+      "reviewState": "official-bulletin-import",
+      "video": {
+       "url": "https://par-pcache.simplex.tv/content/simvid_1.mp4?externalid=370319",
+       "start": 5.28,
+       "end": 44.480000000000004,
+       "officialVideoUrl": "https://par-pcache.simplex.tv/content/simvid_1.mp4?externalid=370319",
+       "method": "NVIDIA Canary word timestamps matched to the official Bulletin paragraph",
+       "matchedFraction": 0.961,
+       "model": "nvidia/canary-1b-v2",
+       "mediaSha256": "cf53a9fa0f403929809516f7ef7b473c8913f4eae9fed1440e60b0d28bb3b722",
+       "reviewState": "machine-aligned; human timing review pending"
+      },
+      "sourceUrl": "https://ws.parlament.ch/OData.svc/Transcript(ID=370319L,Language='FR')",
+      "retrievedAt": "2026-09-22T11:53:39.702Z",
+      "sha256": "052bdd725bd4b0e58c12df733a39da447ca27acd536f10a54ee1b39cd9ed338c"
+     },
+     {
+      "id": "370342-1",
+      "transcriptId": "370342",
+      "sessionId": "5212",
+      "subjectId": "70543",
+      "businessId": "20260022",
+      "businessIds": [
+       "20260022"
+      ],
+      "personId": "10807",
+      "speaker": "Gianini Simone",
+      "speakerFunction": "Mit-M",
+      "roleReview": "unreviewed",
+      "language": "it",
+      "date": "2026-03-09T16:21:50.013Z",
+      "text": "Le groupe libéral-radical exprime également aux victimes de la tragédie de Crans-Montana et à leurs familles toute sa solidarité et sa compassion.",
+      "council": "Conseil national",
+      "group": "RL",
+      "officialUrl": "https://www.parlament.ch/fr/ratsbetrieb/amtliches-bulletin/amtliches-bulletin-die-verhandlungen?SubjectId=70543&TranscriptId=370342",
+      "videoStatus": "pending-verification",
+      "reviewState": "official-bulletin-import",
+      "sourceUrl": "https://ws.parlament.ch/OData.svc/Transcript(ID=370342L,Language='FR')",
+      "retrievedAt": "2026-09-22T11:53:39.702Z",
+      "sha256": "6d8f0389fded1cb90f01f7fa4cfaa3753f90a8b3fca5694ce9410a84afbae2ac"
+     },
+     {
+      "id": "369157-0",
+      "transcriptId": "369157",
+      "sessionId": "5212",
+      "subjectId": "70434",
+      "businessId": "20190300",
+      "businessIds": [
+       "20190300"
+      ],
+      "personId": "4059",
+      "speaker": "Flach Beat",
+      "speakerFunction": "Mit-M",
+      "roleReview": "unreviewed",
+      "language": "de",
+      "date": "2026-03-02T14:36:43.100Z",
+      "text": "Es ist etwas schwierig, nach dem Gedenkmoment zu Crans-Montana einfach wieder zur Tagesordnung überzugehen.",
+      "council": "Conseil national",
+      "group": "GL",
+      "officialUrl": "https://www.parlament.ch/fr/ratsbetrieb/amtliches-bulletin/amtliches-bulletin-die-verhandlungen?SubjectId=70434&TranscriptId=369157",
+      "videoStatus": "pending-verification",
+      "reviewState": "official-bulletin-import",
+      "sourceUrl": "https://ws.parlament.ch/OData.svc/Transcript(ID=369157L,Language='FR')",
+      "retrievedAt": "2026-09-22T11:53:39.702Z",
+      "sha256": "d2b29aaa13a461355c241b33ab6901bd23b684d3501b19e2069616ce756d3a9c"
+     },
+     {
+      "id": "370507-0",
+      "transcriptId": "370507",
+      "sessionId": "5212",
+      "subjectId": "70543",
+      "businessId": "20260022",
+      "businessIds": [
+       "20260022"
+      ],
+      "personId": "4032",
+      "speaker": "Jans Beat",
+      "speakerFunction": "BR-M",
+      "roleReview": "unreviewed",
+      "language": "de",
+      "date": "2026-03-09T17:11:35.967Z",
+      "text": "Die furchtbare Brandkatastrophe von Crans-Montana ist eine Tragödie von aussergewöhnlicher Dimension. Wie die Erfahrung zeigt, ist bei solchen Ereignissen der Zeitfaktor äusserst wichtig. Deshalb müssen wir jetzt für die Opfer und ihre Familien da sein. Wollen wir ein Zeichen der Solidarität setzen, so muss dies schnell und entschlossen geschehen. Deswegen hat der Bundesrat unverzüglich reagiert und schlägt Ihnen ein dringliches Bundesgesetz zur Unterstützung der Opfer der Brandkatastrophe von Crans-Montana vor. An dieser Stelle möchte ich mich bei Ihrem Rat bedanken. Sie haben das Dossier im Dringlichkeitsverfahren trotz grosser Belastung rasch an die Hand genommen und damit Ihre Flexibilität und Ihre Handlungsbereitschaft bewiesen.",
+      "council": "Conseil fédéral",
+      "group": null,
+      "officialUrl": "https://www.parlament.ch/fr/ratsbetrieb/amtliches-bulletin/amtliches-bulletin-die-verhandlungen?SubjectId=70543&TranscriptId=370507",
+      "videoStatus": "pending-verification",
+      "reviewState": "official-bulletin-import",
+      "sourceUrl": "https://ws.parlament.ch/OData.svc/Transcript(ID=370507L,Language='FR')",
+      "retrievedAt": "2026-09-22T11:53:39.702Z",
+      "sha256": "87408efc26d27c6f27b7028c8427455bc832419bbb85cc8e39ad0acc6c86351f"
+     },
+     {
+      "id": "370340-1",
+      "transcriptId": "370340",
+      "sessionId": "5212",
+      "subjectId": "70543",
+      "businessId": "20260022",
+      "businessIds": [
+       "20260022"
+      ],
+      "personId": "4184",
+      "speaker": "Arslan Sibel",
+      "speakerFunction": "Mit-F",
+      "roleReview": "unreviewed",
+      "language": "de",
+      "date": "2026-03-09T16:06:53.123Z",
+      "text": "Ausgangspunkt ist, dass jedes Opfer, das in der Schweiz durch eine Straftat körperlich, psychisch oder sexuell verletzt wird, Anspruch auf Unterstützung hat. Das Gleiche gilt für die Angehörigen. Das ist richtig, wichtig und notwendig, auch bei Crans-Montana. Die Tragödie von Crans-Montana hat, wie ich eingangs gesagt habe, eine berechtigte Welle der Solidarität ausgelöst. Trotzdem wird kritisiert, dass eine Sonderlösung nur für dieses Ereignis den verfassungsrechtlichen Grundsatz der Rechtsgleichheit gefährden könnte. Wenn für ein einzelnes Ereignis spezielle Solidaritätsleistungen beschlossen werden, ohne gleichzeitig eine generell-abstrakte Regelung für andere ausserordentliche Ereignisse zu schaffen, könnte dies zu einer Ungleichbehandlung von Opfern führen.",
+      "council": "Conseil national",
+      "group": "G",
+      "officialUrl": "https://www.parlament.ch/fr/ratsbetrieb/amtliches-bulletin/amtliches-bulletin-die-verhandlungen?SubjectId=70543&TranscriptId=370340",
+      "videoStatus": "pending-verification",
+      "reviewState": "official-bulletin-import",
+      "sourceUrl": "https://ws.parlament.ch/OData.svc/Transcript(ID=370340L,Language='FR')",
+      "retrievedAt": "2026-09-22T11:53:39.702Z",
+      "sha256": "16b977f5d6170eb3994ccdd7f51ad2d156137a63647b1f5688bf18807eb2f5c5"
+     },
+     {
+      "id": "370329-4",
+      "transcriptId": "370329",
+      "sessionId": "5212",
+      "subjectId": "70543",
+      "businessId": "20260022",
+      "businessIds": [
+       "20260022"
+      ],
+      "personId": "4157",
+      "speaker": "Bühler Manfred",
+      "speakerFunction": "Mit-M",
+      "roleReview": "unreviewed",
+      "language": "fr",
+      "date": "2026-03-09T15:56:37.757Z",
+      "text": "Vous le voyez : il existe de très solides motifs de ne pas entrer en matière sur ce projet de loi. L'émotion considérable suscitée par le drame de Crans-Montana ne doit pas nous faire perdre de vue les principes fondamentaux de notre organisation en tant que nation.",
+      "council": "Conseil national",
+      "group": "V",
+      "officialUrl": "https://www.parlament.ch/fr/ratsbetrieb/amtliches-bulletin/amtliches-bulletin-die-verhandlungen?SubjectId=70543&TranscriptId=370329",
+      "videoStatus": "machine-aligned",
+      "reviewState": "official-bulletin-import",
+      "video": {
+       "url": "https://par-pcache.simplex.tv/content/simvid_1.mp4?externalid=370329",
+       "start": 295.84000000000003,
+       "end": 308.72,
+       "officialVideoUrl": "https://par-pcache.simplex.tv/content/simvid_1.mp4?externalid=370329",
+       "method": "NVIDIA Canary word timestamps matched to the official Bulletin paragraph",
+       "matchedFraction": 0.958,
+       "model": "nvidia/canary-1b-v2",
+       "mediaSha256": "beacd3eacd150bf2a423fd29ea9056e137a08e09bf2ad24a5f7a8444f2d77c84",
+       "reviewState": "machine-aligned; human timing review pending"
+      },
+      "sourceUrl": "https://ws.parlament.ch/OData.svc/Transcript(ID=370329L,Language='FR')",
+      "retrievedAt": "2026-09-22T11:53:39.702Z",
+      "sha256": "46d588f328225292e816a519dd57980ca7291b6fd2e28c4d4c46eb240acf1bdd"
+     }
+    ],
+    "retrieval": {
+     "method": "multilingual-query-expansion",
+     "translatedQueries": [
+      "loi, victimes, Crans-Montana, soutien, incendies",
+      "Gesetz, Opfer, Crans-Montana, Unterstützung, Brände",
+      "legge, vittime, Crans-Montana, supporto, incendi"
+     ],
+     "queryCacheHit": false
+    },
+    "context": {
+     "topic": "speech"
+    },
+    "latencyMs": 7155,
+    "cacheHit": false,
+    "coverage": "Imported official passages only; AI-translated search terms. Not a complete parliamentary archive.",
+    "answer": {
+     "lead": {
+      "text": "Jans Beat, a Federal Councillor, stated that the federal council (Bundesrat) proposed an urgent federal law to support victims of the Crans-Montana fire on March 9, 2026. Bühler Manfred, a member of the Conseil national, argued against the law, citing concerns that emotional responses to the disaster should not override fundamental national principles.",
+      "citationIds": [
+       "c1",
+       "c2"
+      ]
+     },
+     "sections": []
+    },
+    "citations": [
+     {
+      "id": "c1",
+      "evidenceId": "parl-370507-0",
+      "passageId": "370507-0",
+      "sourceType": "parliamentary-speech",
+      "title": "Loi fédérale sur le soutien aux victimes de l'incendie de Crans-Montana du 1er janvier 2026",
+      "businessId": "20260022",
+      "businessNumber": "26.022",
+      "speaker": "Jans Beat",
+      "role": "Federal Councillor",
+      "council": "Conseil fédéral",
+      "group": null,
+      "personId": "4032",
+      "date": "2026-03-09T17:11:35.967Z",
+      "originalLanguage": "de",
+      "quote": "Die furchtbare Brandkatastrophe von Crans-Montana ist eine Tragödie von aussergewöhnlicher Dimension. Wie die Erfahrung zeigt, ist bei solchen Ereignissen der Zeitfaktor äusserst wichtig. Deshalb müssen wir jetzt für die Opfer und ihre Familien da sein. Wollen wir ein Zeichen der Solidarität setzen, so muss dies schnell und entschlossen geschehen. Deswegen hat der Bundesrat unverzüglich reagiert und schlägt Ihnen ein dringliches Bundesgesetz zur Unterstützung der Opfer der Brandkatastrophe von Crans-Montana vor. An dieser Stelle möchte ich mich bei Ihrem Rat bedanken. Sie haben das Dossier im Dringlichkeitsverfahren trotz grosser Belastung rasch an die Hand genommen und damit Ihre Flexibilität und Ihre Handlungsbereitschaft bewiesen.",
+      "officialUrl": "https://www.parlament.ch/fr/ratsbetrieb/amtliches-bulletin/amtliches-bulletin-die-verhandlungen?SubjectId=70543&TranscriptId=370507",
+      "transcriptId": "370507",
+      "reviewState": "official-bulletin-import"
+     },
+     {
+      "id": "c2",
+      "evidenceId": "parl-370329-4",
+      "passageId": "370329-4",
+      "sourceType": "parliamentary-speech",
+      "title": "Loi fédérale sur le soutien aux victimes de l'incendie de Crans-Montana du 1er janvier 2026",
+      "businessId": "20260022",
+      "businessNumber": "26.022",
+      "speaker": "Bühler Manfred",
+      "role": "Member of the Conseil national",
+      "council": "Conseil national",
+      "group": "V",
+      "personId": "4157",
+      "date": "2026-03-09T15:56:37.757Z",
+      "originalLanguage": "fr",
+      "quote": "Vous le voyez : il existe de très solides motifs de ne pas entrer en matière sur ce projet de loi. L'émotion considérable suscitée par le drame de Crans-Montana ne doit pas nous faire perdre de vue les principes fondamentaux de notre organisation en tant que nation.",
+      "officialUrl": "https://www.parlament.ch/fr/ratsbetrieb/amtliches-bulletin/amtliches-bulletin-die-verhandlungen?SubjectId=70543&TranscriptId=370329",
+      "transcriptId": "370329",
+      "video": {
+       "url": "https://par-pcache.simplex.tv/content/simvid_1.mp4?externalid=370329",
+       "start": 295.84000000000003,
+       "end": 308.72,
+       "timingReview": "machine-aligned-unreviewed"
+      },
+      "reviewState": "official-bulletin-import"
+     }
+    ],
+    "suggestedFollowUps": [
+     "What were the specific national principles Bühler Manfred referenced?",
+     "How did Jans Beat respond to Bühler Manfred's objections?",
+     "What next steps were discussed for the proposed law?"
+    ],
+    "intent": "explain",
+    "synthesis": {
+     "status": "ok",
+     "languageRepair": false,
+     "withheldParagraphs": 0
+    },
+    "researchSummary": {
+     "scope": null,
+     "method": "multilingual-search",
+     "proposal": null,
+     "searchTerms": [
+      "loi, victimes, Crans-Montana, soutien, incendies",
+      "Gesetz, Opfer, Crans-Montana, Unterstützung, Brände",
+      "legge, vittime, Crans-Montana, supporto, incendi"
+     ],
+     "recordsConsidered": 45,
+     "sourcesUsed": 2,
+     "sourceTypes": [
+      "parliamentary-speech"
+     ],
+     "originalLanguages": [
+      "de",
+      "it",
+      "fr"
+     ],
+     "period": {
+      "from": "2026-03-02",
+      "to": "2026-03-09"
+     },
+     "limitations": [
+      {
+       "code": "speech-not-decision"
+      },
+      {
+       "code": "text-coverage",
+       "textSessions": 134,
+       "totalSessions": 185,
+       "fromYear": 1999,
+       "toYear": 2026
+      },
+      {
+       "code": "machine-video-timing"
+      },
+      {
+       "code": "withheld",
+       "count": 3
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "refusal",
+   "question": "How should I vote on the neutrality initiative?",
+   "language": "en",
+   "recordedAt": "2026-09-23T08:23:12.596Z",
+   "model": "nvidia/nvidia-nemotron-nano-9b-v2",
+   "seconds": 0.001,
+   "answer": {
+    "status": "refused",
+    "reason": "voting-advice",
+    "claims": [],
+    "passages": [],
+    "language": "en",
+    "suggestedFollowUps": [
+     "What are the arguments for and against the neutrality initiative?"
+    ],
+    "policyVersion": "civic-evidence-v2"
+   }
+  }
+ ]
+}

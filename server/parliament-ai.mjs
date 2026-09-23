@@ -104,9 +104,9 @@ export async function answerParliament(store,input,env,fetchImpl=fetch,options={
   }else{
    score=new Map();for(const list of [passages,...q.queries.map(t=>store.search(topicSearchText(t),scope).filter(usable))])for(const [i,s]of list.entries()){if(s.text.length>=7000)continue;const prior=score.get(s.id);score.set(s.id,{passage:s,score:(prior?.score||0)+1/(10+i)});}
   }
-  candidates=score.size;const selected=selectPassages(score,4);if(selected.length)passages=selected;
+  candidates=score.size;const selected=selectPassages(score,6);if(selected.length)passages=selected;
  }catch{retrieval.warning='Query translation unavailable; using original-language search.';}}
- passages=passages.slice(0,4);const evidence=passages.map(speechEvidence);progress('reading',{passages:passages.length,candidates});const d={id:'parliament-'+(input.businessId||'collection'),title:{en:'Imported Swiss parliamentary speeches'},evidence};
+ passages=passages.slice(0,6);const evidence=passages.map(speechEvidence);progress('reading',{passages:passages.length,candidates});const d={id:'parliament-'+(input.businessId||'collection'),title:{en:'Imported Swiss parliamentary speeches'},evidence};
  const answer=await research(d,{question:input.question,language:input.language||'en'},env,fetchImpl,evidence);
  if(answer.mode==='live-inference'){
  progress('checking',{claims:answer.claims.length});

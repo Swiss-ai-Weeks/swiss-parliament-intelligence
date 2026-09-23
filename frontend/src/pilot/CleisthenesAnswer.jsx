@@ -22,6 +22,7 @@ export default function CleisthenesAnswer({answer,language,onCite,onFollowUp,dis
  const paragraph=(p,key,className)=><p key={key} className={className}>{p.text} {chips(p.citationIds||[])}</p>;
  const featured=citations.find(c=>c.video)||citations[0],summary=answer.researchSummary;
  return <div className="cleisthenes-answer">
+  {answer.mode==='recorded-replay'&&<p className="answer-notice" role="note">{t(`Recorded answer from ${day(answer.recordedAt)}: the live model is unavailable right now, so Cleisthenes is showing the verified answer it produced earlier for this exact question.`,`Réponse enregistrée le ${day(answer.recordedAt)} : le modèle en direct est indisponible, Cleisthenes affiche la réponse vérifiée produite plus tôt pour cette question.`)}</p>}
   {paragraph(answer.answer.lead,'lead','answer-lead')}
   {answer.answer.sections?.map((s,i)=><section key={i} className="answer-section"><h3>{s.title}</h3>{s.paragraphs.map((p,j)=>paragraph(p,j))}</section>)}
   {featured&&<figure className="answer-evidence">
